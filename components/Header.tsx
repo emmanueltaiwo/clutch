@@ -73,22 +73,22 @@ const DesktopHeader = () => {
     <nav className="hidden md:flex justify-between lg-[70%] xl:w-[65%]">
       <ul className="flex gap-10 xl:gap-20 items-center">
         <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
-          <Link href="">Home</Link>
+          <Link href="/">Home</Link>
         </li>
         <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
-          <Link href="">Features</Link>
+          <Link href="/#features">Features</Link>
         </li>
         <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
-          <Link href="">Contributors</Link>
+          <Link href="/#features">Contributors</Link>
         </li>
       </ul>
 
       <ul className="mr-10 lg:mr-20 flex gap-5 lg:gap-10 items-center">
         <li className="font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] text-[#903AFF]">
-          <Link href="">Login</Link>
+          <Link href="/#features">Login</Link>
         </li>
         <li className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#7119e6]">
-          <Link href="">Signup</Link>
+          <Link href="/#features">Signup</Link>
         </li>
       </ul>
     </nav>
@@ -97,7 +97,7 @@ const DesktopHeader = () => {
 
 const Header = () => {
   return (
-    <header className="w-full sticky h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
+    <header className="w-full z-50 sticky h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
       <div className="ml-5 md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
         Clutch
       </div>
