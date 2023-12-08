@@ -69,24 +69,24 @@ const MobileHeader = () => {
 
 const DesktopHeader = () => {
   return (
-    <nav className="hidden md:flex justify-between w-[70%] xl:w-[60%]">
-      <ul className="flex gap-10 lg:gap-20 items-center">
-        <li className="text-gray-400 font-medium text-[15px]">
+    <nav className="hidden md:flex justify-between lg-[70%] xl:w-[65%]">
+      <ul className="flex gap-10 xl:gap-20 items-center">
+        <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
           <Link href="">Home</Link>
         </li>
-        <li className="text-gray-400 font-medium text-[15px]">
+        <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
           <Link href="">Features</Link>
         </li>
-        <li className="text-gray-400 font-medium text-[15px]">
+        <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
           <Link href="">Contributors</Link>
         </li>
       </ul>
 
       <ul className="mr-10 lg:mr-20 flex gap-5 lg:gap-10 items-center">
-        <li className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[rgb(2,2,26)] hover:border-[#903AFF]">
+        <li className="font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] text-[#903AFF]">
           <Link href="">Login</Link>
         </li>
-        <li className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] hover:border-[rgb(2,2,26)]">
+        <li className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#7119e6]">
           <Link href="">Signup</Link>
         </li>
       </ul>
