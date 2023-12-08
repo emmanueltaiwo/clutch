@@ -97,7 +97,7 @@ const DesktopHeader = () => {
 
 const Header = () => {
   return (
-    <header className="w-full z-50 sticky h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
+    <header className="w-full z-50 sticky top-0 h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
       <div className="ml-5 md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
         Clutch
       </div>
