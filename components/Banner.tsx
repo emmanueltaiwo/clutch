@@ -2,18 +2,23 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 const BackgroundIllustrations = () => {
   return (
-    <div className="absolute hidden sm:inline">
+    <div className="absolute animate-pulse hidden sm:inline">
       {/* Star icon is top left */}
       <Image
         src="/assets/Images/star.png"
         width={20}
         height={20}
         alt="Star Image"
-        className="relative sm:top-[-300px] sm:left-[-200px] md:left-[-100px] lg:left-[-300px] xl:left-[-500px]"
+        className="relative top-[-200px]  sm:left-[-200px] md:left-[-100px] lg:left-[-300px] xl:left-[-500px]"
       />
+      {/* Star icon is middle */}
+      <div className="relative top-[-200px] sm:left-[-200px] md:left-[-100px] lg:left-[100px] xl:left-[200px] text-[#903AFF]">
+        <AutoAwesomeIcon />
+      </div>
       {/* Star icon is bottom left */}
       <Image
         src="/assets/Images/star.png"
@@ -63,7 +68,7 @@ const Banner = () => {
       </h4>
       <Link
         href="/signup"
-        className="text-white font-[500] mt-5 text-[15px] md:text-[20px] px-16 sm:px-16 py-3 md:px-20 md:py-4 rounded-[5px] border-2 border-[#903AFF]"
+        className="text-white font-[500] mt-5 text-[15px] md:text-[20px] px-16 py-3 sm:px-16 sm:py-3 md:px-20 md:py-4 rounded-[5px] border-2 border-[#903AFF]"
       >
         Join Now
       </Link>
