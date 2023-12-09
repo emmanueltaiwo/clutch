@@ -1,6 +1,7 @@
 import React from "react";
-import { features } from "@/data/features";
+import { features } from "@/db/features";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
+import { BackgroundIllustrations } from "./Banner";
 
 const Features = () => {
   return (
@@ -8,6 +9,7 @@ const Features = () => {
       id="features"
       className="w-full h-full flex flex-col gap-5 items-center py-10"
     >
+      <BackgroundIllustrations />
       <span className="border-[#903AFF] border-2 mx-auto rounded-[50px] px-8 py-2 w-fit h-fit text-white">
         Features
       </span>

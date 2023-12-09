@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
-const BackgroundIllustrations = () => {
+export const BackgroundIllustrations = () => {
   return (
     <div className="absolute animate-pulse hidden sm:inline">
       {/* Star icon is top left */}
