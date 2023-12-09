@@ -12,9 +12,12 @@ const MenuItem = ({
   href: string;
   children: ReactNode;
 }) => (
-  <li className="text-gray-400 font-medium text-[15px] ml-5 w-[60%] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
-    <Link href={href}>{children}</Link>
-  </li>
+  <Link
+    className="text-gray-400 font-medium text-[15px] ml-5 w-[60%] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]"
+    href={href}
+  >
+    {children}
+  </Link>
 );
 
 const MobileHeader = () => {
@@ -50,16 +53,23 @@ const MobileHeader = () => {
               Clutch
             </div>
             <MenuItem href="/">Home</MenuItem>
-            <MenuItem href="/">Features</MenuItem>
-            <MenuItem href="/">Contributors</MenuItem>
+            <MenuItem href="/#features">Features</MenuItem>
+            <MenuItem href="/#contributors">Contributors</MenuItem>
 
             <ul className="mt-auto mb-5 ml-5 flex flex-col gap-5">
-              <li className="text-white font-medium text-[15px] w-[60%] text-center h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF]">
-                <Link href="">Login</Link>
-              </li>
-              <li className="text-white font-medium text-[15px] w-[60%] text-center h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF]">
-                <Link href="">Signup</Link>
-              </li>
+              <Link
+                className="text-white font-medium text-[15px] w-[60%] text-center h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] hover:bg-[#8f3aff64]"
+                href="/login"
+              >
+                Login
+              </Link>
+
+              <Link
+                className="text-white font-medium text-[15px] w-[60%] text-center h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] hover:bg-[#8f3aff64]"
+                href="/signup"
+              >
+                Signup
+              </Link>
             </ul>
           </motion.ul>
         </AnimatePresence>
@@ -79,17 +89,24 @@ const DesktopHeader = () => {
           <Link href="/#features">Features</Link>
         </li>
         <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
-          <Link href="/#features">Contributors</Link>
+          <Link href="/#contributors">Contributors</Link>
         </li>
       </ul>
 
       <ul className="mr-10 lg:mr-20 flex gap-5 lg:gap-10 items-center">
-        <li className="font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] text-[#903AFF]">
-          <Link href="/#features">Login</Link>
-        </li>
-        <li className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#7119e6]">
-          <Link href="/#features">Signup</Link>
-        </li>
+        <Link
+          className="font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] text-[#903AFF] hover:bg-[#8f3aff64]"
+          href="/login"
+        >
+          Login
+        </Link>
+
+        <Link
+          className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#7119e6] hover:bg-[#8f3aff64]"
+          href="/signup"
+        >
+          Signup
+        </Link>
       </ul>
     </nav>
   );

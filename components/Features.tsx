@@ -11,7 +11,7 @@ const Features = () => {
       <span className="border-[#903AFF] border-2 mx-auto rounded-[50px] px-8 py-2 w-fit h-fit text-white">
         Features
       </span>
-      <h1 className="text-[30px] xl:px-0 px-5 sm:text-[50px] md:text-[60px] lg:text-[80px] xl:text-[80px] mt-5 font-black text-white text-center lg:leading-[90px] xl:w-[1000px] mx-auto">
+      <h1 className="text-[25px] xl:px-0 px-5 sm:text-[50px] md:text-[60px] lg:text-[80px] xl:text-[80px] mt-5 font-black text-white text-center lg:leading-[90px] xl:w-[1000px] mx-auto">
         Uncover the <span className="text-[#D434FE]">Exceptional</span> Features
         of Our Social Platform
       </h1>

@@ -49,7 +49,7 @@ const BackgroundIllustrations = () => {
 
 const Banner = () => {
   return (
-    <div className="w-full h-[90vh] flex flex-col gap-5 justify-center items-center">
+    <div className="w-full h-[70vh] md:h-[90vh] flex flex-col gap-5 justify-center items-center">
       <BackgroundIllustrations />
       <span className="border-[#903AFF] border-2 rounded-[50px] px-8 py-2 w-fit h-fit text-white">
         Community Based App
@@ -68,7 +68,7 @@ const Banner = () => {
       </h4>
       <Link
         href="/signup"
-        className="text-white font-[500] mt-5 text-[15px] md:text-[20px] px-16 py-3 sm:px-16 sm:py-3 md:px-20 md:py-4 rounded-[5px] border-2 border-[#903AFF]"
+        className="text-white font-[500] mt-5 text-[15px] md:text-[20px] px-16 py-3 sm:px-16 sm:py-3 md:px-20 md:py-4 rounded-[5px] border-2 border-[#903AFF] hover:bg-[#8f3aff64]"
       >
         Join Now
       </Link>
