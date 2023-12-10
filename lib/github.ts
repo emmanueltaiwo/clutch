@@ -1,6 +1,6 @@
 "use server";
 import axios from "axios";
-import { ContributorsType } from "@/typings";
+import { ContributorsType } from "@/types";
 
 const apiUrl = `https://api.github.com/`;
 const owner = "realemmanuel";
@@ -24,6 +24,7 @@ export const fetchAllContributors = async (): Promise<ContributorsType[]> => {
         },
       }
     );
+
     return response?.data;
   } catch (error) {
     throw new Error("Error fetching contributors");

@@ -1,30 +1,23 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React from "react";
 import { fetchAllContributors } from "@/lib/github";
-import { ContributorsType } from "@/typings";
+import { ContributorsType } from "@/types";
 import { BackgroundIllustrations } from "./Banner";
+import { useQuery } from "@tanstack/react-query";
 
-const Contributors = () => {
-  const [contributors, setContributors] = useState<ContributorsType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const Contributors = ({
+  contributors,
+}: {
+  contributors: ContributorsType[];
+}) => {
+  const { data, isLoading, isError, error } = useQuery<ContributorsType[]>({
+    queryKey: ["contributors"],
+    queryFn: async () => await fetchAllContributors(),
+    initialData: contributors,
+  });
 
-  useEffect(() => {
-    const requestContributors = async () => {
-      try {
-        const receivedContributors = await fetchAllContributors();
-        setContributors(receivedContributors ?? []);
-        setLoading(false);
-      } catch (error) {
-        setError("Could not find contributors in client side");
-        setLoading(false);
-      }
-    };
-
-    requestContributors();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <p className="text-white text-center font-medium text-[15px]">
         Loading contributors...
@@ -32,10 +25,10 @@ const Contributors = () => {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <p className="text-red-500 text-center font-medium text-[15px]">
-        Error: {error}
+        Error: {error.message}
       </p>
     );
   }
@@ -55,15 +48,15 @@ const Contributors = () => {
       </h1>
 
       <ul className="flex flex-wrap gap-2">
-        {contributors
-          .toSorted((a, b) => b.contributions - a.contributions)
+        {data
+          ?.sort((a, b) => b.contributions - a.contributions)
           .map((contributor) => (
             <li
               className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-full p-5 w-fit h-fit shadow-sm shadow-gray-600"
-              key={contributor.email}
+              key={contributor.email.toString()}
             >
               <h2 className="text-white font-[500] text-[15px]">
-                {contributor.name}
+                {contributor.name.toString()}
               </h2>
             </li>
           ))}
@@ -71,5 +64,4 @@ const Contributors = () => {
     </section>
   );
 };
-
 export default Contributors;

@@ -8,13 +8,16 @@ import { motion, AnimatePresence } from "framer-motion";
 const MenuItem = ({
   href,
   children,
+  onClick,
 }: {
   href: string;
   children: ReactNode;
+  onClick: () => void;
 }) => (
   <Link
     className="text-gray-400 font-medium text-[15px] ml-5 w-[60%] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]"
     href={href}
+    onClick={onClick}
   >
     {children}
   </Link>
@@ -49,17 +52,27 @@ const MobileHeader = () => {
             transition={{ duration: 0.3 }}
             className="w-[30vh] h-full flex flex-col gap-10 fixed top-0 left-0 right-0 bottom-0 z-50 bg-[rgb(2,2,26)] shadow-lg shadow-gray-600"
           >
-            <div className="ml-5 px-3 h-24 items-center flex md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
+            <Link href="/" className="ml-5 px-3 h-24 items-center flex md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
               Clutch
-            </div>
-            <MenuItem href="/">Home</MenuItem>
-            <MenuItem href="/#features">Features</MenuItem>
-            <MenuItem href="/#contributors">Contributors</MenuItem>
+            </Link>
+            <MenuItem onClick={() => setMenuIsOpen(false)} href="/">
+              Home
+            </MenuItem>
+            <MenuItem onClick={() => setMenuIsOpen(false)} href="/#features">
+              Features
+            </MenuItem>
+            <MenuItem
+              onClick={() => setMenuIsOpen(false)}
+              href="/#contributors"
+            >
+              Contributors
+            </MenuItem>
 
             <ul className="mt-auto mb-5 ml-5 flex flex-col gap-5">
               <Link
                 className="text-white font-medium text-[15px] w-[60%] text-center h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] hover:bg-[#8f3aff64]"
                 href="/login"
+                onClick={() => setMenuIsOpen(false)}
               >
                 Login
               </Link>
@@ -67,6 +80,7 @@ const MobileHeader = () => {
               <Link
                 className="text-white font-medium text-[15px] w-[60%] text-center h-fit px-5 py-2 rounded-[10px] border-2 border-[#903AFF] hover:bg-[#8f3aff64]"
                 href="/signup"
+                onClick={() => setMenuIsOpen(false)}
               >
                 Signup
               </Link>
@@ -115,9 +129,9 @@ const DesktopHeader = () => {
 const Header = () => {
   return (
     <header className="w-full z-50 sticky top-0 h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
-      <div className="ml-5 md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
+      <Link href="/" className="ml-5 md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
         Clutch
-      </div>
+      </Link>
       <MobileHeader />
       <DesktopHeader />
     </header>
