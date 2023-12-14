@@ -7,10 +7,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 export const handleLoginAuthentication = async (
   prevState: LoginResponse,
@@ -74,8 +73,6 @@ export const handleSignupAuthentication = async (
 ): Promise<LoginResponse> => {
   // This function handles the signup request by verifying the data, sending the authentication to firebase auth, creatig a new document containing the user data in the firebase database, storing the userID in cookies and redirecting to the main app on successful login.
 
-  // TODO: Make all the authentication and database storing work and make the code cleaner
-
   if (!formData) {
     const response = {
       message: "No data was received, Try resubmitting the form",
@@ -135,7 +132,7 @@ export const handleSignupAuthentication = async (
     );
     const user = userCredential.user;
     const { uid } = user;
-    await createNewUserDocument();
+    await createNewUserDocument(uid, newUser);
     localStorage.setItem("USER_ID", uid);
     redirect("/");
   } catch (error) {
@@ -155,11 +152,35 @@ const validateLoginInput = (formData: Login): boolean => {
   return true;
 };
 
-const validateSignupInput = (formData: Signup) => {
+export const validateSignupInput = (formData: Signup): boolean => {
   // This function validates the signup input by making sure specific criteria are checked and returns a boolean value
+  const { email, phoneNumber, dateOfBirth, gender, password } = formData;
 
-  // TODO: Write the algorithm to validate the signup input
-  return false;
+  const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return false;
+  }
+
+  const phoneRegex: RegExp = /^\d{10}$/;
+  if (!phoneRegex.test(phoneNumber)) {
+    return false;
+  }
+
+  const dobRegex: RegExp = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dobRegex.test(dateOfBirth)) {
+    return false;
+  }
+
+  const validGenders: string[] = ["Male", "Female", "Other"];
+  if (!validGenders.includes(gender)) {
+    return false;
+  }
+
+  if (password.length < 8) {
+    return false;
+  }
+
+  return true;
 };
 
 export const verifyUserStatus = async (): Promise<boolean> => {
@@ -181,9 +202,20 @@ export const verifyUserStatus = async (): Promise<boolean> => {
   }
 };
 
-const createNewUserDocument = async () => {
-  // TODO: Perform the task of creating a new user document to the database
-  return true;
+const createNewUserDocument = async (userId: string, newUser: Signup) => {
+  try {
+    const checkUserRef = doc(db, "users", userId);
+    const checkUserSnap = await getDoc(checkUserRef);
+
+    if (checkUserSnap.exists()) {
+      throw new Error("User already exists");
+    }
+    await setDoc(doc(db, "users", userId), newUser);
+  } catch (error) {
+    throw new Error(
+      "Error creating user, try refreshing the page and try again"
+    );
+  }
 };
 
 const updateUserStatus = async (
