@@ -57,7 +57,7 @@ export const handleLoginAuthentication = async (
       return {
         message: "Error updating user status, Please refresh and try again",
       };
-    cookies().set("USER_ID", uid);
+    localStorage.setItem("USER_ID", uid);
     redirect("/");
   } catch (error) {
     const firebaseError = error as FirebaseError;
@@ -136,7 +136,7 @@ export const handleSignupAuthentication = async (
     const user = userCredential.user;
     const { uid } = user;
     await createNewUserDocument();
-    cookies().set("USER_ID", uid);
+    localStorage.setItem("USER_ID", uid);
     redirect("/");
   } catch (error) {
     const firebaseError = error as FirebaseError;
@@ -165,7 +165,7 @@ const validateSignupInput = (formData: Signup) => {
 export const verifyUserStatus = async (): Promise<boolean> => {
   // This function checks the user status from the database whether the user is offline or online
   try {
-    const userId = cookies().get("USER_ID");
+    const userId = localStorage.getItem("USER_ID");
     if (!userId) return false;
 
     const userRef = doc(db, "users", userId.toString());
@@ -194,7 +194,7 @@ const updateUserStatus = async (
     const userRef = doc(db, "users", userId);
     if (!userRef) return false;
     await updateDoc(userRef, {
-      status,
+      status: status,
     });
     return true;
   } catch (error) {
