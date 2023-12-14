@@ -4,6 +4,7 @@ import Link from "next/link";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "../Logo";
 
 const MenuItem = ({
   href,
@@ -52,9 +53,9 @@ const MobileHeader = () => {
             transition={{ duration: 0.3 }}
             className="w-[30vh] h-full flex flex-col gap-10 fixed top-0 left-0 right-0 bottom-0 z-50 bg-[rgb(2,2,26)] shadow-lg shadow-gray-600"
           >
-            <Link href="/" className="ml-5 px-3 h-24 items-center flex md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
-              Clutch
-            </Link>
+            <div className="ml-5 px-3 h-24 items-center flex md:ml-10 lg:ml-2">
+              <Logo />
+            </div>
             <MenuItem onClick={() => setMenuIsOpen(false)} href="/">
               Home
             </MenuItem>
@@ -94,8 +95,8 @@ const MobileHeader = () => {
 
 const DesktopHeader = () => {
   return (
-    <nav className="hidden md:flex justify-between lg-[70%] xl:w-[65%]">
-      <ul className="flex gap-10 xl:gap-20 items-center">
+    <nav className="hidden md:flex justify-between lg:w-[70%] xl:w-[65%]">
+      <ul className="flex gap-10 xl:gap-20 items-center md:mr-10 lg:mr-0">
         <li className="text-gray-400 font-medium text-[15px] py-2 px-4 rounded-[10px] hover:bg-[rgb(13,13,58)]">
           <Link href="/">Home</Link>
         </li>
@@ -129,9 +130,9 @@ const DesktopHeader = () => {
 const Header = () => {
   return (
     <header className="w-full z-50 sticky top-0 h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
-      <Link href="/" className="ml-5 md:ml-10 lg:ml-20 text-white text-[20px] font-bold">
-        Clutch
-      </Link>
+      <div className="ml-5 md:ml-10 lg:ml-20">
+        <Logo />
+      </div>
       <MobileHeader />
       <DesktopHeader />
     </header>

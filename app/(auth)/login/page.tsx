@@ -1,9 +1,18 @@
+"use client"
+
 import React from "react";
+import LoginForm from "./LoginForm";
+import { BackgroundIllustrations } from "@/components/Banner";
+import Logo from "@/components/Logo";
 
 const Login = () => {
   return (
-    <main className="w-full h-screen flex justify-center">
-      <form className="w-[700px] h-[600px] mt-7 rounded-[10px] shadow-sm shadow-gray-500 bg-[rgb(11,11,41)] flex justify-center"></form>
+    <main className="w-full h-full flex justify-center py-10 lg:py-12">
+      <BackgroundIllustrations />
+      <section className="w-[93%] md:w-[700px] h-full md:h-fit rounded-[10px] bg-[rgb(11,11,41)] flex flex-col gap-5 py-10 m-auto items-center ">
+        <Logo />
+        <LoginForm />
+      </section>
     </main>
   );
 };
