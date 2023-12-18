@@ -166,7 +166,7 @@ export const handleDemoAccountAuthentication = async () => {
     );
     const user = userCredential.user;
     const { uid } = user;
-    handleCookies("set", "USER_ID", uid);
+    await handleCookies("set", "USER_ID", uid);
   } catch (error) {
     const firebaseError = error as FirebaseError;
     const { code } = firebaseError;
