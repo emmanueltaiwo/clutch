@@ -49,7 +49,7 @@ const Contributors = ({
 
       <ul className="flex flex-wrap gap-2">
         {data
-          ?.toSorted((a, b) => b.contributions - a.contributions)
+          ?.sort((a, b) => b.contributions - a.contributions)
           .map((contributor) => (
             <li
               className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-full p-5 w-fit h-fit shadow-sm shadow-gray-600"
