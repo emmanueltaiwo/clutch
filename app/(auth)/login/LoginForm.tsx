@@ -1,15 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import { handleLoginAuthentication } from "@/lib/auth";
+import { handleLoginAuthentication } from "@/services/auth";
+import DemoAccount from "../DemoAccount";
+import AuthInput from "../AuthInput";
+import { AuthResponse } from "@/types/auth-types";
+import { useRouter } from "next/navigation";
 
 const initialState = {
   message: "",
 };
 
-const SubmitButton = () => {
+export const SubmitButton = ({ children }: { children: ReactNode }) => {
   const { pending } = useFormStatus();
 
   return (
@@ -22,29 +25,38 @@ const SubmitButton = () => {
           : "w-[90%] p-4 rounded-[10px] bg-[#8f3aff64] hover:bg-[#8133e798] active:border-2 active:border-violet-700 text-white font-[400] text-[16px]"
       }`}
     >
-      Login
+      {children}
     </button>
   );
 };
 
 const LoginForm = () => {
-  const [state, formAction] = useFormState(
-    handleLoginAuthentication,
-    initialState
-  );
+  const router = useRouter();
+
+  const loginUser = async (prevState: AuthResponse, formData: FormData) => {
+    try {
+      const login = await handleLoginAuthentication(prevState, formData);
+      if (!login) return { message: "Error login attempt" };
+      if (
+        login.message !==
+        "Yay! You've logged in successfully. redirecting you now"
+      ) {
+        return login;
+      }
+      router.push("/");
+      return login;
+    } catch (error) {
+      return { message: "Unknow Error, Try again" };
+    }
+  };
+  const [state, formAction] = useFormState(loginUser, initialState);
 
   return (
     <form
       action={formAction}
       className="w-full h-full py-10 flex flex-col gap-10 items-center"
     >
-      <button
-        type="button"
-        className="w-[90%] p-4 rounded-[10px] bg-[#903AFF] text-white font-[400] text-[16px] flex gap-3 items-center justify-center"
-      >
-        Try a Demo Account
-        <AutoAwesomeIcon />
-      </button>
+      <DemoAccount />
 
       <div className="flex w-[90%] items-center gap-2">
         <hr className="w-full border-[0.3px] border-gray-500" />
@@ -56,11 +68,10 @@ const LoginForm = () => {
         <label className="text-white font-[400] text-[14px]">
           Enter E-mail Address:
         </label>
-        <input
+        <AuthInput
           type="email"
           placeholder="clutchuser@hello.com"
           name="email"
-          className="w-full p-4 rounded-[10px] border-2 border-[rgb(43,43,125)] text-white placeholder:text-white font-[400] text-[14px] bg-transparent outline-none"
         />
       </div>
 
@@ -68,15 +79,10 @@ const LoginForm = () => {
         <label className="text-white font-[400] text-[14px]">
           Enter Password:
         </label>
-        <input
-          type="password"
-          placeholder="*********"
-          name="password"
-          className="w-full p-4 rounded-[10px] border-2 border-[rgb(43,43,125)] text-white placeholder:text-white font-[400] text-[14px] bg-transparent outline-none"
-        />
+        <AuthInput type="password" placeholder="*********" name="password" />
       </div>
 
-      <SubmitButton />
+      <SubmitButton>Login</SubmitButton>
 
       <p
         aria-live="polite"

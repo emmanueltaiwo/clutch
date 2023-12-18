@@ -1,6 +1,6 @@
 "use server";
 import axios from "axios";
-import { ContributorsType } from "@/types";
+import { ContributorsType } from "../types/homepage-types";
 
 const apiUrl = `https://api.github.com/`;
 const owner = "realemmanuel";

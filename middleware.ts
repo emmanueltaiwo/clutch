@@ -1,8 +1,8 @@
-import { verifyUserStatus } from "./lib/auth";
+import { verifyUserStatus } from "./services/auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedRoutes = ["/app"];
+const protectedRoutes = ["/feed"];
 
 const middleware = async (req: NextRequest) => {
   const isAuthenticated: boolean = await verifyUserStatus();

@@ -1,10 +1,3 @@
-export interface ContributorsType {
-  email: string;
-  name: string;
-  type: string;
-  contributions: number;
-}
-
 export interface Login {
   email: string;
   password: string;
@@ -17,11 +10,13 @@ export interface Signup {
   dateOfBirth: string;
   gender: string;
   country: string;
-  interests: string[];
+  interest: string;
   termsAndConditions: string;
   password: string;
+  hasFullAccess?: boolean;
+  status?: boolean;
 }
 
-export interface LoginResponse {
+export interface AuthResponse {
   message: string;
 }

@@ -1,8 +1,4 @@
-interface Features {
-  id: number;
-  title: string;
-  description: string;
-}
+import { Features } from "@/types/homepage-types";
 
 export const features: Features[] = [
   {

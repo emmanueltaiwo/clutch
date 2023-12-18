@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { fetchAllContributors } from "@/lib/github";
-import { ContributorsType } from "@/types";
+import { fetchAllContributors } from "@/services/github";
+import { ContributorsType } from "../types/homepage-types";
 import { BackgroundIllustrations } from "./Banner";
 import { useQuery } from "@tanstack/react-query";
 
@@ -49,7 +49,7 @@ const Contributors = ({
 
       <ul className="flex flex-wrap gap-2">
         {data
-          ?.sort((a, b) => b.contributions - a.contributions)
+          ?.toSorted((a, b) => b.contributions - a.contributions)
           .map((contributor) => (
             <li
               className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-full p-5 w-fit h-fit shadow-sm shadow-gray-600"

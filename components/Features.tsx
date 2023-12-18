@@ -1,5 +1,5 @@
 import React from "react";
-import { features } from "@/db/features";
+import { features } from "@/data/features";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import { BackgroundIllustrations } from "./Banner";
 
