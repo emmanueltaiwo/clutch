@@ -13,7 +13,7 @@ const DemoAccount = () => {
     try {
       setIsPending(true);
       await handleDemoAccountAuthentication();
-      router.push("/");
+      router.push("/feed");
       setIsPending(false);
     } catch {
       throw new Error("Error while login to demo account, try again");
