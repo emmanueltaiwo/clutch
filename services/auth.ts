@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
-import { cookies } from "next/headers";
+import { handleCookies } from "@/lib/utils";
 
 export const handleLoginAuthentication = async (
   prevState: AuthResponse,
@@ -166,7 +166,7 @@ export const handleDemoAccountAuthentication = async () => {
     );
     const user = userCredential.user;
     const { uid } = user;
-    await handleCookies("set", "USER_ID", uid);
+    handleCookies("set", "USER_ID", uid);
   } catch (error) {
     const firebaseError = error as FirebaseError;
     const { code } = firebaseError;
@@ -175,7 +175,7 @@ export const handleDemoAccountAuthentication = async () => {
   }
 };
 
-const validateLoginInput = (formData: Login): boolean => {
+export const validateLoginInput = (formData: Login): boolean => {
   // This function validates the login input by making sure specific criteria are checked and returns a boolean value
   const { email, password } = formData;
   const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -207,7 +207,7 @@ export const validateSignupInput = (formData: Signup): boolean => {
 export const verifyUserStatus = async (): Promise<boolean> => {
   // This function checks if the user has an existing id stored in cookies. If it exists, then it finds it in the database and verify the status then returns true. else it returns false
   try {
-    const userId = await handleCookies("get", "USER_ID");
+    const userId = handleCookies("get", "USER_ID");
     if (!userId) return false;
 
     const userRef = doc(db, "users", userId.toString());
@@ -223,7 +223,10 @@ export const verifyUserStatus = async (): Promise<boolean> => {
   }
 };
 
-const createNewUserDocument = async (userId: string, newUser: Signup) => {
+export const createNewUserDocument = async (
+  userId: string,
+  newUser: Signup
+) => {
   try {
     const checkUserRef = doc(db, "users", userId);
     const checkUserSnap = await getDoc(checkUserRef);
@@ -240,7 +243,7 @@ const createNewUserDocument = async (userId: string, newUser: Signup) => {
   }
 };
 
-const updateUserStatus = async (
+export const updateUserStatus = async (
   userId: string,
   status: boolean
 ): Promise<boolean> => {
@@ -254,32 +257,5 @@ const updateUserStatus = async (
     return true;
   } catch (error) {
     return false;
-  }
-};
-
-export const handleCookies = async (
-  method: string,
-  name?: string,
-  setItem?: string
-) => {
-  // This method is used to store, get, delete items in cookiess
-  try {
-    if (method === "get" && name !== undefined) {
-      const data = cookies().get(name);
-      return data?.value;
-    } else if (
-      method === "set" &&
-      setItem !== undefined &&
-      name !== undefined
-    ) {
-      cookies().set(name, setItem);
-      return true;
-    } else if (method === "delete" && name !== undefined) {
-      cookies().delete(name);
-      return true;
-    }
-    // Add more cookies method
-  } catch (error) {
-    throw new Error();
   }
 };
