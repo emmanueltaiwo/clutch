@@ -53,10 +53,10 @@ const Contributors = ({
           .map((contributor) => (
             <li
               className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-full p-5 w-fit h-fit shadow-sm shadow-gray-600"
-              key={contributor.email.toString()}
+              key={contributor.email}
             >
               <h2 className="text-white font-[500] text-[15px]">
-                {contributor.name.toString()}
+                {contributor.name}
               </h2>
             </li>
           ))}
