@@ -1,5 +1,7 @@
 import { validateLoginInput, validateSignupInput } from "@/services/auth";
 
+jest.mock("firebase/auth");
+
 describe("Validating Input Field", () => {
   const validLoginFormData = {
     email: "hello@test.com",

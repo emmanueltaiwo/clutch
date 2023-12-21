@@ -1,4 +1,5 @@
 "use server";
+
 import axios from "axios";
 import { ContributorsType } from "../types/homepage-types";
 
@@ -27,6 +28,6 @@ export const fetchAllContributors = async (): Promise<ContributorsType[]> => {
 
     return response?.data;
   } catch (error) {
-    throw new Error("Error fetching contributors");
+    throw new Error("An error occured while fetching contributors");
   }
 };
