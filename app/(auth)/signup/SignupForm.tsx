@@ -10,6 +10,8 @@ import AuthInput from "../AuthInput";
 import { AuthResponse } from "@/types/auth-types";
 import { useRouter } from "next/navigation";
 import { countries, gender, interests } from "@/data/form";
+import { useAppDispatch } from "@/lib/hooks";
+import { addUser } from "@/lib/features/auth/authSlice";
 
 const initialState = {
   message: "",
@@ -17,18 +19,21 @@ const initialState = {
 
 const SignupForm = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const signupUser = async (prevState: AuthResponse, formData: FormData) => {
     try {
       const login = await handleSignupAuthentication(prevState, formData);
-      if (!login) return { message: "Error login attempt" };
+      if (!login || !login.user) return { message: "Error login attempt" };
       if (
         login.message !==
         "Yay! You've succesfully created an account on clutch. redirecting you now"
       ) {
         return login;
       }
-      router.push("/");
+      
+      dispatch(addUser({ ...login.user }));
+      router.push("/feed");
       return login;
     } catch (error) {
       return { message: "Unknow Error, Try again" };

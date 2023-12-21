@@ -1,3 +1,5 @@
+import { User } from "@/types";
+
 export interface Login {
   email: string;
   password: string;
@@ -19,4 +21,6 @@ export interface Signup {
 
 export interface AuthResponse {
   message: string;
+  user?: User;
+  userId?: string;
 }

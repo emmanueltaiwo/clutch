@@ -9,7 +9,8 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
-import { handleCookies } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { User } from "@/types";
 
 export const handleLoginAuthentication = async (
   prevState: AuthResponse,
@@ -57,7 +58,26 @@ export const handleLoginAuthentication = async (
       return {
         message: "Error updating user status, Please refresh and try again",
       };
+    const storedUserData = await getUserDocFromFirestore(uid);
+
+    if (!storedUserData)
+      return {
+        message: "Error updating user status, Please refresh and try again",
+      };
+
+    const userData: User = {
+      email: storedUserData.email,
+      fullName: storedUserData.fullName,
+      phoneNumber: storedUserData.phoneNumber,
+      dateOfBirth: storedUserData.dateOfBirth,
+      profilePic: storedUserData.profilePic || "",
+      gender: storedUserData.gender,
+      country: storedUserData.country,
+      interests: [storedUserData.interest],
+    };
+
     return {
+      user: userData,
       message: "Yay! You've logged in successfully. redirecting you now",
     };
   } catch (error) {
@@ -141,7 +161,18 @@ export const handleSignupAuthentication = async (
       status: true,
     });
     handleCookies("set", "USER_ID", uid);
+
     return {
+      user: {
+        email: newUser.email,
+        fullName: newUser.fullName,
+        phoneNumber: newUser.phoneNumber,
+        dateOfBirth: newUser.dateOfBirth,
+        profilePic: "",
+        gender: newUser.gender,
+        country: newUser.country,
+        interests: [newUser.interest],
+      },
       message:
         "Yay! You've succesfully created an account on clutch. redirecting you now",
     };
@@ -214,9 +245,6 @@ export const verifyUserStatus = async (): Promise<boolean> => {
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) return false;
-    const isUserOnline = userSnap.data().status;
-
-    if (!isUserOnline) return false;
     return true;
   } catch (error) {
     return false;
@@ -255,6 +283,48 @@ export const updateUserStatus = async (
       status: status,
     });
     return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getUserDocFromFirestore = async (userId: string) => {
+  const docRef = doc(db, "users", userId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return false;
+  }
+};
+
+export const handleCookies = (
+  method: string,
+  name?: string,
+  setItem?: string
+): string | boolean => {
+  // This method is used to store, get, delete items in cookiess
+  try {
+    if (method === "get" && name !== undefined) {
+      const cookieData = cookies().get(name);
+      if (!cookieData) return false;
+      const data = cookieData.value;
+      return data;
+    }
+
+    if (method === "set" && setItem !== undefined && name !== undefined) {
+      cookies().set(name, setItem);
+      return true;
+    }
+    if (method === "delete" && name !== undefined) {
+      const data = cookies().get(name);
+      if (!data) return false;
+      cookies().delete(name);
+      return true;
+    }
+    return false;
+    // Add more cookies method
   } catch (error) {
     return false;
   }
