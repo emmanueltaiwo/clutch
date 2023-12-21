@@ -1,4 +1,4 @@
-import { verifyUserStatus } from "./services/auth";
+import { verifyUserStatus } from "@/services/auth"
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
