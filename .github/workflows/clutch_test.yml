@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     defaults:
       run:
@@ -15,8 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [21.3.0]
-        npm: [10.2.4]
+        npm: [21.3.0]
 
     env:
       MODE: "dev"
@@ -26,7 +25,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.npm }}
 
