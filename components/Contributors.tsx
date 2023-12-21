@@ -2,16 +2,14 @@
 
 import React from "react";
 import { fetchAllContributors } from "@/services/github";
-import { ContributorsType } from "../types/homepage-types";
+import { GitHubUser } from "../types/homepage-types";
 import { BackgroundIllustrations } from "./Banner";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
 
-const Contributors = ({
-  contributors,
-}: {
-  contributors: ContributorsType[];
-}) => {
-  const { data, isLoading, isError, error } = useQuery<ContributorsType[]>({
+const Contributors = ({ contributors }: { contributors: GitHubUser[] }) => {
+  const { data, isLoading, isError, error } = useQuery<GitHubUser[]>({
     queryKey: ["contributors"],
     queryFn: async () => await fetchAllContributors(),
     initialData: contributors,
@@ -50,15 +48,25 @@ const Contributors = ({
       <ul className="flex flex-wrap gap-2">
         {data
           ?.sort((a, b) => b.contributions - a.contributions)
+          .slice(1)
           .map((contributor) => (
-            <li
-              className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-full p-5 w-fit h-fit shadow-sm shadow-gray-600"
-              key={contributor.email}
+            <Link
+              href={contributor.html_url}
+              target="_blank"
+              className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-[10px] p-5 w-fit h-fit shadow-sm shadow-gray-600"
+              key={contributor.id}
             >
+              <Image
+                src={contributor.avatar_url}
+                width={50}
+                height={50}
+                alt={contributor.login}
+                className="rounded-full"
+              />
               <h2 className="text-white font-[500] text-[15px]">
-                {contributor.name}
+                {contributor.login}
               </h2>
-            </li>
+            </Link>
           ))}
       </ul>
     </section>

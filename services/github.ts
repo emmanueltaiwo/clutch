@@ -1,14 +1,14 @@
 "use server";
 
 import axios from "axios";
-import { ContributorsType } from "../types/homepage-types";
+import { GitHubUser } from "../types/homepage-types";
 
 const apiUrl = `https://api.github.com/`;
 const owner = "realemmanuel";
 const repo = "clutch";
 const token = process.env.GITHUB_TOKEN_KEY;
 
-export const fetchAllContributors = async (): Promise<ContributorsType[]> => {
+export const fetchAllContributors = async (): Promise<GitHubUser[]> => {
   try {
     const response = await axios.get(
       `${apiUrl}repos/${owner}/${repo}/contributors`,
@@ -25,7 +25,7 @@ export const fetchAllContributors = async (): Promise<ContributorsType[]> => {
         },
       }
     );
-
+    console.log(response?.data);
     return response?.data;
   } catch (error) {
     throw new Error("An error occured while fetching contributors");

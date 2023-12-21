@@ -15,7 +15,6 @@ const config: Config = {
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/components/$1",
   },
-  coverageProvider: "v8",
   testEnvironment: "jsdom",
 };
  
