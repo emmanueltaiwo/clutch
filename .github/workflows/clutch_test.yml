@@ -15,7 +15,8 @@ jobs:
 
     strategy:
       matrix:
-        npm: [10.2.5]
+        node: [21.3.0]
+        npm: [10.2.4]
 
     env:
       MODE: "dev"
