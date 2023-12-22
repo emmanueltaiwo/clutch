@@ -51,7 +51,7 @@ const Contributors = ({ contributors }: { contributors: GitHubUser[] }) => {
           .slice(1)
           .map((contributor) => (
             <Link
-              href={contributor.html_url}
+              href={contributor.html_url || "/"}
               target="_blank"
               className="flex flex-col justify-center items-center gap-2 bg-[rgb(11,11,41)] rounded-[10px] p-5 w-fit h-fit shadow-sm shadow-gray-600"
               key={contributor.id}
