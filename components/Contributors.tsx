@@ -47,8 +47,7 @@ const Contributors = ({ contributors }: { contributors: GitHubUser[] }) => {
 
       <ul className="flex flex-wrap gap-2">
         {data
-          ?.sort((a, b) => b.contributions - a.contributions)
-          .slice(1)
+          ?.toSorted((a, b) => b.contributions - a.contributions)
           .map((contributor) => (
             <Link
               href={contributor.html_url || "/"}

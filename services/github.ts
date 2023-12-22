@@ -19,12 +19,12 @@ export const fetchAllContributors = async (): Promise<GitHubUser[]> => {
           "X-GitHub-Api-Version": "2022-11-28",
         },
         params: {
-          anon: "true",
           per_page: 100,
           page: 1,
         },
       }
     );
+    console.log(response?.data);
     return response?.data;
   } catch (error) {
     throw new Error("An error occured while fetching contributors");
