@@ -44,7 +44,7 @@ const MobileHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
           >
             <CloseIcon fontSize="large" />
           </button>
-          <div
+          <button
             className="right-0 top-0 bottom-0 fixed bg-[#00000032] h-full w-full z-40"
             onClick={() => setMenuIsOpen(false)}
             onKeyDown={() => setMenuIsOpen(false)}
@@ -87,7 +87,7 @@ const MobileHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
                   href="/feed"
                   onClick={() => setMenuIsOpen(false)}
                 >
-                  Go To Feed
+                  Go To App
                 </Link>
               ) : (
                 <Link
@@ -133,7 +133,7 @@ const DesktopHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
             className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#7119e6] hover:bg-[#8f3aff64]"
             href="/feed"
           >
-            Go To Feed
+            Go To App
           </Link>
         ) : (
           <Link
@@ -152,9 +152,10 @@ const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkUserAuthenticationState = () => {
+    const checkUserAuthenticationState = async () => {
       try {
-        const userHasToken = handleCookies("get", "USER_ID");
+        const userHasToken = (await handleCookies("get", "USER_ID")) as string;
+
         if (!userHasToken) {
           setIsAuthenticated(false);
         } else {

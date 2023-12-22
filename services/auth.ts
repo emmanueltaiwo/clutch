@@ -238,7 +238,7 @@ export const validateSignupInput = (formData: Signup): boolean => {
 export const verifyUserStatus = async (): Promise<boolean> => {
   // This function checks if the user has an existing id stored in cookies. If it exists, then it finds it in the database and verify the status then returns true. else it returns false
   try {
-    const userId = handleCookies("get", "USER_ID");
+    const userId = await handleCookies("get", "USER_ID");
     if (!userId) return false;
 
     const userRef = doc(db, "users", userId.toString());
@@ -299,11 +299,11 @@ const getUserDocFromFirestore = async (userId: string) => {
   }
 };
 
-export const handleCookies = (
+export const handleCookies = async (
   method: string,
   name?: string,
   setItem?: string
-): string | boolean => {
+): Promise<string | boolean> => {
   // This method is used to store, get, delete items in cookiess
   try {
     if (method === "get" && name !== undefined) {
