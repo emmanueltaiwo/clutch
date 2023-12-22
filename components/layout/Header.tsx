@@ -44,7 +44,7 @@ const MobileHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
           >
             <CloseIcon fontSize="large" />
           </button>
-          <button
+          <div
             className="right-0 top-0 bottom-0 fixed bg-[#00000032] h-full w-full z-40"
             onClick={() => setMenuIsOpen(false)}
             onKeyDown={() => setMenuIsOpen(false)}
