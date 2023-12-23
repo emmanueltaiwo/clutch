@@ -1,7 +1,7 @@
-import Banner from "@/components/Banner";
-import Contributors from "@/components/Contributors";
-import Features from "@/components/Features";
-import Layout from "@/components/layout";
+import Banner from "@/components/home/Banner";
+import Contributors from "@/components/home/Contributors";
+import Features from "@/components/home/Features";
+import Layout from "@/components/home/layout";
 import { fetchAllContributors } from "@/services/github";
 
 export default async function Home() {

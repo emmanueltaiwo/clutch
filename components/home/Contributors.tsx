@@ -2,7 +2,7 @@
 
 import React from "react";
 import { fetchAllContributors } from "@/services/github";
-import { GitHubUser } from "../types/homepage-types";
+import { GitHubUser } from "../../types/homepage-types";
 import { BackgroundIllustrations } from "./Banner";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
