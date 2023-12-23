@@ -2,8 +2,8 @@ import { verifyUserStatus } from "@/services/auth";
 
 export const getSessionStatus = async (): Promise<boolean> => {
   try {
-    const isUserVerified = await verifyUserStatus();
-    return isUserVerified;
+    const doesUserTokenExist = await verifyUserStatus();
+    return doesUserTokenExist;
   } catch (error) {
     return false;
   }

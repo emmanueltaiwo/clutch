@@ -2,8 +2,7 @@
 
 import React from "react";
 import { useAppSelector } from "@/lib/hooks";
-import Header from "@/components/layout/Header";
-import { User } from "@/types";
+import Header from "@/components/home/layout/Header";
 
 const Feed = () => {
   const user = useAppSelector((state) => state.auth);

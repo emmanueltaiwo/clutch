@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import Logo from "../Logo";
