@@ -25,7 +25,6 @@ export const fetchAllContributors = async (): Promise<GitHubUser[]> => {
       }
     );
     const data = response.data;
-    console.log("DATA", data);
     return data;
   } catch (error) {
     throw new Error("An error occured while fetching contributors");
