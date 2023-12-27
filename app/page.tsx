@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <Layout>
-      <main className="flex flex-col w-full h-full">
+      <main className="flex flex-col w-full h-full bg-[rgba(2,2,26)]">
         <Banner />
         <Features />
         <Contributors contributors={contributors} />

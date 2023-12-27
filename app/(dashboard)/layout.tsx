@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSessionStatus } from "@/lib/session";
+import Sidebar from "@/components/Sidebar";
 
 export default function AppLayout({
   children,
@@ -36,7 +37,12 @@ export default function AppLayout({
         </p>
       )}
 
-      {isAuthenticated && <>{children}</>}
+      {isAuthenticated && (
+        <section>
+          <Sidebar />
+          {children}
+        </section>
+      )}
     </section>
   );
 }

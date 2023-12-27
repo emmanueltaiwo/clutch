@@ -6,7 +6,7 @@ import WidgetsIcon from "@mui/icons-material/Widgets";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion, AnimatePresence } from "framer-motion";
 import { handleCookies } from "@/services/auth";
-import Logo from "../Logo";
+import Logo from "../../Logo";
 
 const MenuItem = ({
   href,

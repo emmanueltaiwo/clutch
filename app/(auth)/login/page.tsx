@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "./LoginForm";
 import { BackgroundIllustrations } from "@/components/home/Banner";
-import Logo from "@/components/home/Logo";
+import Logo from "@/components/Logo";
 
 const Login = () => {
   return (

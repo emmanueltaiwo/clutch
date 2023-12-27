@@ -5,7 +5,7 @@ export default function AuthLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <section>
+    <section className="bg-[rgba(2,2,26)]">
       <Layout>{children}</Layout>
     </section>
   );
