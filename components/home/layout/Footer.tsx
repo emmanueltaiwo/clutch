@@ -1,7 +1,7 @@
 import React from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import Logo from "../Logo";
+import Logo from "../../Logo";
 
 const Footer = () => {
   return (

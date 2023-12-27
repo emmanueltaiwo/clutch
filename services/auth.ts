@@ -317,6 +317,7 @@ export const handleCookies = async (
       cookies().set(name, setItem);
       return true;
     }
+
     if (method === "delete" && name !== undefined) {
       const data = cookies().get(name);
       if (!data) return false;
