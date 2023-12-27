@@ -12,9 +12,8 @@ const Contributors = () => {
   const { data, isLoading, isError, error } = useQuery<GitHubUser[]>({
     queryKey: ["contributors"],
     queryFn: async () => await fetchAllContributors(),
+    staleTime: 0,
   });
-
-  console.log(data)
 
   if (isLoading) {
     return (
