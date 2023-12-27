@@ -13,6 +13,8 @@ const Contributors = ({ contributors }: { contributors: GitHubUser[] }) => {
     queryKey: ["contributors"],
     queryFn: async () => await fetchAllContributors(),
     initialData: contributors,
+    refetchInterval: 5000,
+    staleTime: 0,
   });
 
   if (isLoading) {
