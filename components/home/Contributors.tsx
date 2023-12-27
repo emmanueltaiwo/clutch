@@ -8,14 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 
-const Contributors = ({ contributors }: { contributors: GitHubUser[] }) => {
+const Contributors = () => {
   const { data, isLoading, isError, error } = useQuery<GitHubUser[]>({
     queryKey: ["contributors"],
     queryFn: async () => await fetchAllContributors(),
-    initialData: contributors,
-    refetchInterval: 5000,
-    staleTime: 0,
   });
+
+  console.log(data)
 
   if (isLoading) {
     return (
@@ -47,7 +46,7 @@ const Contributors = ({ contributors }: { contributors: GitHubUser[] }) => {
         contributing to <span className="text-[#FE34B9]">Clutch</span>
       </h1>
 
-      <ul className="flex flex-wrap gap-2">
+      <ul className="flex flex-wrap gap-5">
         {data
           ?.sort((a, b) => b.contributions - a.contributions)
           .map((contributor) => (
