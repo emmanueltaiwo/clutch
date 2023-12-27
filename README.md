@@ -1,6 +1,6 @@
 # Clutch - Social Media App
 
-Clutch is a social media platform that focuses on building communities. Its primary objective is to create a space where users can connect with like-minded individuals, share ideas, and cultivate meaningful communities. Clutch places a strong emphasis on quality connections over quantity, promoting a positive and engaging user experience.
+Clutch is a social platform that focuses on building communities. Its primary objective is to create a space where users can connect with like-minded individuals, share ideas, and cultivate meaningful communities. Clutch places a strong emphasis on quality connections over quantity, promoting a positive and engaging user experience.
 
 ## Features
 
