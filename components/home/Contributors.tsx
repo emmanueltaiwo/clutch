@@ -3,10 +3,10 @@
 import React from "react";
 import { fetchAllContributors } from "@/services/github";
 import { GitHubUser } from "../../types/homepage-types";
-import { BackgroundIllustrations } from "./Banner";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { BackgroundIllustrations } from "./Banner";
 
 const Contributors = () => {
   const { data, isLoading, isError, error } = useQuery<GitHubUser[]>({

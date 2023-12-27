@@ -5,10 +5,6 @@ import Image from "next/image";
 const Logo = () => {
   return (
     <Link href="/">
-      {/* <p className="text-[20px] font-bold text-gray-900 dark:text-gray-100">
-        Logo
-      </p> */}
-
       <Image
         src="/assets/Images/logo.png"
         width={100}
