@@ -1,7 +1,12 @@
 import React from "react";
+import RightPanel from "@/components/RightPanel";
 
 const Feed = () => {
-  return <div></div>;
+  return (
+    <main className="w-full h-full">
+      <RightPanel />
+    </main>
+  );
 };
 
 export default Feed;
