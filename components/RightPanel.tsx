@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const RightPanel = () => {
   return (
-    <section className="hidden lg:inline lg:w-[40vh] xl:w-[50vh] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
+    <section className="hidden lg:inline lg:w-[25%] xl:w-[27%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
       <div className="flex flex-col gap-5">
         <div className="h-[11vh] flex items-center justify-center">
           <input
