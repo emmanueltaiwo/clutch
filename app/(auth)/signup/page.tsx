@@ -1,5 +1,5 @@
 import React from "react";
-import { BackgroundIllustrations } from "@/components/home/Banner";
+import { BackgroundIllustrations } from "@/components/Home/Banner";
 import Logo from "@/components/Logo";
 import SignupForm from "./SignupForm";
 

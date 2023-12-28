@@ -1,7 +1,7 @@
-import Banner from "@/components/home/Banner";
-import Contributors from "@/components/home/Contributors";
-import Features from "@/components/home/Features";
-import Layout from "@/components/home/layout";
+import Banner from "@/components/Home/Banner";
+import Contributors from "@/components/Home/Contributors";
+import Features from "@/components/Home/Features";
+import Layout from "@/components/Home/layout";
 
 export default function Home() {
   return (

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Layout from "@/components/home/layout";
+import Layout from "@/components/Home/layout";
 
 export default function AuthLayout({
   children,
