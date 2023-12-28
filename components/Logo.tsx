@@ -1,10 +1,21 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const Logo = () => {
+  const pathName = usePathname();
+
   return (
-    <Link href="/">
+    <Link
+      href={`${
+        pathName === "/" || pathName === "/login" || pathName === "/signup"
+          ? "/"
+          : "/feed"
+      }`}
+    >
       <Image
         src="/assets/Images/logo.png"
         width={100}
