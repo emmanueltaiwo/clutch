@@ -18,10 +18,13 @@ import {
 import { fetchAllCommunities } from "@/services/communities";
 import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { openSidebar, closeSidebar } from "@/lib/features/sidebar/sidebarSlice";
 
 const Sidebar = () => {
+  const dispatch = useAppDispatch();
+  const isOpen = useAppSelector((state) => state.sidebar.isOpen);
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
   const [activeLink, setActiveLink] = useState<string>("");
   const { data, isLoading } = useQuery<Community[]>({
     queryKey: ["contributors"],
@@ -37,8 +40,8 @@ const Sidebar = () => {
     <aside
       className={`${
         isOpen
-          ? "w-[35vh] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto transition-all duration-500"
-          : "w-[10vh] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto duration-500"
+          ? "w-[90%] sm:w-[37%] md:w-[33%] lg:w-[25%] xl:w-[21%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto transition-all duration-500"
+          : "w-[20%] sm:w-[10%] md:w-[9%] lg:w-[8%] xl:w-[5%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto duration-500"
       }`}
     >
       {isOpen && (
@@ -49,7 +52,9 @@ const Sidebar = () => {
             <div className="flex items-center gap-3">
               <ModeToggle />
               <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                  dispatch(closeSidebar());
+                }}
                 className="text-gray-900 dark:text-white p-1 rounded-full bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] dark:hover:bg-[rgba(24,29,40,0.99)] transition-all duration-200"
               >
                 <ChevronLeftIcon />
@@ -154,23 +159,27 @@ const Sidebar = () => {
       )}
 
       {!isOpen && (
-        <nav className="flex flex-col gap-5 p-5 pb-10">
+        <nav className="flex flex-col items-center gap-5 p-5 pb-10">
           <div className="flex flex-col gap-5 justify-between">
-            <Image
-              src="/assets/Images/logoIcon.svg"
-              width={30}
-              height={30}
-              alt="Clutch logo"
-              className="dark:inline hidden"
-            />
+            <Link href="/feed">
+              <Image
+                src="/assets/Images/logoIcon.svg"
+                width={30}
+                height={30}
+                alt="Clutch logo"
+                className="dark:inline hidden"
+              />
+            </Link>
 
-            <Image
-              src="/assets/Images/logoIconBg.svg"
-              width={30}
-              height={30}
-              alt="Clutch logo"
-              className="dark:hidden inline"
-            />
+            <Link href="/feed">
+              <Image
+                src="/assets/Images/logoIconBg.svg"
+                width={30}
+                height={30}
+                alt="Clutch logo"
+                className="dark:hidden inline"
+              />
+            </Link>
 
             <div className="flex items-center gap-3">
               <div className={`${isOpen ? "inline" : "hidden"}`}>
@@ -178,7 +187,9 @@ const Sidebar = () => {
               </div>
 
               <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                  dispatch(openSidebar());
+                }}
                 className="text-gray-900 dark:text-white p-1 rounded-full bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] dark:hover:bg-[rgba(24,29,40,0.99)] transition-all duration-200"
               >
                 <ChevronRightIcon />
@@ -207,25 +218,29 @@ const Sidebar = () => {
             })}
           </ul>
 
-          <hr className="w-full border-[0.4px] border-gray-600" />
+          {data && data.length >= 1 && (
+            <>
+              <hr className="w-full border-[0.4px] border-gray-600" />
 
-          <ul className="flex flex-col gap-3">
-            {data?.slice(0, 5).map((community) => (
-              <Link
-                key={community.communityID}
-                href={`communities/${community.communityCategory}/${community.communityID}`}
-                className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
-              >
-                <Image
-                  src={community.communityPic ?? "/assets/Images/cover.png"}
-                  width={50}
-                  height={50}
-                  alt="community image"
-                  className="rounded-full w-[30px] h-[30px]"
-                />
-              </Link>
-            ))}
-          </ul>
+              <ul className="flex flex-col gap-3">
+                {data?.slice(0, 5).map((community) => (
+                  <Link
+                    key={community.communityID}
+                    href={`communities/${community.communityCategory}/${community.communityID}`}
+                    className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                  >
+                    <Image
+                      src={community.communityPic ?? "/assets/Images/cover.png"}
+                      width={50}
+                      height={50}
+                      alt="community image"
+                      className="rounded-full w-[30px] h-[30px]"
+                    />
+                  </Link>
+                ))}
+              </ul>
+            </>
+          )}
 
           <hr className="w-full border-[0.4px] border-gray-600" />
 
