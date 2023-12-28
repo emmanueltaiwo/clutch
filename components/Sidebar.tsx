@@ -103,7 +103,7 @@ const Sidebar = () => {
                 Find Communities
               </Link>
             ) : (
-              data?.map((community) => (
+              data?.slice(0, 5).map((community) => (
                 <Link
                   key={community.communityID}
                   href={`communities/${community.communityCategory}/${community.communityID}`}
@@ -210,7 +210,7 @@ const Sidebar = () => {
           <hr className="w-full border-[0.4px] border-gray-600" />
 
           <ul className="flex flex-col gap-3">
-            {data?.map((community) => (
+            {data?.slice(0, 5).map((community) => (
               <Link
                 key={community.communityID}
                 href={`communities/${community.communityCategory}/${community.communityID}`}
