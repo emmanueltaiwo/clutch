@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { BackgroundIllustrations } from "./Banner";
+import LoadingAnimation from "../LoadingAnimation";
 
 const Contributors = () => {
   const { data, isLoading, isError, error } = useQuery<GitHubUser[]>({
@@ -17,9 +18,9 @@ const Contributors = () => {
 
   if (isLoading) {
     return (
-      <p className="text-white text-center font-medium text-[15px]">
-        Loading contributors...
-      </p>
+      <div className="w-full flex items-center justify-center py-10">
+        <LoadingAnimation />
+      </div>
     );
   }
 

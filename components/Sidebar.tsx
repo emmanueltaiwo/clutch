@@ -20,6 +20,7 @@ import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { openSidebar, closeSidebar } from "@/lib/features/sidebar/sidebarSlice";
+import LoadingAnimation from "./LoadingAnimation";
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
@@ -95,9 +96,9 @@ const Sidebar = () => {
             </li>
 
             {isLoading && (
-              <p className="font-bold text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
-                Loading...
-              </p>
+              <div className="w-full flex items-center justify-center">
+                <LoadingAnimation/>
+              </div>
             )}
 
             {data && data.length < 1 ? (

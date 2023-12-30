@@ -4,7 +4,7 @@ import React from "react";
 import FeedToggle from "@/components/Feed/FeedToggle";
 import { useAppSelector } from "@/lib/hooks";
 
-const Feed = () => {
+const FeedPage = () => {
   const isOpen = useAppSelector((state) => state.sidebar.isOpen);
   return (
     <main
@@ -19,4 +19,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default FeedPage;

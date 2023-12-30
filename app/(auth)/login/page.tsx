@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm";
 import { BackgroundIllustrations } from "@/components/Home/Banner";
 import Logo from "@/components/Logo";
 
-const Login = () => {
+const LoginPage = () => {
   return (
     <main className="w-full h-full flex justify-center py-10 lg:py-12">
       <BackgroundIllustrations />
@@ -15,4 +15,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
