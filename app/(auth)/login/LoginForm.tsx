@@ -39,7 +39,8 @@ const LoginForm = () => {
   const loginUser = async (prevState: AuthResponse, formData: FormData) => {
     try {
       const login = await handleLoginAuthentication(prevState, formData);
-      if (!login || !login.user) return { message: "Error login attempt" };
+      if (!login?.user) return { message: "Error login attempt" };
+
       if (
         login.message !==
         "Yay! You've logged in successfully. redirecting you now"
@@ -70,7 +71,7 @@ const LoginForm = () => {
       </div>
 
       <div className="flex flex-col gap-4 w-[90%]">
-        <label className="text-white font-[400] text-[14px]">
+        <label htmlFor="email" className="text-white font-[400] text-[14px]">
           Enter E-mail Address:
         </label>
         <AuthInput
@@ -81,7 +82,7 @@ const LoginForm = () => {
       </div>
 
       <div className="flex flex-col gap-4 w-[90%]">
-        <label className="text-white font-[400] text-[14px]">
+        <label htmlFor="password" className="text-white font-[400] text-[14px]">
           Enter Password:
         </label>
         <AuthInput type="password" placeholder="*********" name="password" />
