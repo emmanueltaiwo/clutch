@@ -15,7 +15,7 @@ import {
   iconComponents,
   subIconComponents,
 } from "@/data/sidebar";
-import { fetchAllCommunities } from "@/services/communities";
+import { fetchUserCommunities } from "@/services/communities";
 import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -27,8 +27,8 @@ const Sidebar = () => {
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState<string>("");
   const { data, isLoading } = useQuery<Community[]>({
-    queryKey: ["contributors"],
-    queryFn: async () => await fetchAllCommunities(),
+    queryKey: ["user-communities"],
+    queryFn: async () => await fetchUserCommunities(),
     staleTime: 0,
   });
 
