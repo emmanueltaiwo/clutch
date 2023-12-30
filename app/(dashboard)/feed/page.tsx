@@ -1,11 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import FeedToggle from "@/components/Feed/FeedToggle";
 import { useAppSelector } from "@/lib/hooks";
+import Feed from "@/components/Feed/Feed";
+import LoadingAnimation from "@/components/LoadingAnimation";
+import CreatePost from "@/components/Feed/CreatePost";
 
 const FeedPage = () => {
   const isOpen = useAppSelector((state) => state.sidebar.isOpen);
+  
   return (
     <main
       className={`${
@@ -15,6 +19,10 @@ const FeedPage = () => {
       }`}
     >
       <FeedToggle />
+      <CreatePost />
+      <Suspense fallback={<LoadingAnimation />}>
+        <Feed />
+      </Suspense>
     </main>
   );
 };
