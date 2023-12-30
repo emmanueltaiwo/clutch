@@ -3,7 +3,7 @@ import { BackgroundIllustrations } from "@/components/Home/Banner";
 import Logo from "@/components/Logo";
 import SignupForm from "./SignupForm";
 
-const Signup = () => {
+const SignupPage = () => {
   return (
     <main className="w-full h-full flex justify-center py-10 lg:py-12">
       <BackgroundIllustrations />
@@ -15,4 +15,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupPage;

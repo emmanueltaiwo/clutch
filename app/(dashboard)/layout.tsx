@@ -4,6 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSessionStatus } from "@/lib/session";
 import Sidebar from "@/components/Sidebar";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 export default function AppLayout({
   children,
@@ -32,9 +33,9 @@ export default function AppLayout({
   return (
     <section>
       {!isAuthenticated && (
-        <p className="text-white text-[15px] font-medium text-center">
-          Loading...
-        </p>
+        <div className="w-full flex items-center justify-center fixed top-0 bottom-0">
+          <LoadingAnimation />
+        </div>
       )}
 
       {isAuthenticated && (

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { recommendCommunityToUser } from "@/services/communities";
 import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
+import LoadingAnimation from "./LoadingAnimation";
 
 const RightPanel = () => {
   const { data, isLoading } = useQuery<Community[]>({
@@ -49,9 +50,9 @@ const RightPanel = () => {
           </h1>
 
           {isLoading && (
-            <p className="font-bold text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
-              Loading...
-            </p>
+            <div className="w-full flex items-center justify-center">
+              <LoadingAnimation />
+            </div>
           )}
 
           {data && data.length < 1 ? (
