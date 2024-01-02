@@ -330,3 +330,13 @@ export const handleCookies = async (
     return false;
   }
 };
+
+export const handleUserSignout = async (): Promise<boolean> => {
+  try {
+    await handleCookies("delete", "USER_ID");
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

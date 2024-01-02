@@ -8,7 +8,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   sidebarLinks,
   sidebarSubLinks,
@@ -16,6 +16,7 @@ import {
   subIconComponents,
 } from "@/data/sidebar";
 import { fetchUserCommunities } from "@/services/communities";
+import { handleUserSignout } from "@/services/auth";
 import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -23,6 +24,7 @@ import { openSidebar, closeSidebar } from "@/lib/features/sidebar/sidebarSlice";
 import LoadingAnimation from "./LoadingAnimation";
 
 const Sidebar = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.sidebar.isOpen);
   const pathname = usePathname();
@@ -36,6 +38,16 @@ const Sidebar = () => {
   useEffect(() => {
     setActiveLink(pathname);
   }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      const signout = await handleUserSignout();
+
+      if (!signout) router.push("/feed");
+
+      router.push("/login");
+    } catch (error) {}
+  };
 
   return (
     <aside
@@ -97,7 +109,7 @@ const Sidebar = () => {
 
             {isLoading && (
               <div className="w-full flex items-center justify-center">
-                <LoadingAnimation/>
+                <LoadingAnimation />
               </div>
             )}
 
@@ -152,7 +164,10 @@ const Sidebar = () => {
             })}
           </ul>
 
-          <button className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] mt-auto">
+          <button
+            className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] mt-auto"
+            onClick={handleLogout}
+          >
             <LogoutIcon />
             Log Out
           </button>
@@ -266,7 +281,10 @@ const Sidebar = () => {
             })}
           </ul>
 
-          <button className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] mt-auto">
+          <button
+            className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] mt-auto"
+            onClick={handleLogout}
+          >
             <LogoutIcon />
           </button>
         </nav>
