@@ -41,8 +41,8 @@ const Sidebar = () => {
     <aside
       className={`${
         isOpen
-          ? "w-[90%] sm:w-[37%] md:w-[33%] lg:w-[25%] xl:w-[21%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto transition-all duration-500"
-          : "w-[20%] sm:w-[10%] md:w-[9%] lg:w-[8%] xl:w-[5%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto duration-500"
+          ? "w-[90%] sm:w-[37%] md:w-[33%] lg:w-[25%] xl:w-[21%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden transition-all duration-500"
+          : "w-[20%] sm:w-[10%] md:w-[9%] lg:w-[8%] xl:w-[5%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden duration-500"
       }`}
     >
       {isOpen && (
