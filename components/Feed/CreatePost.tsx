@@ -20,7 +20,7 @@ const CreatePost = () => {
           <div className="w-full flex items-center gap-5 cursor-pointer">
             <ProfileAvatar />
             <h3 className="text-[20px] dark:text-gray-400 text-gray-700 font-[300]">
-              Say what&apos; on your mind
+              Say what&apos;s on your mind
             </h3>
           </div>
         </DialogTrigger>
