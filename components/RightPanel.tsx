@@ -7,6 +7,7 @@ import { recommendCommunityToUser } from "@/services/communities";
 import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "./LoadingAnimation";
+import SearchIcon from "@mui/icons-material/Search";
 
 const RightPanel = () => {
   const { data, isLoading } = useQuery<Community[]>({
@@ -17,12 +18,13 @@ const RightPanel = () => {
 
   return (
     <section className="hidden lg:inline lg:w-[25%] xl:w-[27%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
-      <div className="flex flex-col gap-5">
-        <div className="h-[11vh] flex items-center justify-center">
+      <div className="mt-5 flex flex-col gap-5">
+        <div className="w-[90%] rounded-full h-[8vh] mx-auto flex gap-4 items-center px-4 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]">
+          <SearchIcon />
           <input
             type="text"
             placeholder="Search.."
-            className="w-[90%] p-4 rounded-full bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] dark:placeholder:text-gray-200 placeholder:text-gray-900 outline-bg-gray-400"
+            className="h-full bg-transparent outline-none dark:placeholder:text-gray-200 placeholder:text-gray-900"
           />
         </div>
 
