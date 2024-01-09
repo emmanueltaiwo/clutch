@@ -35,7 +35,7 @@ const RightPanel = () => {
 
           <div className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-[rgb(205,211,226)] dark:bg-[rgb(26,32,44)] overflow-y-auto p-5">
             <h4 className="font-bold text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
-              You have no active community
+              None of your communities are currently active
             </h4>
             <Link
               href="/communities"
