@@ -4,15 +4,20 @@ import React, { useState } from "react";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { useRouter } from "next/navigation";
 import { handleDemoAccountAuthentication } from "@/services/auth";
+import { useAppDispatch } from "@/lib/hooks";
+import { addUser } from "@/lib/features/auth/authSlice";
 
 const DemoAccount = () => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const loginToDemoAccount = async () => {
     try {
       setIsPending(true);
-      await handleDemoAccountAuthentication();
+      const userData = await handleDemoAccountAuthentication();
+      if (!userData) return;
+      dispatch(addUser(userData));
       router.push("/feed");
       setIsPending(false);
     } catch {
