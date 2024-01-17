@@ -198,11 +198,15 @@ export const handleDemoAccountAuthentication = async () => {
     const user = userCredential.user;
     const { uid } = user;
     handleCookies("set", "USER_ID", uid);
+    const userDoc = await getUserDocFromFirestore(uid);
+    if (userDoc !== false) {
+      return userDoc as User;
+    }
   } catch (error) {
-    const firebaseError = error as FirebaseError;
-    const { code } = firebaseError;
-    const response = { message: code };
-    return response;
+    throw new Error();
+    // const firebaseError = error as FirebaseError;
+    // const { code } = firebaseError;
+    // const response = { message: code };
   }
 };
 
