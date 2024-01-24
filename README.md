@@ -43,7 +43,7 @@ Clutch is a social network that focuses on building communities. Its primary obj
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/clutch.git
+   git clone https://github.com/realemmanuel/clutch.git
    ```
 
 2. Install dependencies:
@@ -64,7 +64,7 @@ Clutch is a social network that focuses on building communities. Its primary obj
 2. Clone your fork:
 
 ```bash
-git clone https://github.com/yourusername/clutch.git
+git clone https://github.com/realemmanuel/clutch.git
 ```
 
 2. Create a new branch:
