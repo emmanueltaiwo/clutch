@@ -14,16 +14,21 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import ProfileAvatar from "../ProfileAvatar";
 import { createNewPost } from "@/services/feed";
+import { useToast } from "@/components/ui/use-toast";
 
 const CreatePost = () => {
+  const { toast } = useToast();
   const [post, setPost] = useState<string>("");
 
   const hanldePostCreation = async () => {
     try {
       const postResponse = await createNewPost(post);
 
-      alert(postResponse);
-      setPost("")
+      toast({
+        title: postResponse,
+        description: "Your Post Has Been Created! Enjoy Clutch!",
+      });
+      setPost("");
     } catch (error) {
       throw new Error();
     }
