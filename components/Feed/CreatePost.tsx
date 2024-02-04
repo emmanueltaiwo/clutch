@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,15 +13,29 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import ProfileAvatar from "../ProfileAvatar";
+import { createNewPost } from "@/services/feed";
 
 const CreatePost = () => {
+  const [post, setPost] = useState<string>("");
+
+  const hanldePostCreation = async () => {
+    try {
+      const postResponse = await createNewPost(post);
+
+      alert(postResponse);
+      setPost("")
+    } catch (error) {
+      throw new Error();
+    }
+  };
+
   return (
     <section className="h-[13vh] border-b-[0.5px] flex justify-center items-center flex-col border-gray-500 p-5">
       <Dialog>
         <DialogTrigger asChild>
           <div className="w-full flex items-center gap-5 cursor-pointer">
             <ProfileAvatar />
-            <h3 className="text-[20px] dark:text-gray-400 text-gray-700 font-[300]">
+            <h3 className="text-[14px] md:text-[20px] dark:text-gray-400 text-gray-700 font-[300]">
               Say what&apos;s on your mind
             </h3>
           </div>
@@ -30,12 +46,18 @@ const CreatePost = () => {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="w-full  items-center gap-4">
-              <Textarea placeholder="Say what's on your mind" />
+              <Textarea
+                value={post}
+                onChange={(e) => setPost(e.target.value)}
+                placeholder="Say what's on your mind"
+              />
             </div>
           </div>
           <DialogClose>
             <DialogFooter>
-              <Button type="submit">Post</Button>
+              <Button onClick={hanldePostCreation} type="submit">
+                Post
+              </Button>
             </DialogFooter>
           </DialogClose>
         </DialogContent>

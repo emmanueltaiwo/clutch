@@ -9,3 +9,18 @@ export interface User {
   interests: string[];
   status?: boolean;
 }
+
+export type Post = {
+  postId: string;
+  userId: string;
+  post: string;
+  postImage?: string;
+  category: string;
+  createdAt: string;
+  timeStamp: number;
+  user: {
+    fullName: string;
+    profilePic: string;
+    country: string;
+  };
+};

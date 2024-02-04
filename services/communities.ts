@@ -56,7 +56,7 @@ export const recommendCommunityToUser = async (): Promise<Community[]> => {
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
-      const userInterests = userSnap.data()?.interest as string[];
+      const userInterests = userSnap.data()?.interests as string[];
 
       const mappedInterests = userInterests.map((interest: string) => interest);
 

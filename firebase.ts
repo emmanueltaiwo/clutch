@@ -3,13 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID,
+  apiKey: "AIzaSyAhnYXSiZKOUiufw06l0naUGrU10gdT8Jk",
+  authDomain: "clutch-16650.firebaseapp.com",
+  projectId: "clutch-16650",
+  storageBucket: "clutch-16650.appspot.com",
+  messagingSenderId: "147699418091",
+  appId: "1:147699418091:web:6b77019f07f955e052cfae",
+  measurementId: "G-73MP2P2SBB"
 };
 
 const app = initializeApp(firebaseConfig);
