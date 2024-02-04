@@ -8,6 +8,7 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase";
 import { getUserDocFromFirestore } from "@/services/auth";
 import SkeletonCard from "./SkeletonCard";
+import { formatDate } from "@/utils/helpers";
 
 const Feed = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -34,7 +35,7 @@ const Feed = () => {
                 postImage: post.postImage,
                 category: post.category,
                 createdAt: post.createdAt,
-                timeStamp: post.timeStamp,
+                createdAtString: formatDate(post.createdAt),
                 user: {
                   fullName: user.fullName,
                   profilePic: user.profilePic,
@@ -60,16 +61,13 @@ const Feed = () => {
   }, []);
 
   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
-    <div
-      key={index}
-      className="w-full h-full flex flex-col gap-3"
-    >
+    <div key={index} className="w-full h-full flex flex-col gap-3">
       <SkeletonCard />
     </div>
   ));
 
   const sortedPosts = [...posts].sort((a, b) => {
-    return b.timeStamp - a.timeStamp;
+    return b.createdAt - a.createdAt;
   });
 
   return (
@@ -98,7 +96,7 @@ const Feed = () => {
                     width={50}
                     height={50}
                     alt={post.user.fullName}
-                    className="rounded-full border-[1px] border-gray-500"
+                    className="rounded-full border-[1px] border-gray-500 dark:invert-0 invert"
                   />
 
                   <div className="flex flex-col">
@@ -106,7 +104,7 @@ const Feed = () => {
                       {post.user.fullName}
                     </h4>
                     <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-                      {post.createdAt}
+                      {post.createdAtString}
                     </span>
                   </div>
                 </div>
