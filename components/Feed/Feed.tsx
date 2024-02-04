@@ -7,13 +7,16 @@ import Link from "next/link";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase";
 import { getUserDocFromFirestore } from "@/services/auth";
+import SkeletonCard from "./SkeletonCard";
 
 const Feed = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
+        setIsLoading(true);
         const q = query(collection(db, "posts"));
 
         const unsubscribe = onSnapshot(q, async (querySnapshot) => {
@@ -44,6 +47,7 @@ const Feed = () => {
           );
 
           setPosts(newPosts);
+          setIsLoading(false);
         });
 
         return () => unsubscribe();
@@ -55,9 +59,14 @@ const Feed = () => {
     fetchAllPosts();
   }, []);
 
-  if (posts.length < 1) {
-    return <p>No Posts Found</p>;
-  }
+  const skeletonCards = Array.from({ length: 5 }, (_, index) => (
+    <div
+      key={index}
+      className="w-full h-full flex flex-col gap-3"
+    >
+      <SkeletonCard />
+    </div>
+  ));
 
   const sortedPosts = [...posts].sort((a, b) => {
     return b.timeStamp - a.timeStamp;
@@ -65,47 +74,49 @@ const Feed = () => {
 
   return (
     <section className="w-full md:w-[90%] md:mx-auto h-full flex flex-col gap-5 my-5">
-      {sortedPosts.map((post) => {
-        const [firstName, lastName] = post.user.fullName.split(" ");
+      {isLoading || posts.length === 0
+        ? skeletonCards
+        : sortedPosts.map((post) => {
+            const [firstName, lastName] = post.user.fullName.split(" ");
 
-        return (
-          <Link
-            href={`/feed/${firstName.toLowerCase()}-${lastName.toLowerCase()}/${
-              post.postId
-            }`}
-            key={post.postId}
-            className="w-full border-[1px] border-gray-800 dark:border-gray-700 md:rounded-lg p-3 flex flex-col gap-5"
-          >
-            <div className="flex items-center gap-3">
-              <Image
-                src={
-                  post.user.profilePic.length < 1 ||
-                  post.user.profilePic === undefined
-                    ? "/assets/Images/logoIcon.svg"
-                    : post.user.profilePic
-                }
-                width={50}
-                height={50}
-                alt={post.user.fullName}
-                className="rounded-full border-[1px] border-gray-500"
-              />
+            return (
+              <Link
+                href={`/feed/${firstName.toLowerCase()}-${lastName.toLowerCase()}/${
+                  post.postId
+                }`}
+                key={post.postId}
+                className="w-full border-[1px] border-gray-800 dark:border-gray-700 md:rounded-lg p-3 flex flex-col gap-5"
+              >
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={
+                      post.user.profilePic.length < 1 ||
+                      post.user.profilePic === undefined
+                        ? "/assets/Images/logoIcon.svg"
+                        : post.user.profilePic
+                    }
+                    width={50}
+                    height={50}
+                    alt={post.user.fullName}
+                    className="rounded-full border-[1px] border-gray-500"
+                  />
 
-              <div className="flex flex-col">
-                <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
-                  {post.user.fullName}
-                </h4>
-                <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-                  {post.createdAt}
-                </span>
-              </div>
-            </div>
+                  <div className="flex flex-col">
+                    <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
+                      {post.user.fullName}
+                    </h4>
+                    <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
+                      {post.createdAt}
+                    </span>
+                  </div>
+                </div>
 
-            <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-100">
-              {post.post}
-            </p>
-          </Link>
-        );
-      })}
+                <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-100">
+                  {post.post}
+                </p>
+              </Link>
+            );
+          })}
     </section>
   );
 };

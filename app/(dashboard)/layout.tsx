@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getSessionStatus } from "@/lib/session";
 import Sidebar from "@/components/Sidebar";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function AppLayout({
   children,
@@ -42,6 +43,7 @@ export default function AppLayout({
         <section>
           <Sidebar />
           {children}
+          <Toaster />
         </section>
       )}
     </section>
