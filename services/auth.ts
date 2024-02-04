@@ -292,7 +292,7 @@ export const updateUserStatus = async (
   }
 };
 
-const getUserDocFromFirestore = async (userId: string) => {
+export const getUserDocFromFirestore = async (userId: string) => {
   const docRef = doc(db, "users", userId);
   const docSnap = await getDoc(docRef);
 
