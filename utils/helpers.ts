@@ -1,24 +1,19 @@
-import {
-  differenceInMinutes,
-  differenceInSeconds,
-  formatDistanceToNow,
-} from "date-fns";
-
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: number): string => {
   const now = new Date();
+  const msDiff = now.getTime() - date;
 
-  const minutesDiff = differenceInMinutes(now, date);
-  const secondsDiff = differenceInSeconds(now, date);
+  const secondsDiff = Math.floor(msDiff / 1000);
+  const minutesDiff = Math.floor(secondsDiff / 60);
+  const hoursDiff = Math.floor(minutesDiff / 60);
 
   if (minutesDiff < 1) {
     return "less than a minute ago";
   } else if (minutesDiff < 60) {
     return `${minutesDiff} ${minutesDiff === 1 ? "minute" : "minutes"} ago`;
-  } else if (secondsDiff < 3600) {
-    return `${Math.floor(minutesDiff / 60)} ${
-      Math.floor(minutesDiff / 60) === 1 ? "hour" : "hours"
-    } ago`;
+  } else if (hoursDiff < 24) {
+    return `${hoursDiff} ${hoursDiff === 1 ? "hour" : "hours"} ago`;
   } else {
-    return formatDistanceToNow(date, { addSuffix: true });
+    const options = { year: "numeric", month: "long", day: "numeric" } as const;
+    return now.toLocaleDateString(undefined, options);
   }
 };

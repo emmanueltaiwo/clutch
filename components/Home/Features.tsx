@@ -1,7 +1,7 @@
 import React from "react";
-import { features } from "@/data/features";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import { BackgroundIllustrations } from "./Banner";
+import { FEATURES } from "@/constants";
 
 const Features = () => {
   return (
@@ -19,7 +19,7 @@ const Features = () => {
       </h1>
 
       <ul className="mt-10 flex flex-wrap gap-5 w-[95%] mx-auto justify-center">
-        {features.map((feature) => (
+        {FEATURES.map((feature) => (
           <li
             key={feature.id}
             className="w-[420px] h-[250px] rounded-[10px] shadow-sm shadow-gray-600 bg-[rgb(11,11,41)] flex flex-col gap-5 items-center justify-center cursor-pointer hover:bg-[rgb(18,18,71)] hover:transition-ease hover:duration-200"

@@ -9,12 +9,6 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  sidebarLinks,
-  sidebarSubLinks,
-  iconComponents,
-  subIconComponents,
-} from "@/data/sidebar";
 import { fetchUserCommunities } from "@/services/communities";
 import { handleUserSignout } from "@/services/auth";
 import { Community } from "@/types/communities-types";
@@ -22,6 +16,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { openSidebar, closeSidebar } from "@/lib/features/sidebar/sidebarSlice";
 import LoadingAnimation from "./LoadingAnimation";
+import {
+  SIDEBAR_LINKS,
+  SIDEBAR_SUB_LINKS,
+  iconComponents,
+  subIconComponents,
+} from "@/constants";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -79,7 +79,7 @@ const Sidebar = () => {
             <li className="text-gray-900 dark:text-gray-400 text-[14px] font-[500]">
               Menu
             </li>
-            {sidebarLinks.map((item) => {
+            {SIDEBAR_LINKS.map((item) => {
               const IconComponent = iconComponents[item.icon];
               const isActiveLink = item.route == activeLink;
 
@@ -143,7 +143,7 @@ const Sidebar = () => {
           <hr className="w-full border-[0.4px] border-gray-600" />
 
           <ul className="flex flex-col gap-3 pb-10">
-            {sidebarSubLinks.map((item) => {
+            {SIDEBAR_SUB_LINKS.map((item) => {
               const IconComponent = subIconComponents[item.icon];
               const isActiveLink = item.route == activeLink;
 
@@ -214,7 +214,7 @@ const Sidebar = () => {
           </div>
 
           <ul className="mt-7 flex flex-col gap-3">
-            {sidebarLinks.map((item) => {
+            {SIDEBAR_LINKS.map((item) => {
               const IconComponent = iconComponents[item.icon];
               const isActiveLink = item.route == activeLink;
 
@@ -261,7 +261,7 @@ const Sidebar = () => {
           <hr className="w-full border-[0.4px] border-gray-600" />
 
           <ul className="flex flex-col gap-3 pb-10">
-            {sidebarSubLinks.map((item) => {
+            {SIDEBAR_SUB_LINKS.map((item) => {
               const IconComponent = subIconComponents[item.icon];
               const isActiveLink = item.route == activeLink;
 

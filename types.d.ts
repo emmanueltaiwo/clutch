@@ -16,8 +16,8 @@ export type Post = {
   post: string;
   postImage?: string;
   category: string;
-  createdAt: string;
-  timeStamp: number;
+  createdAt: number;
+  createdAtString: string;
   user: {
     fullName: string;
     profilePic: string;

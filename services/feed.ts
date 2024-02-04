@@ -28,8 +28,7 @@ export const createNewPost = async (post: string): Promise<string> => {
       category: userInterest,
       post: post,
       postImage: "",
-      createdAt: formatDate(new Date()),
-      timeStamp: new Date().getTime(),
+      createdAt: new Date().getTime(),
     };
     await setDoc(doc(db, "posts", postId), newPost);
 

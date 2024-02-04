@@ -9,7 +9,7 @@ import { SubmitButton } from "../login/LoginForm";
 import AuthInput from "../AuthInput";
 import { AuthResponse } from "@/types/auth-types";
 import { useRouter } from "next/navigation";
-import { countries, gender, interests } from "@/data/form";
+import { COUNTRIES, GENDER, INTERESTS } from "@/constants";
 import { useAppDispatch } from "@/lib/hooks";
 import { addUser } from "@/lib/features/auth/authSlice";
 
@@ -31,7 +31,7 @@ const SignupForm = () => {
       ) {
         return login;
       }
-      
+
       dispatch(addUser({ ...login.user }));
       router.push("/feed");
       return login;
@@ -104,7 +104,7 @@ const SignupForm = () => {
             <option value="default" disabled selected>
               Select your gender
             </option>
-            {gender.map((item) => (
+            {GENDER.map((item) => (
               <option key={item.id} value={item.name}>
                 {item.name}
               </option>
@@ -123,7 +123,7 @@ const SignupForm = () => {
             <option value="default" disabled selected>
               Select your country, you can change this later
             </option>
-            {countries.map((item) => (
+            {COUNTRIES.map((item) => (
               <option key={item.id} value={item.name}>
                 {item.name}
               </option>
@@ -143,7 +143,7 @@ const SignupForm = () => {
           <option value="default" disabled selected>
             Select your top interest, you can change this later
           </option>
-          {interests.map((item) => (
+          {INTERESTS.map((item) => (
             <option key={item.id} value={item.name}>
               {item.name}
             </option>

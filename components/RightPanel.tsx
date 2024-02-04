@@ -19,7 +19,7 @@ const RightPanel = () => {
   return (
     <section className="hidden lg:inline lg:w-[25%] xl:w-[27%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
       <div className="mt-5 flex flex-col gap-5">
-        <div className="w-[90%] rounded-full h-[8vh] mx-auto flex gap-4 items-center px-4 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]">
+        <div className="w-[90%] rounded-full min-h-[7vh] mx-auto flex gap-4 items-center px-4 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]">
           <SearchIcon />
           <input
             type="text"
