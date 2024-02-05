@@ -15,8 +15,9 @@ import { Textarea } from "@/components/ui/textarea";
 import ProfileAvatar from "../ProfileAvatar";
 import { createNewPost } from "@/services/feed";
 import { useToast } from "@/components/ui/use-toast";
+import { User } from "@/types";
 
-const CreatePost = () => {
+const CreatePost = ({ user }: { user: User }) => {
   const { toast } = useToast();
   const [post, setPost] = useState<string>("");
 
@@ -39,7 +40,7 @@ const CreatePost = () => {
       <Dialog>
         <DialogTrigger asChild>
           <div className="w-full flex items-center gap-5 cursor-pointer">
-            <ProfileAvatar />
+            <ProfileAvatar user={user} />
             <h3 className="text-[14px] md:text-[20px] dark:text-gray-400 text-gray-700 font-[300]">
               Say what&apos;s on your mind
             </h3>

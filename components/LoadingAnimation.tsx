@@ -12,7 +12,7 @@ const LoadingAnimation = () => {
         width={300}
         height={300}
         alt="Person Image"
-        className="rounded-full h-28 w-28"
+        className="rounded-full h-28 w-28 invert filter dark:invert-0"
       />
     </div>
   );

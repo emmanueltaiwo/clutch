@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { Post, User } from "@/types";
-import Image from "next/image";
 import Link from "next/link";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase";
 import { getUserDocFromFirestore } from "@/services/auth";
 import SkeletonCard from "./SkeletonCard";
 import { formatDate } from "@/utils/helpers";
+import PostAvatar from "./PostAvatar";
 
 const Feed = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -53,7 +53,7 @@ const Feed = () => {
 
         return () => unsubscribe();
       } catch (error) {
-        throw error;
+        throw new Error();
       }
     };
 
@@ -61,7 +61,7 @@ const Feed = () => {
   }, []);
 
   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
-    <div key={index} className="w-full h-full flex flex-col gap-3">
+    <div key={index} className="w-[90%] mx-auto h-full flex flex-col gap-3">
       <SkeletonCard />
     </div>
   ));
@@ -71,7 +71,7 @@ const Feed = () => {
   });
 
   return (
-    <section className="w-full md:w-[90%] md:mx-auto h-full flex flex-col gap-5 my-5">
+    <section className="w-full md:mx-auto h-full flex flex-col my-5">
       {isLoading || posts.length === 0
         ? skeletonCards
         : sortedPosts.map((post) => {
@@ -83,33 +83,31 @@ const Feed = () => {
                   post.postId
                 }`}
                 key={post.postId}
-                className="w-full border-[1px] border-gray-800 dark:border-gray-700 md:rounded-lg p-3 flex flex-col gap-5"
+                className="w-full border-t-[1px] border-b-[0.5px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5"
               >
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={
-                      post.user.profilePic.length < 1 ||
-                      post.user.profilePic === undefined
-                        ? "/assets/Images/logoIcon.svg"
-                        : post.user.profilePic
-                    }
-                    width={50}
-                    height={50}
-                    alt={post.user.fullName}
-                    className="rounded-full border-[1px] border-gray-500 dark:invert-0 invert"
-                  />
+                <div className="flex justify-between items-center gap-3">
+                  <div className="flex items-center gap-3">
+                    <PostAvatar
+                      profilePic={post.user.profilePic}
+                      fullName={post.user.fullName}
+                    />
 
-                  <div className="flex flex-col">
-                    <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
-                      {post.user.fullName}
-                    </h4>
-                    <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-                      {post.createdAtString}
-                    </span>
+                    <div className="flex flex-col">
+                      <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
+                        {post.user.fullName}
+                      </h4>
+                      <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
+                        @{firstName.toLowerCase()}
+                        {lastName.toLowerCase()}
+                      </span>
+                    </div>
                   </div>
+                  <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
+                    Posted {post.createdAtString}
+                  </p>
                 </div>
 
-                <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-100">
+                <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-200">
                   {post.post}
                 </p>
               </Link>
