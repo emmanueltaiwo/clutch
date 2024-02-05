@@ -133,9 +133,10 @@ export const handleSignupAuthentication = async (
     dateOfBirth,
     gender,
     country,
-    interest,
+    interests: [interest],
     termsAndConditions,
     password,
+    profilePic: "",
   };
 
   const isFormValid: boolean = validateSignupInput(newUser);
@@ -171,7 +172,7 @@ export const handleSignupAuthentication = async (
         profilePic: "",
         gender: newUser.gender,
         country: newUser.country,
-        interests: [newUser.interest],
+        interests: newUser.interests,
       },
       message:
         "Yay! You've succesfully created an account on clutch. redirecting you now",

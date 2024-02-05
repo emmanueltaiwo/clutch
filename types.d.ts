@@ -24,3 +24,12 @@ export type Post = {
     country: string;
   };
 };
+
+export type Follower = {
+  userId: string;
+  fullName: string;
+  profilePic: string;
+  gender: string;
+  country: string;
+  interests: string[];
+};

@@ -12,11 +12,12 @@ export interface Signup {
   dateOfBirth: string;
   gender: string;
   country: string;
-  interest: string;
+  interests: string[];
   termsAndConditions: string;
   password: string;
   hasFullAccess?: boolean;
   status?: boolean;
+  profilePic?: string;
 }
 
 export interface AuthResponse {
