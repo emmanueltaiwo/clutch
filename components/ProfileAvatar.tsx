@@ -13,7 +13,7 @@ const ProfileAvatar = (user: { user: User }) => {
           src={user.user.profilePic}
           width={50}
           height={50}
-          className="min-w-[50px] min-h-[50px] rounded-full invert-0 dark:invert dark:filter"
+          className="rounded-full invert-0"
           alt="Profile Pic"
         />
       )}
