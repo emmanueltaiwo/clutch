@@ -6,8 +6,8 @@ import Image from "next/image";
 import { recommendCommunityToUser } from "@/services/communities";
 import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
-import LoadingAnimation from "./LoadingAnimation";
 import SearchIcon from "@mui/icons-material/Search";
+import CommunitySkeleton from "./CommunitySkeleton";
 
 const RightPanel = () => {
   const { data, isLoading } = useQuery<Community[]>({
@@ -16,10 +16,16 @@ const RightPanel = () => {
     staleTime: 0,
   });
 
+  const skeletonCards = Array.from({ length: 2 }, (_, index) => (
+    <div key={index} className="w-full flex flex-col gap-3">
+      <CommunitySkeleton />
+    </div>
+  ));
+
   return (
-    <section className="hidden lg:inline lg:w-[25%] xl:w-[27%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
+    <section className="hidden lg:inline lg:w-[25%] xl:w-[27%] bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
       <div className="mt-5 flex flex-col gap-5">
-        <div className="w-[90%] rounded-full min-h-[7vh] mx-auto flex gap-4 items-center px-4 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]">
+        <div className="w-[90%] rounded-full min-h-[7vh] mx-auto flex gap-4 items-center px-4 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]">
           <SearchIcon />
           <input
             type="text"
@@ -28,12 +34,12 @@ const RightPanel = () => {
           />
         </div>
 
-        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-5">
+        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-5">
           <h1 className="text-gray-900 dark:text-gray-100 text-[20px] font-[600]">
             Active Communities
           </h1>
 
-          <div className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-[rgb(205,211,226)] dark:bg-[rgb(26,32,44)] overflow-y-auto p-5">
+          <div className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-[rgb(26,32,44)] overflow-y-auto p-5">
             <h4 className="font-bold text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
               None of your communities are currently active
             </h4>
@@ -46,19 +52,15 @@ const RightPanel = () => {
           </div>
         </div>
 
-        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit max-h-[500px] bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-5">
+        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit max-h-[500px] bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-5">
           <h1 className="text-gray-900 dark:text-gray-100 text-[20px] font-[600]">
             Recommended for you
           </h1>
 
-          {isLoading && (
-            <div className="w-full flex items-center justify-center">
-              <LoadingAnimation />
-            </div>
-          )}
+          {isLoading &&  skeletonCards }
 
           {data && data.length < 1 ? (
-            <h3 className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-4 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]">
+            <h3 className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-4 py-3 rounded-[15px] transition-all duration-200 bg-gray-100 dark:bg-[rgba(38,47,66,0.86)]">
               No community was found
             </h3>
           ) : (

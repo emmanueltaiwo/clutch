@@ -3,14 +3,20 @@
 import React from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
-import { User } from "@/types";
 
-const ProfileAvatar = (user: { user: User }) => {
+const PostAvatar = ({
+  profilePic,
+  fullName,
+}: {
+  profilePic: string;
+  fullName: string;
+}) => {
+
   return (
     <Avatar>
-      {user.user.profilePic.length !== 0 && (
+      {profilePic.length !== 0 && (
         <Image
-          src={user.user.profilePic}
+          src={profilePic}
           width={50}
           height={50}
           className="min-w-[50px] min-h-[50px] rounded-full invert-0 dark:invert dark:filter"
@@ -19,7 +25,7 @@ const ProfileAvatar = (user: { user: User }) => {
       )}
 
       <AvatarFallback delayMs={1000}>
-        {user.user.fullName
+        {fullName
           .split(" ")
           .map((n) => n[0])
           .join("")}
@@ -28,4 +34,4 @@ const ProfileAvatar = (user: { user: User }) => {
   );
 };
 
-export default ProfileAvatar;
+export default PostAvatar;

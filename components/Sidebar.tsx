@@ -15,13 +15,13 @@ import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { openSidebar, closeSidebar } from "@/lib/features/sidebar/sidebarSlice";
-import LoadingAnimation from "./LoadingAnimation";
 import {
   SIDEBAR_LINKS,
   SIDEBAR_SUB_LINKS,
   iconComponents,
   subIconComponents,
 } from "@/constants";
+import CommunitySkeleton from "./CommunitySkeleton";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -49,12 +49,18 @@ const Sidebar = () => {
     } catch (error) {}
   };
 
+  const skeletonCards = Array.from({ length: 2 }, (_, index) => (
+    <div key={index} className="w-full flex flex-col gap-3">
+      <CommunitySkeleton />
+    </div>
+  ));
+
   return (
     <aside
       className={`${
         isOpen
-          ? "w-[90%] sm:w-[37%] md:w-[33%] lg:w-[25%] xl:w-[21%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden transition-all duration-500"
-          : "w-[20%] sm:w-[10%] md:w-[9%] lg:w-[8%] xl:w-[5%] bg-gray-300 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden duration-500"
+          ? "w-[90%] sm:w-[37%] md:w-[33%] lg:w-[25%] xl:w-[21%] bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden transition-all duration-500"
+          : "w-[20%] sm:w-[10%] md:w-[9%] lg:w-[8%] xl:w-[5%] bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden duration-500"
       }`}
     >
       {isOpen && (
@@ -68,7 +74,7 @@ const Sidebar = () => {
                 onClick={() => {
                   dispatch(closeSidebar());
                 }}
-                className="text-gray-900 dark:text-white p-1 rounded-full bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] dark:hover:bg-[rgba(24,29,40,0.99)] transition-all duration-200"
+                className="text-gray-900 dark:text-white p-1 rounded-full bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] dark:hover:bg-[rgba(24,29,40,0.99)] transition-all duration-200"
               >
                 <ChevronLeftIcon />
               </button>
@@ -76,7 +82,7 @@ const Sidebar = () => {
           </div>
 
           <ul className="mt-10 flex flex-col gap-4">
-            <li className="text-gray-900 dark:text-gray-400 text-[14px] font-[500]">
+            <li className="text-gray-500 dark:text-gray-400 text-[14px] font-[500]">
               Menu
             </li>
             {SIDEBAR_LINKS.map((item) => {
@@ -89,8 +95,8 @@ const Sidebar = () => {
                   href={item.route}
                   className={`${
                     isActiveLink
-                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
-                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
+                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                   }`}
                 >
                   <IconComponent />
@@ -107,16 +113,12 @@ const Sidebar = () => {
               My Communities
             </li>
 
-            {isLoading && (
-              <div className="w-full flex items-center justify-center">
-                <LoadingAnimation />
-              </div>
-            )}
+            {isLoading && skeletonCards}
 
             {data && data.length < 1 ? (
               <Link
                 href="/communities"
-                className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-4 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
+                className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-[90%] px-4 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
               >
                 Find Communities
               </Link>
@@ -125,7 +127,7 @@ const Sidebar = () => {
                 <Link
                   key={community.communityID}
                   href={`communities/${community.communityCategory}/${community.communityID}`}
-                  className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                  className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                 >
                   <Image
                     src={community.communityPic ?? "/assets/Images/cover.png"}
@@ -153,8 +155,8 @@ const Sidebar = () => {
                   href={item.route}
                   className={`${
                     isActiveLink
-                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
-                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
+                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                   }`}
                 >
                   <IconComponent />
@@ -165,7 +167,7 @@ const Sidebar = () => {
           </ul>
 
           <button
-            className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)] mt-auto"
+            className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] mt-auto"
             onClick={handleLogout}
           >
             <LogoutIcon />
