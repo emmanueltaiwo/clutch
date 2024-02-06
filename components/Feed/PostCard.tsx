@@ -1,0 +1,56 @@
+import Link from "next/link";
+import React, { FC } from "react";
+import PostAvatar from "./PostAvatar";
+
+type Props = {
+  postId: string;
+  firstName: string;
+  lastName: string;
+  profilePic: string;
+  fullName: string;
+  createdAtString: string;
+  post: string;
+};
+
+const PostCard: FC<Props> = ({
+  postId,
+  firstName,
+  lastName,
+  profilePic,
+  fullName,
+  createdAtString,
+  post,
+}) => {
+  return (
+    <Link
+      href={`/feed/${firstName.toLowerCase()}-${lastName.toLowerCase()}/${postId}`}
+      key={postId}
+      className="w-full border-t-[1px] border-b-[0.5px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5"
+    >
+      <div className="flex justify-between items-center gap-3">
+        <div className="flex items-center gap-3">
+          <PostAvatar profilePic={profilePic} fullName={fullName} />
+
+          <div className="flex flex-col">
+            <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
+              {fullName}
+            </h4>
+            <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
+              @{firstName.toLowerCase()}
+              {lastName.toLowerCase()}
+            </span>
+          </div>
+        </div>
+        <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
+          Posted {createdAtString}
+        </p>
+      </div>
+
+      <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-200">
+        {post}
+      </p>
+    </Link>
+  );
+};
+
+export default PostCard;
