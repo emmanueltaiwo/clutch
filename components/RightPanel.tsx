@@ -60,9 +60,18 @@ const RightPanel = () => {
           {isLoading &&  skeletonCards }
 
           {data && data.length < 1 ? (
-            <h3 className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-4 py-3 rounded-[15px] transition-all duration-200 bg-gray-100 dark:bg-[rgba(38,47,66,0.86)]">
+            <div className="flex flex-col gap-3 items-center justify-center px-4 py-3 rounded-[15px] transition-all duration-200 bg-gray-100 dark:bg-[rgba(38,47,66,0.86)]">
+            <h3 className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5">
               No community was found
             </h3>
+
+            <Link
+              href="/communities/create"
+              className="w-fit h-fit px-5 py-2 rounded-full bg-[rgb(26,32,44)] dark:bg-[rgb(205,211,226)] hover:bg-[rgb(0,0,0)] hover:dark:bg-[rgb(155,159,168)] text-[rgb(205,211,226)] dark:text-[rgb(26,32,44)] font-semibold"
+            >
+              Create Community
+            </Link>
+            </div>
           ) : (
             data?.slice(0, 10).map((community) => (
               <Link
