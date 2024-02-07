@@ -25,13 +25,16 @@ const PostCard: FC<Props> = ({
     <Link
       href={`/feed/${firstName.toLowerCase()}-${lastName.toLowerCase()}/${postId}`}
       key={postId}
-      className="w-full border-t-[1px] border-b-[0.5px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5"
+      className="w-full border-t-[1px] border-b-[0.5px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5 hover:bg-[rgba(48,48,48,0.24)] transition-all duration-300"
     >
       <div className="flex justify-between items-center gap-3">
-        <div className="flex items-center gap-3">
+        <Link
+          href={`/${firstName.toLowerCase()}${lastName.toLowerCase()}`}
+          className="flex items-center gap-3"
+        >
           <PostAvatar profilePic={profilePic} fullName={fullName} />
 
-          <div className="flex flex-col">
+          <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
             <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
               {fullName}
             </h4>
@@ -40,7 +43,7 @@ const PostCard: FC<Props> = ({
               {lastName.toLowerCase()}
             </span>
           </div>
-        </div>
+        </Link>
         <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
           Posted {createdAtString}
         </p>
