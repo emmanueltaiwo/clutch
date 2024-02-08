@@ -4,28 +4,34 @@ import PostAvatar from "./PostAvatar";
 
 type Props = {
   postId: string;
+  username: string;
   firstName: string;
   lastName: string;
   profilePic: string;
   fullName: string;
   createdAtString: string;
   post: string;
+  postDetailPage?: boolean;
 };
 
 const PostCard: FC<Props> = ({
   postId,
+  username,
   firstName,
   lastName,
   profilePic,
   fullName,
   createdAtString,
   post,
+  postDetailPage,
 }) => {
   return (
     <Link
-      href={`/feed/${firstName.toLowerCase()}-${lastName.toLowerCase()}/${postId}`}
+      href={`/feed/${username}/${postId}`}
       key={postId}
-      className="w-full border-t-[1px] border-b-[0.5px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5 hover:bg-[rgba(48,48,48,0.24)] transition-all duration-300"
+      className={`w-full border-t-[1px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5 hover:bg-[rgba(48,48,48,0.24)] transition-all duration-300 ${
+        !postDetailPage && "border-b-[0.5px]"
+      }`}
     >
       <div className="flex justify-between items-center gap-3">
         <Link

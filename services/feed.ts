@@ -1,10 +1,10 @@
 "use server";
 
 import { db } from "@/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
+import { Post, User } from "@/types";
 import { formatDate } from "@/utils/helpers";
-import { User } from "@/types";
 
 export const createNewPost = async (post: string): Promise<string> => {
   try {
@@ -53,4 +53,35 @@ export const generatePostId = (post: string): string => {
   const postId = postIdBase.substring(0, 15);
 
   return postId;
+};
+
+export const fetchPostById = async (postId: string): Promise<Post> => {
+  try {
+    const docRef = doc(db, "posts", postId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) throw new Error();
+    const postDetail = docSnap.data() as Post;
+
+    const user = (await getUserDocFromFirestore(postDetail.userId)) as User;
+
+    const post: Post = {
+      postId: postId,
+      userId: postDetail.userId,
+      post: postDetail.post,
+      postImage: postDetail.postImage,
+      category: postDetail.category,
+      createdAt: postDetail.createdAt,
+      createdAtString: formatDate(postDetail.createdAt),
+      user: {
+        fullName: user.fullName,
+        profilePic: user.profilePic,
+        country: user.country,
+      },
+    };
+
+    return post;
+  } catch (error) {
+    throw new Error();
+  }
 };
