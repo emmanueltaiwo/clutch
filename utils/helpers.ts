@@ -1,6 +1,7 @@
 export const formatDate = (date: number): string => {
   const now = new Date();
   const msDiff = now.getTime() - date;
+  const postDate = new Date(date);
 
   const secondsDiff = Math.floor(msDiff / 1000);
   const minutesDiff = Math.floor(secondsDiff / 60);
@@ -14,6 +15,6 @@ export const formatDate = (date: number): string => {
     return `${hoursDiff} ${hoursDiff === 1 ? "hour" : "hours"} ago`;
   } else {
     const options = { year: "numeric", month: "long", day: "numeric" } as const;
-    return now.toLocaleDateString(undefined, options);
+    return postDate.toLocaleDateString(undefined, options);
   }
 };
