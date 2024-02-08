@@ -18,7 +18,7 @@ const AdminPostOptions = () => {
           <MoreVertRoundedIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Post Admin Tools</DropdownMenuLabel>
+          <DropdownMenuLabel>Admin Tools</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Delete Post</DropdownMenuItem>
           <DropdownMenuItem>Edit Post</DropdownMenuItem>
