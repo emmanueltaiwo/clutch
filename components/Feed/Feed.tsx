@@ -73,6 +73,7 @@ const Feed = () => {
 
   return (
     <section className="w-full md:mx-auto h-full flex flex-col my-5">
+      
       {isLoading || posts.length === 0
         ? skeletonCards
         : sortedPosts.map((post) => {

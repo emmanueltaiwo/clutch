@@ -1,6 +1,9 @@
 import Link from "next/link";
 import React, { FC } from "react";
 import PostAvatar from "./PostAvatar";
+import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import IosShareRoundedIcon from "@mui/icons-material/IosShareRounded";
 
 type Props = {
   postId: string;
@@ -58,6 +61,20 @@ const PostCard: FC<Props> = ({
       <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-200">
         {post}
       </p>
+
+      <div className="flex justify-between items-center">
+        <button className="text-gray-600 hover:bg-[rgba(58,94,255,0.12)] hover:text-blue-500 transition-all duration-300 p-2 rounded-full">
+          <ChatBubbleOutlineRoundedIcon />
+        </button>
+
+        <button className="text-gray-600 hover:bg-[rgba(248,79,79,0.1)] hover:text-red-500 transition-all duration-300 p-2 rounded-full">
+          <FavoriteBorderRoundedIcon />
+        </button>
+
+        <button className="text-gray-600 hover:bg-[rgba(74,252,98,0.11)] hover:text-green-500 transition-all duration-300 p-2 rounded-full">
+          <IosShareRoundedIcon />
+        </button>
+      </div>
     </Link>
   );
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const BackButton = () => {
