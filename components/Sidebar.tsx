@@ -118,7 +118,7 @@ const Sidebar = () => {
             {data && data.length < 1 ? (
               <Link
                 href="/communities"
-                className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-[90%] px-4 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
+                className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-full px-4 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
               >
                 Find Communities
               </Link>
@@ -240,23 +240,23 @@ const Sidebar = () => {
             <>
               <hr className="w-full border-[0.4px] border-gray-600" />
 
-              <ul className="flex flex-col gap-3">
+              <div className="w-full flex flex-col gap-3">
                 {data?.slice(0, 5).map((community) => (
                   <Link
                     key={community.communityID}
                     href={`communities/${community.communityCategory}/${community.communityID}`}
-                    className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                    className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center justify-center py-2 hover:animate-spin"
                   >
                     <Image
                       src={community.communityPic ?? "/assets/Images/cover.png"}
                       width={50}
                       height={50}
                       alt="community image"
-                      className="rounded-full w-[30px] h-[30px]"
+                      className="rounded-full min-w-[40px] h-[40px]"
                     />
                   </Link>
                 ))}
-              </ul>
+              </div>
             </>
           )}
 
