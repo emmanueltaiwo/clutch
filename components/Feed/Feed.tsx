@@ -77,11 +77,13 @@ const Feed = () => {
         ? skeletonCards
         : sortedPosts.map((post) => {
             const [firstName, lastName] = post.user.fullName.split(" ");
+            const username = `${firstName.toLowerCase()}${lastName.toLowerCase()}`;
 
             return (
               <PostCard
                 key={post.postId}
                 postId={post.postId}
+                username={username}
                 firstName={firstName}
                 lastName={lastName}
                 profilePic={post.user.profilePic}
