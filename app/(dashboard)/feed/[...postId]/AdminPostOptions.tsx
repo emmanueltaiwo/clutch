@@ -20,7 +20,9 @@ const AdminPostOptions = () => {
         <DropdownMenuContent>
           <DropdownMenuLabel>Admin Tools</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Delete Post</DropdownMenuItem>
+          <DropdownMenuItem className="bg-red-500 focus:bg-red-600 dark:bg-red-500 dark:focus:bg-red-600">
+            Delete Post
+          </DropdownMenuItem>
           <DropdownMenuItem>Edit Post</DropdownMenuItem>
           <DropdownMenuItem>Change Visibility</DropdownMenuItem>
           <DropdownMenuItem>Change Who Can Reply</DropdownMenuItem>
