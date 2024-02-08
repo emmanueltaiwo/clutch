@@ -40,7 +40,7 @@ export default function AppLayout({
       )}
 
       {isAuthenticated && (
-        <section>
+        <section className="cursor-pointer">
           <Sidebar />
           {children}
           <Toaster />

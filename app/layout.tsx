@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`cursor-pointer ${inter.className}`}>
+      <body className={`${inter.className}`}>
         <StoreProvider>
           <Provider>
             <ThemeProvider
