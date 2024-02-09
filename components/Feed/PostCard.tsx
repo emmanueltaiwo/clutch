@@ -32,7 +32,7 @@ const PostCard: FC<Props> = ({
     <Link
       href={`/feed/${username}/${postId}`}
       key={postId}
-      className={`w-full border-t-[1px] border-gray-800 dark:border-gray-700 p-5 flex flex-col gap-5 hover:bg-[rgba(48,48,48,0.24)] transition-all duration-300 ${
+      className={`w-full border-t-[1px] border-gray-800 dark:border-gray-700 px-5 pt-5 pb-1 flex flex-col gap-5 hover:bg-[rgba(48,48,48,0.24)] transition-all duration-300 ${
         !postDetailPage && "border-b-[0.5px]"
       }`}
     >
