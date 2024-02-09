@@ -63,16 +63,16 @@ const PostCard: FC<Props> = ({
       </p>
 
       <div className="flex justify-between items-center">
-        <button className="text-gray-600 hover:bg-[rgba(58,94,255,0.12)] hover:text-blue-500 transition-all duration-300 p-2 rounded-full">
-          <ChatBubbleOutlineRoundedIcon />
+        <button className="text-gray-600 hover:bg-[rgba(58,94,255,0.12)] hover:text-blue-500 transition-all duration-300 px-[8px] py-[6px] rounded-full">
+          <ChatBubbleOutlineRoundedIcon fontSize="small" />
         </button>
 
-        <button className="text-gray-600 hover:bg-[rgba(248,79,79,0.1)] hover:text-red-500 transition-all duration-300 p-2 rounded-full">
-          <FavoriteBorderRoundedIcon />
+        <button className="text-gray-600 hover:bg-[rgba(248,79,79,0.1)] hover:text-red-500 transition-all duration-300 px-[8px] py-[6px] rounded-full">
+          <FavoriteBorderRoundedIcon fontSize="small" />
         </button>
 
-        <button className="text-gray-600 hover:bg-[rgba(74,252,98,0.11)] hover:text-green-500 transition-all duration-300 p-2 rounded-full">
-          <IosShareRoundedIcon />
+        <button className="text-gray-600 hover:bg-[rgba(74,252,98,0.11)] hover:text-green-500 transition-all duration-300 px-[8px] pt-[3px] pb-[9px] rounded-full">
+          <IosShareRoundedIcon fontSize="small" />
         </button>
       </div>
     </Link>
