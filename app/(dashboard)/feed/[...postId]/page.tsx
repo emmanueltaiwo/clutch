@@ -43,7 +43,7 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
             <input
               type="text"
               placeholder="Post your reply"
-              className="w-full text-[20px] bg-transparent outline-none"
+              className="w-full text-[20px] bg-transparent outline-none focus-within:border-b-[1px] border-gray-500 pb-3"
             />
           </div>
 
