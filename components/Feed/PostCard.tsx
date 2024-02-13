@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import PostAvatar from "./PostAvatar";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
-import IosShareRoundedIcon from "@mui/icons-material/IosShareRounded";
+import SharePost from "./SharePost";
 
 type Props = {
   postId: string;
@@ -71,9 +71,7 @@ const PostCard: FC<Props> = ({
           <FavoriteBorderRoundedIcon fontSize="small" />
         </button>
 
-        <button className="text-gray-600 hover:bg-[rgba(74,252,98,0.11)] hover:text-green-500 transition-all duration-300 px-[8px] pt-[3px] pb-[9px] rounded-full">
-          <IosShareRoundedIcon fontSize="small" />
-        </button>
+        <SharePost username={username} postId={postId} />
       </div>
     </Link>
   );
