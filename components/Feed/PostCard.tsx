@@ -2,8 +2,8 @@ import Link from "next/link";
 import React, { FC } from "react";
 import PostAvatar from "./PostAvatar";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import SharePost from "./SharePost";
+import LikePost from "./LikePost";
 
 type Props = {
   postId: string;
@@ -67,9 +67,7 @@ const PostCard: FC<Props> = ({
           <ChatBubbleOutlineRoundedIcon fontSize="small" />
         </button>
 
-        <button className="text-gray-600 hover:bg-[rgba(248,79,79,0.1)] hover:text-red-500 transition-all duration-300 px-[8px] py-[6px] rounded-full">
-          <FavoriteBorderRoundedIcon fontSize="small" />
-        </button>
+        <LikePost postId={postId} />
 
         <SharePost username={username} postId={postId} />
       </div>

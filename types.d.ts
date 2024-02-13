@@ -33,3 +33,10 @@ export type Follower = {
   country: string;
   interests: string[];
 };
+
+export type LikedPost = {
+  likeId: string;
+  userId: string;
+  postId: string;
+  likeCreatedAt: number;
+};
