@@ -8,6 +8,7 @@ import SettingsInputSvideoRoundedIcon from "@mui/icons-material/SettingsInputSvi
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 const PROJECT_NAME = "Clutch";
+const DOMAIN_NAME = 'https://clutchapp.vercel.app'
 const BASE_WEBSITE_URL = "https://clutch.com.ng/";
 const BASE_GITHUB_URL = "https://github.com/realemmanuel";
 const BASE_GITHUB_PROJECT_URL = BASE_GITHUB_URL + "/clutch";
@@ -234,6 +235,7 @@ export {
   subIconComponents,
   iconComponents,
   PROJECT_NAME,
+  DOMAIN_NAME,
   BASE_WEBSITE_URL,
   BASE_GITHUB_URL,
   BASE_GITHUB_PROJECT_URL,
