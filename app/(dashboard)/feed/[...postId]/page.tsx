@@ -21,17 +21,6 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
 
   const [firstName, lastName] = post.user.fullName.split(" ");
 
-  const likeCount = await fetchAllLikesForPost(postId);
-  const totalLikes = likeCount.length;
-
-  const likedPosts = await findAllLikedPost();
-  let hasLikePost: boolean = false;
-  likedPosts.forEach((favPost) => {
-    if (favPost.postId === postId) {
-      hasLikePost = true;
-    }
-  });
-
   return (
     <Container>
       <PageHeader postUserId={post.userId} userId={userId} />
@@ -47,8 +36,8 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
           createdAtString={post.createdAtString}
           post={post.post}
           postDetailPage={true}
-          totalLikes={totalLikes}
-          hasLikePost={hasLikePost}
+          totalLikes={post.totalLikes}
+          hasLikePost={post.hasLikePost}
         />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
