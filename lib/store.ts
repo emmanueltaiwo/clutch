@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
 import sidebarReducer from "./features/sidebar/sidebarSlice";
+import editPostReducer from "./features/editPost/editPostSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       auth: authReducer,
       sidebar: sidebarReducer,
+      editPost: editPostReducer,
     },
   });
 };

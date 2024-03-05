@@ -17,7 +17,9 @@ export type Post = {
   postImage?: string;
   category: string;
   createdAt: number;
+  updatedAt: number;
   createdAtString: string;
+  updatedAtString: string;
   totalLikes: number;
   hasLikePost: boolean;
   user: {

@@ -10,6 +10,7 @@ import {
   where,
   getDocs,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
 import { LikedPost, Post, User } from "@/types";
@@ -38,6 +39,7 @@ export const createNewPost = async (post: string): Promise<string> => {
       post: post,
       postImage: "",
       createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
     };
     await setDoc(doc(db, "posts", postId), newPost);
 
@@ -47,12 +49,12 @@ export const createNewPost = async (post: string): Promise<string> => {
   }
 };
 
-export const fetchPostById = async (postId: string): Promise<Post> => {
+export const fetchPostById = async (postId: string): Promise<Post | boolean> => {
   try {
     const docRef = doc(db, "posts", postId);
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) throw new Error();
+    if (!docSnap.exists()) return false
     const postDetail = docSnap.data() as Post;
 
     const user = (await getUserDocFromFirestore(postDetail.userId)) as User;
@@ -73,7 +75,9 @@ export const fetchPostById = async (postId: string): Promise<Post> => {
       postImage: postDetail.postImage,
       category: postDetail.category,
       createdAt: postDetail.createdAt,
+      updatedAt: postDetail.updatedAt,
       createdAtString: formatDate(postDetail.createdAt),
+      updatedAtString: formatDate(postDetail.updatedAt),
       totalLikes: totalLikes,
       hasLikePost: hasLikePost,
       user: {
@@ -85,7 +89,7 @@ export const fetchPostById = async (postId: string): Promise<Post> => {
 
     return post;
   } catch (error) {
-    throw new Error();
+    return false
   }
 };
 
@@ -208,5 +212,32 @@ export const fetchAllLikesForPost = async (
     return totalLikes;
   } catch (error) {
     throw new Error("Failed to fetch liked posts.");
+  }
+};
+
+export const editPost = async (
+  postId: string,
+  post: string
+): Promise<boolean> => {
+  try {
+    const postRef = doc(db, "posts", postId);
+
+    await updateDoc(postRef, {
+      post: post,
+      updatedAt: new Date().getTime(),
+    });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const deletePost = async (postId: string): Promise<boolean> => {
+  try {
+    await deleteDoc(doc(db, "posts", postId));
+    return true;
+  } catch (error) {
+    return false;
   }
 };
