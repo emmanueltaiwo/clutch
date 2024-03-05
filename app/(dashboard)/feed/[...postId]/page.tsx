@@ -1,7 +1,11 @@
 import Container from "@/components/Container";
 import React from "react";
 import PostCard from "@/components/Feed/PostCard";
-import { fetchPostById } from "@/services/feed";
+import {
+  fetchAllLikesForPost,
+  fetchPostById,
+  findAllLikedPost,
+} from "@/services/feed";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
 import { User } from "@/types";
@@ -16,6 +20,17 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
   const user = (await getUserDocFromFirestore(userId)) as User;
 
   const [firstName, lastName] = post.user.fullName.split(" ");
+
+  const likeCount = await fetchAllLikesForPost(postId);
+  const totalLikes = likeCount.length;
+
+  const likedPosts = await findAllLikedPost();
+  let hasLikePost: boolean = false;
+  likedPosts.forEach((favPost) => {
+    if (favPost.postId === postId) {
+      hasLikePost = true;
+    }
+  });
 
   return (
     <Container>
@@ -32,6 +47,8 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
           createdAtString={post.createdAtString}
           post={post.post}
           postDetailPage={true}
+          totalLikes={totalLikes}
+          hasLikePost={hasLikePost}
         />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />

@@ -56,6 +56,15 @@ export const fetchPostById = async (postId: string): Promise<Post> => {
     const postDetail = docSnap.data() as Post;
 
     const user = (await getUserDocFromFirestore(postDetail.userId)) as User;
+    const likeCount = await fetchAllLikesForPost(postId);
+    const totalLikes = likeCount.length;
+    const likedPosts = await findAllLikedPost();
+    let hasLikePost: boolean = false;
+    likedPosts.forEach((favPost) => {
+      if (favPost.postId === postId) {
+        hasLikePost = true;
+      }
+    });
 
     const post: Post = {
       postId: postId,
@@ -65,6 +74,8 @@ export const fetchPostById = async (postId: string): Promise<Post> => {
       category: postDetail.category,
       createdAt: postDetail.createdAt,
       createdAtString: formatDate(postDetail.createdAt),
+      totalLikes: totalLikes,
+      hasLikePost: hasLikePost,
       user: {
         fullName: user.fullName,
         profilePic: user.profilePic,

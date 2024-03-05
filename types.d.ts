@@ -18,6 +18,8 @@ export type Post = {
   category: string;
   createdAt: number;
   createdAtString: string;
+  totalLikes: number;
+  hasLikePost: boolean;
   user: {
     fullName: string;
     profilePic: string;
