@@ -42,6 +42,8 @@ const Feed = () => {
               category: post.category,
               createdAt: post.createdAt,
               createdAtString: formatDate(post.createdAt),
+              updatedAtString: formatDate(post.updatedAt),
+              updatedAt: post.updatedAt,
               hasLikePost: hasLikePost,
               totalLikes: totalLikes,
               user: {
@@ -98,6 +100,9 @@ const Feed = () => {
                 profilePic={post.user.profilePic}
                 fullName={post.user.fullName}
                 createdAtString={post.createdAtString}
+                updatedAtString={post.updatedAtString}
+                updatedAt={post.updatedAt}
+                createdAt={post.createdAt}
                 post={post.post}
                 totalLikes={post.totalLikes}
                 hasLikePost={post.hasLikePost}
