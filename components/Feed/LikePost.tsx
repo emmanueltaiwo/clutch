@@ -1,65 +1,35 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import {
-  fetchAllLikesForPost,
-  findAllLikedPost,
-  handleLikePost,
-} from "@/services/feed";
+import { handleLikePost } from "@/services/feed";
 import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
   postId: string;
+  totalLikes: number;
+  hasLikePost: boolean;
 };
 
-const LikePost: FC<Props> = ({ postId }) => {
+const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
   const { toast } = useToast();
-  const [favouritedPost, setFavouritedPost] = useState<boolean>(false);
-  const [totalLikes, setTotalLikes] = useState<number>(0);
+  const [favouritedPost, setFavouritedPost] = useState<boolean>(hasLikePost);
+  const [totalPostLikes, setTotalPostLikes] = useState<number>(totalLikes);
 
-  useEffect(() => {
-    const fetchLikedPost = async () => {
-      try {
-        const likedPosts = await findAllLikedPost();
-        likedPosts.forEach((post) => {
-          if (post.postId === postId) {
-            setFavouritedPost(true);
-          }
-        });
-      } catch (error) {
-        throw new Error();
-      }
-    };
-
-    fetchLikedPost();
-  }, [postId]);
-
-  useEffect(() => {
-    const fetchPostLikeCount = async () => {
-      try {
-        const likeCount = await fetchAllLikesForPost(postId);
-        setTotalLikes(likeCount.length);
-      } catch (error) {
-        throw new Error();
-      }
-    };
-
-    fetchPostLikeCount();
-  }, [postId]);
-
-  const favouritePost = async (e: { preventDefault: () => void; stopPropagation: () => void; }) => {
+  const favouritePost = async (e: {
+    preventDefault: () => void;
+    stopPropagation: () => void;
+  }) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-     
       setFavouritedPost(true);
       const response = await handleLikePost(postId);
 
       if (response !== "Post Favourited Successfully") {
         setFavouritedPost(false);
-        setTotalLikes((prevLikes) => prevLikes - 1);
+        setTotalPostLikes((prevLikes) => prevLikes - 1);
         return toast({
           title: response,
           description: response,
@@ -67,7 +37,7 @@ const LikePost: FC<Props> = ({ postId }) => {
       }
 
       setFavouritedPost(true);
-      setTotalLikes((prevLikes) => prevLikes + 1);
+      setTotalPostLikes((prevLikes) => prevLikes + 1);
       return toast({
         title: response,
         description: "Yay! This post has been added to your favourites",
@@ -90,7 +60,9 @@ const LikePost: FC<Props> = ({ postId }) => {
         <FavoriteBorderRoundedIcon fontSize="small" />
       )}
 
-      <span className="text-[13px] font-[300] text-gray-500">{totalLikes}</span>
+      <span className="text-[13px] font-[300] text-gray-500">
+        {totalPostLikes}
+      </span>
     </button>
   );
 };

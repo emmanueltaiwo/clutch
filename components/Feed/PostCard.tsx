@@ -15,6 +15,8 @@ type Props = {
   createdAtString: string;
   post: string;
   postDetailPage?: boolean;
+  totalLikes: number;
+  hasLikePost: boolean;
 };
 
 const PostCard: FC<Props> = ({
@@ -27,6 +29,8 @@ const PostCard: FC<Props> = ({
   createdAtString,
   post,
   postDetailPage,
+  totalLikes,
+  hasLikePost,
 }) => {
   return (
     <Link
@@ -67,7 +71,11 @@ const PostCard: FC<Props> = ({
           <ChatBubbleOutlineRoundedIcon fontSize="small" />
         </button>
 
-        <LikePost postId={postId} />
+        <LikePost
+          postId={postId}
+          totalLikes={totalLikes}
+          hasLikePost={hasLikePost}
+        />
 
         <SharePost username={username} postId={postId} />
       </div>

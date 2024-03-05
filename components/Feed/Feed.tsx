@@ -8,6 +8,7 @@ import { getUserDocFromFirestore } from "@/services/auth";
 import SkeletonCard from "./SkeletonCard";
 import { formatDate } from "@/utils/helpers";
 import PostCard from "./PostCard";
+import { fetchAllLikesForPost, findAllLikedPost } from "@/services/feed";
 
 const Feed = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,40 +20,48 @@ const Feed = () => {
         setIsLoading(true);
         const q = query(collection(db, "posts"));
 
-        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-          const newPosts: Post[] = [];
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          const promises = querySnapshot.docs.map(async (doc) => {
+            const post = doc.data() as Post;
+            const user = (await getUserDocFromFirestore(post.userId)) as User;
+            const likeCount = await fetchAllLikesForPost(post.postId);
+            const totalLikes = likeCount.length;
+            const likedPosts = await findAllLikedPost();
+            let hasLikePost: boolean = false;
+            likedPosts.forEach((favPost) => {
+              if (favPost.postId === post.postId) {
+                hasLikePost = true;
+              }
+            });
 
-          await Promise.all(
-            querySnapshot.docs.map(async (doc) => {
-              const post = doc.data() as Post;
-              const user = (await getUserDocFromFirestore(post.userId)) as User;
+            return {
+              postId: post.postId,
+              userId: post.userId,
+              post: post.post,
+              postImage: post.postImage,
+              category: post.category,
+              createdAt: post.createdAt,
+              createdAtString: formatDate(post.createdAt),
+              hasLikePost: hasLikePost,
+              totalLikes: totalLikes,
+              user: {
+                fullName: user.fullName,
+                profilePic: user.profilePic,
+                country: user.country,
+              },
+            };
+          });
 
-              const generatedPost = {
-                postId: post.postId,
-                userId: post.userId,
-                post: post.post,
-                postImage: post.postImage,
-                category: post.category,
-                createdAt: post.createdAt,
-                createdAtString: formatDate(post.createdAt),
-                user: {
-                  fullName: user.fullName,
-                  profilePic: user.profilePic,
-                  country: user.country,
-                },
-              };
-
-              newPosts.push(generatedPost);
-            })
-          );
-
-          setPosts(newPosts);
-          setIsLoading(false);
+          Promise.all(promises).then((newPosts) => {
+            setPosts(newPosts);
+          });
         });
 
         return () => unsubscribe();
       } catch (error) {
         throw new Error();
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -73,7 +82,6 @@ const Feed = () => {
 
   return (
     <section className="w-full md:mx-auto h-full flex flex-col my-5">
-      
       {isLoading || posts.length === 0
         ? skeletonCards
         : sortedPosts.map((post) => {
@@ -91,6 +99,8 @@ const Feed = () => {
                 fullName={post.user.fullName}
                 createdAtString={post.createdAtString}
                 post={post.post}
+                totalLikes={post.totalLikes}
+                hasLikePost={post.hasLikePost}
               />
             );
           })}
