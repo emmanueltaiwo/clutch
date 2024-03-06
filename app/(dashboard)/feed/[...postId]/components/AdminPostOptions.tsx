@@ -25,14 +25,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
+import { editComment } from "@/lib/features/editComment/editCommentSlice";
 
-const AdminPostOptions = ({ postId }: { postId: string }) => {
+const AdminPostOptions = ({
+  postId,
+  userId,
+  type,
+}: {
+  postId: string;
+  userId: string;
+  type: string;
+}) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { toast } = useToast();
 
   return (
-    <div className="mr-5 w-fit ml-auto">
+    <div className="ml-auto w-fit">
       <AlertDialog>
         <DropdownMenu>
           <DropdownMenuTrigger className="p-2 hover:bg-[rgba(48,48,48,0.29)] rounded-full">
@@ -44,12 +53,22 @@ const AdminPostOptions = ({ postId }: { postId: string }) => {
 
             <AlertDialogTrigger asChild>
               <DropdownMenuItem className="bg-red-500 focus:bg-red-600 dark:bg-red-500 dark:focus:bg-red-600">
-                Delete Post
+                Delete {type === "post" ? "post" : "comment"}
               </DropdownMenuItem>
             </AlertDialogTrigger>
 
-            <DropdownMenuItem onClick={() => dispatch(editPost())}>
-              Edit Post
+            <DropdownMenuItem
+              onClick={() => {
+                if (type === "post") {
+                  return dispatch(editPost({ postId: postId, userId: userId }));
+                } else if (type === "comment") {
+                  return dispatch(
+                    editComment({ commentId: postId, userId: userId })
+                  );
+                }
+              }}
+            >
+              Edit {type === "post" ? "post" : "comment"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -59,14 +78,14 @@ const AdminPostOptions = ({ postId }: { postId: string }) => {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete this
-              post.
+              {type === "post" ? "post" : "comment"}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
-                const response = await deletePost(postId);
+                const response = await deletePost(postId, type);
                 if (!response) {
                   return toast({
                     title: "An Error Occured!",
@@ -74,10 +93,15 @@ const AdminPostOptions = ({ postId }: { postId: string }) => {
                   });
                 }
 
-                router.back();
+                if (type === "post") router.back();
+
                 return toast({
-                  title: "Post Deleted Succesfully",
-                  description: "Your Post Has Been Deleted! Enjoy Clutch!",
+                  title: `${
+                    type === "post" ? "Post" : "Comment"
+                  } Deleted Succesfully`,
+                  description: `Your ${
+                    type === "post" ? "post" : "comment"
+                  } Has Been Deleted! Enjoy Clutch!`,
                 });
               }}
             >

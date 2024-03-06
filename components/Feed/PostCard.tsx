@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, useState } from "react";
 import PostAvatar from "./PostAvatar";
 import { ReloadIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
@@ -31,9 +31,10 @@ type Props = {
   postDetailPage?: boolean;
   totalLikes: number;
   hasLikePost: boolean;
+  defaultUserId: string;
 };
 
-const EditPostButton: FC = () => {
+export const EditPostButton: FC = () => {
   const { pending } = useFormStatus();
 
   if (pending) {
@@ -45,10 +46,10 @@ const EditPostButton: FC = () => {
     );
   }
 
-  return <Button type="submit">Edit Post</Button>;
+  return <Button type="submit">Edit</Button>;
 };
 
-const Children: FC<Props & { isEditPost: boolean }> = ({
+const PostCard: FC<Props> = ({
   postId,
   username,
   firstName,
@@ -60,16 +61,23 @@ const Children: FC<Props & { isEditPost: boolean }> = ({
   createdAt,
   updatedAtString,
   post,
+  postDetailPage,
   totalLikes,
   hasLikePost,
-  isEditPost,
+  defaultUserId,
 }) => {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [displayedPost, setDisplayedPost] = useState<string>(post);
+  const edit = useAppSelector((state) => state.editPost);
+  const { editUserId, editPostId, isEditPost } = edit;
 
   return (
-    <>
+    <WrapperComponent
+      username={username}
+      postId={postId}
+      postDetailPage={postDetailPage}
+    >
       <div className="flex justify-between items-center gap-3">
         <Link
           href={`/${firstName.toLowerCase()}${lastName.toLowerCase()}`}
@@ -90,7 +98,7 @@ const Children: FC<Props & { isEditPost: boolean }> = ({
 
         <div className="flex items-center gap-5">
           <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-            Posted {createdAtString}
+            Created {createdAtString}
           </p>
 
           {updatedAt > createdAt && (
@@ -101,7 +109,7 @@ const Children: FC<Props & { isEditPost: boolean }> = ({
         </div>
       </div>
 
-      {isEditPost ? (
+      {isEditPost && editPostId === postId && editUserId === defaultUserId ? (
         <form
           action={async (formData: FormData) => {
             try {
@@ -115,7 +123,7 @@ const Children: FC<Props & { isEditPost: boolean }> = ({
               const response = await editPost(postId, newPost);
               if (!response) {
                 return toast({
-                  title: "An Error Occured!",
+                  title: "An Error Occurred!",
                   description: "Refresh page and try again",
                 });
               }
@@ -123,12 +131,12 @@ const Children: FC<Props & { isEditPost: boolean }> = ({
               setDisplayedPost(newPost);
               dispatch(closeEditPost());
               return toast({
-                title: "Post Edited Succesfully",
+                title: "Post Edited Successfully",
                 description: "Your Post Has Been Edited! Enjoy Clutch!",
               });
             } catch (error) {
               return toast({
-                title: "An Error Occured!",
+                title: "An Error Occurred!",
                 description: "Refresh page and try again",
               });
             }
@@ -160,51 +168,6 @@ const Children: FC<Props & { isEditPost: boolean }> = ({
 
         <SharePost username={username} postId={postId} />
       </div>
-    </>
-  );
-};
-
-const PostCard: FC<Props> = ({
-  postId,
-  username,
-  firstName,
-  lastName,
-  profilePic,
-  fullName,
-  createdAtString,
-  updatedAt,
-  createdAt,
-  updatedAtString,
-  post,
-  postDetailPage,
-  totalLikes,
-  hasLikePost,
-}) => {
-  const isEditPost = useAppSelector((state) => state.editPost.isEditPost);
-
-  return (
-    <WrapperComponent
-      username={username}
-      postId={postId}
-      postDetailPage={postDetailPage}
-    >
-      <Children
-        postId={postId}
-        username={username}
-        firstName={firstName}
-        lastName={lastName}
-        profilePic={profilePic}
-        fullName={fullName}
-        createdAtString={createdAtString}
-        createdAt={createdAt}
-        updatedAt={updatedAt}
-        updatedAtString={updatedAtString}
-        post={post}
-        postDetailPage={postDetailPage}
-        totalLikes={totalLikes}
-        hasLikePost={hasLikePost}
-        isEditPost={isEditPost}
-      />
     </WrapperComponent>
   );
 };
