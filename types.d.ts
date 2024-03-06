@@ -44,3 +44,19 @@ export type LikedPost = {
   postId: string;
   likeCreatedAt: number;
 };
+
+export type Comment = {
+  commentId: string;
+  userId: string;
+  postId: string;
+  commentText: string;
+  createdAt: number;
+  updatedAt: number;
+  createdAtString: string;
+  updatedAtString: string;
+  user: {
+    fullName: string;
+    profilePic: string;
+    country: string;
+  };
+};

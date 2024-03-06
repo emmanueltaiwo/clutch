@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
 import sidebarReducer from "./features/sidebar/sidebarSlice";
 import editPostReducer from "./features/editPost/editPostSlice";
+import editCommentReducer from "./features/editComment/editCommentSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       auth: authReducer,
       sidebar: sidebarReducer,
       editPost: editPostReducer,
+      editComment: editCommentReducer,
     },
   });
 };

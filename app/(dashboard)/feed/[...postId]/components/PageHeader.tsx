@@ -7,11 +7,11 @@ import AdminPostOptions from "./AdminPostOptions";
 const PageHeader = ({
   postUserId,
   userId,
-  postId
+  postId,
 }: {
   postUserId: string;
-    userId: string;
-  postId:string
+  userId: string;
+  postId: string;
 }) => {
   const [postCreatedByUser, setPostCreatedByUser] = useState<boolean>(false);
 
@@ -38,7 +38,11 @@ const PageHeader = ({
         <h4 className="dark:text-white font-bold text-[25px]">Post</h4>
       </div>
 
-      {postCreatedByUser && <AdminPostOptions postId={postId} />}
+      {postCreatedByUser && (
+        <div className="mr-5 ml-auto">
+          <AdminPostOptions userId={userId} type="post" postId={postId} />
+        </div>
+      )}
     </div>
   );
 };

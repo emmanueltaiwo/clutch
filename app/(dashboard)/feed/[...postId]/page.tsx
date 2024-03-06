@@ -1,12 +1,11 @@
 import Container from "@/components/Container";
-import React from "react";
 import PostCard from "@/components/Feed/PostCard";
 import { fetchPostById } from "@/services/feed";
-import ProfileAvatar from "@/components/ProfileAvatar";
 import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
 import { User } from "@/types";
-import PageHeader from "./PageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "./components/PageHeader";
+import CreateComment from "./components/CreateComment";
+import CommentContainer from "./components/CommentContainer";
 
 const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
   const [username, postId] = params.postId;
@@ -48,26 +47,17 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
           postDetailPage={true}
           totalLikes={post.totalLikes}
           hasLikePost={post.hasLikePost}
+          defaultUserId={userId}
         />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
 
-        <form className="w-[95%] py-5 mx-auto flex gap-5 items-center justify-center">
-          <div className="w-full flex items-center gap-5">
-            <ProfileAvatar user={user} />
-
-            <input
-              type="text"
-              placeholder="Post your reply"
-              className="w-full text-[20px] mt-2 bg-transparent outline-none focus-within:border-b-[1px] border-gray-500 pb-3"
-            />
-          </div>
-
-          <Button type="submit">Reply</Button>
-        </form>
+        <CreateComment user={user} postId={postId} />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
       </div>
+
+      <CommentContainer postId={postId} defaultUserId={userId} />
     </Container>
   );
 };
