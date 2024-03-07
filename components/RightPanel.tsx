@@ -8,6 +8,7 @@ import { Community } from "@/types/communities-types";
 import { useQuery } from "@tanstack/react-query";
 import SearchIcon from "@mui/icons-material/Search";
 import CommunitySkeleton from "./CommunitySkeleton";
+import { Button } from "@/components/ui/button";
 
 const RightPanel = () => {
   const { data, isLoading } = useQuery<Community[]>({
@@ -25,7 +26,7 @@ const RightPanel = () => {
   return (
     <section className="hidden lg:inline lg:w-[25%] xl:w-[27%] bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
       <div className="mt-5 flex flex-col gap-5">
-        <div className="w-[90%] focus-within:border-2 border-gray-500 rounded-full min-h-[7vh] mx-auto flex gap-4 items-center px-4 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]">
+        <div className="w-[90%] focus-within:border-2 border-gray-500 rounded-full h-[60px] mx-auto flex gap-4 items-center px-4 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]">
           <SearchIcon />
           <input
             type="text"
@@ -34,43 +35,37 @@ const RightPanel = () => {
           />
         </div>
 
-        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-5">
+        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-2">
           <h1 className="text-gray-900 dark:text-gray-100 text-[20px] font-[600]">
             Active Communities
           </h1>
 
-          <div className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-[rgb(26,32,44)] overflow-y-auto p-5">
-            <h4 className="font-bold text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
+          <div className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-[rgb(26,32,44)] overflow-y-auto p-3">
+            <h4 className="font-[300] text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
               None of your communities are currently active
             </h4>
-            <Link
-              href="/communities"
-              className="w-fit h-fit px-5 py-2 rounded-full bg-[rgb(26,32,44)] dark:bg-[rgb(205,211,226)] hover:bg-[rgb(0,0,0)] hover:dark:bg-[rgb(155,159,168)] text-[rgb(205,211,226)] dark:text-[rgb(26,32,44)] font-semibold"
-            >
-              Find Community
-            </Link>
+            <Button asChild>
+              <Link href="/communities">Find Community</Link>
+            </Button>
           </div>
         </div>
 
-        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit max-h-[500px] bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-5">
-          <h1 className="text-gray-900 dark:text-gray-100 text-[20px] font-[600]">
+        <div className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit max-h-[500px] bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] overflow-y-auto p-2">
+          <h1 className="text-gray-900 dark:text-gray-100 lg:text-[15px] xl:text-[20px] font-[600]">
             Recommended for you
           </h1>
 
-          {isLoading &&  skeletonCards }
+          {isLoading && skeletonCards}
 
           {data && data.length < 1 ? (
-            <div className="flex flex-col gap-3 items-center justify-center px-4 py-3 rounded-[15px] transition-all duration-200 bg-gray-100 dark:bg-[rgba(38,47,66,0.86)]">
-            <h3 className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5">
-              No community was found
-            </h3>
+            <div className="flex flex-col gap-3 items-center justify-center px-2 py-3 rounded-[15px] transition-all duration-200 bg-gray-100 dark:bg-[rgba(38,47,66,0.86)]">
+              <h3 className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5">
+                No community was found
+              </h3>
 
-            <Link
-              href="/communities/create"
-              className="w-fit h-fit px-5 py-2 rounded-full bg-[rgb(26,32,44)] dark:bg-[rgb(205,211,226)] hover:bg-[rgb(0,0,0)] hover:dark:bg-[rgb(155,159,168)] text-[rgb(205,211,226)] dark:text-[rgb(26,32,44)] font-semibold"
-            >
-              Create Community
-            </Link>
+              <Button asChild>
+                <Link href="/communities/create">Create Community</Link>
+              </Button>
             </div>
           ) : (
             data?.slice(0, 10).map((community) => (
@@ -107,12 +102,6 @@ const RightPanel = () => {
             className="font-bold text-[12px] text-gray-900 dark:text-gray-400"
           >
             Report a Problem
-          </a>
-          <a
-            href="https://github.com/realemmanuel/clutch"
-            className="font-bold text-[12px] text-gray-900 dark:text-gray-400"
-          >
-            User Guide
           </a>
           <a
             href="https://github.com/realemmanuel/clutch"

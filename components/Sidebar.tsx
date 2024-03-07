@@ -59,16 +59,16 @@ const Sidebar = () => {
     <aside
       className={`${
         isOpen
-          ? "w-[90%] sm:w-[37%] md:w-[33%] lg:w-[25%] xl:w-[21%] bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden transition-all duration-500"
+          ? "flex-none sm:w-2/5 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden transition-all duration-500 z-50"
           : "w-[20%] sm:w-[10%] md:w-[9%] lg:w-[8%] xl:w-[5%] bg-gray-100 dark:bg-gray-900 top-0 bottom-0 fixed left-0 overflow-y-auto overflow-hidden duration-500"
-      }`}
+      } z-50`}
     >
       {isOpen && (
         <nav className="flex flex-col gap-5 p-5 pb-10">
           <div className="flex justify-between items-center">
             <Logo />
 
-            <div className="flex items-center gap-3">
+            <div className="mt-5 flex items-center gap-3">
               <ModeToggle />
               <button
                 onClick={() => {
@@ -95,8 +95,8 @@ const Sidebar = () => {
                   href={item.route}
                   className={`${
                     isActiveLink
-                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
-                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
+                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                   }`}
                 >
                   <IconComponent />
@@ -118,7 +118,7 @@ const Sidebar = () => {
             {data && data.length < 1 ? (
               <Link
                 href="/communities"
-                className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-full px-4 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
+                className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-full px-4 py-3 rounded-[10px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
               >
                 Find Communities
               </Link>
@@ -127,7 +127,7 @@ const Sidebar = () => {
                 <Link
                   key={community.communityID}
                   href={`communities/${community.communityCategory}/${community.communityID}`}
-                  className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                  className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                 >
                   <Image
                     src={community.communityPic ?? "/assets/Images/cover.png"}
@@ -155,8 +155,8 @@ const Sidebar = () => {
                   href={item.route}
                   className={`${
                     isActiveLink
-                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
-                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
+                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                   }`}
                 >
                   <IconComponent />
@@ -167,7 +167,7 @@ const Sidebar = () => {
           </ul>
 
           <button
-            className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] mt-auto"
+            className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)] mt-auto"
             onClick={handleLogout}
           >
             <LogoutIcon />
@@ -226,8 +226,8 @@ const Sidebar = () => {
                   href={item.route}
                   className={`${
                     isActiveLink
-                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
-                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
+                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[10px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                   }`}
                 >
                   <IconComponent />
@@ -273,8 +273,8 @@ const Sidebar = () => {
                   href={item.route}
                   className={`${
                     isActiveLink
-                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
-                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[15px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
+                      ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[15px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-[rgba(38,47,66,0.86)]"
+                      : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[10px] transition-all duration-200 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                   }`}
                 >
                   <IconComponent />
