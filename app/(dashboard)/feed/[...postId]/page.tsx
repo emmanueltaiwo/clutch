@@ -43,6 +43,7 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
           postDetailPage={true}
           totalLikes={post.totalLikes}
           hasLikePost={post.hasLikePost}
+          totalComment={post.totalComment}
           defaultUserId={userId}
         />
 

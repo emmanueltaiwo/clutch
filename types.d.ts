@@ -22,6 +22,7 @@ export type Post = {
   createdAtString: string;
   updatedAtString: string;
   totalLikes: number;
+  totalComment: number;
   hasLikePost: boolean;
   user: {
     username: string;
