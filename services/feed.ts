@@ -13,7 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
-import { Comment, LikedPost, Post, User } from "@/types";
+import { LikedPost, Post, User } from "@/types";
 import { formatDate } from "@/utils/helpers";
 
 export const createNewPost = async (post: string): Promise<string> => {
@@ -83,6 +83,7 @@ export const fetchPostById = async (
       totalLikes: totalLikes,
       hasLikePost: hasLikePost,
       user: {
+        username: user.username,
         fullName: user.fullName,
         profilePic: user.profilePic,
         country: user.country,
@@ -286,7 +287,7 @@ export const editComment = async (
     const commentRef = doc(db, "comments", commentId);
 
     await updateDoc(commentRef, {
-      post: comment,
+      commentText: comment,
       updatedAt: new Date().getTime(),
     });
 

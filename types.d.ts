@@ -8,6 +8,7 @@ export interface User {
   country: string;
   interests: string[];
   status?: boolean;
+  username: string;
 }
 
 export type Post = {
@@ -23,6 +24,7 @@ export type Post = {
   totalLikes: number;
   hasLikePost: boolean;
   user: {
+    username: string;
     fullName: string;
     profilePic: string;
     country: string;

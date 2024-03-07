@@ -7,7 +7,16 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import { cookies } from "next/headers";
 import { User } from "@/types";
@@ -74,6 +83,7 @@ export const handleLoginAuthentication = async (
       gender: storedUserData.gender,
       country: storedUserData.country,
       interests: [storedUserData.interest],
+      username: storedUserData.username,
     };
 
     return {
@@ -92,7 +102,7 @@ export const handleSignupAuthentication = async (
   prevState: AuthResponse,
   formData: FormData
 ): Promise<AuthResponse> => {
-  // This function handles the signup request by verifying the data, sending the authentication to firebase auth, creatig a new document containing the user data in the firebase database, storing the userID in cookies and redirecting to the main app on successful login.
+  // This function handles the signup request by verifying the data, sending the authentication to firebase auth, creating a new document containing the user data in the firebase database, storing the userID in cookies and redirecting to the main app on successful login.
 
   if (!formData) {
     const response = {
@@ -120,11 +130,13 @@ export const handleSignupAuthentication = async (
     !country ||
     !interest ||
     !termsAndConditions ||
-    !interest ||
     !password
   ) {
     return { message: "All input must be filled" };
   }
+
+  const [firstName, lastName] = fullName.split(" ");
+  let username = `${firstName.toLowerCase()}${lastName.toLowerCase()}`;
 
   const newUser: Signup = {
     email,
@@ -137,6 +149,7 @@ export const handleSignupAuthentication = async (
     termsAndConditions,
     password,
     profilePic: "",
+    username,
   };
 
   const isFormValid: boolean = validateSignupInput(newUser);
@@ -148,6 +161,18 @@ export const handleSignupAuthentication = async (
     return response;
   }
 
+  let q = query(collection(db, "users"), where("username", "==", username));
+  let querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    let randomChars = Math.random().toString(36).substring(2, 6);
+    while (!querySnapshot.empty) {
+      username = `${username}${randomChars}`;
+      q = query(collection(db, "users"), where("username", "==", username));
+      querySnapshot = await getDocs(q);
+    }
+  }
+
   try {
     const userCredential: UserCredential = await createUserWithEmailAndPassword(
       auth,
@@ -156,11 +181,14 @@ export const handleSignupAuthentication = async (
     );
     const user = userCredential.user;
     const { uid } = user;
+
     await createNewUserDocument(uid, {
       ...newUser,
       hasFullAccess: true,
       status: true,
+      username,
     });
+
     handleCookies("set", "USER_ID", uid);
 
     return {
@@ -173,9 +201,10 @@ export const handleSignupAuthentication = async (
         gender: newUser.gender,
         country: newUser.country,
         interests: newUser.interests,
+        username,
       },
       message:
-        "Yay! You've succesfully created an account on clutch. redirecting you now",
+        "Yay! You've successfully created an account on clutch. Redirecting you now",
     };
   } catch (error) {
     const firebaseError = error as FirebaseError;

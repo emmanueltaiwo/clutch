@@ -19,8 +19,6 @@ import WrapperComponent from "./Wrapper";
 type Props = {
   postId: string;
   username: string;
-  firstName: string;
-  lastName: string;
   profilePic: string;
   fullName: string;
   createdAtString: string;
@@ -52,8 +50,6 @@ export const EditPostButton: FC = () => {
 const PostCard: FC<Props> = ({
   postId,
   username,
-  firstName,
-  lastName,
   profilePic,
   fullName,
   createdAtString,
@@ -79,10 +75,7 @@ const PostCard: FC<Props> = ({
       postDetailPage={postDetailPage}
     >
       <div className="flex justify-between items-center gap-3">
-        <Link
-          href={`/${firstName.toLowerCase()}${lastName.toLowerCase()}`}
-          className="flex items-center gap-3"
-        >
+        <Link href={`/${username}`} className="flex items-center gap-3">
           <PostAvatar profilePic={profilePic} fullName={fullName} />
 
           <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
@@ -90,8 +83,7 @@ const PostCard: FC<Props> = ({
               {fullName}
             </h4>
             <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-              @{firstName.toLowerCase()}
-              {lastName.toLowerCase()}
+              @{username}
             </span>
           </div>
         </Link>

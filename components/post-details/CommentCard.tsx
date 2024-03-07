@@ -23,7 +23,6 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
   const {
     commentId,
     userId,
-    postId,
     commentText,
     createdAt,
     updatedAt,
@@ -102,36 +101,39 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
       {isEditComment &&
       editCommentId === commentId &&
       editUserId === defaultUserId ? (
-        <form   action={async (formData: FormData) => {
-          try {
-            const newComment = formData.get("comment")?.toString();
-            if (!newComment) {
+        <form
+          action={async (formData: FormData) => {
+            try {
+              const newComment = formData.get("comment")?.toString();
+              if (!newComment) {
+                return toast({
+                  title: "Post Failed To Edit",
+                  description: "New Post Entry Is Invalid",
+                });
+              }
+              const response = await editComment(commentId, newComment);
+              if (!response) {
+                return toast({
+                  title: "An Error Occurred!",
+                  description: "Refresh page and try again",
+                });
+              }
+
+              setDisplayedComment(newComment);
+              dispatch(closeEditComment());
               return toast({
-                title: "Post Failed To Edit",
-                description: "New Post Entry Is Invalid",
+                title: "Comment Edited Successfully",
+                description: "Your Comment Has Been Edited! Enjoy Clutch!",
               });
-            }
-            const response = await editComment(commentId, newComment);
-            if (!response) {
+            } catch (error) {
               return toast({
                 title: "An Error Occurred!",
                 description: "Refresh page and try again",
               });
             }
-
-            setDisplayedComment(newComment);
-            dispatch(closeEditComment());
-            return toast({
-              title: "Comment Edited Successfully",
-              description: "Your Comment Has Been Edited! Enjoy Clutch!",
-            });
-          } catch (error) {
-            return toast({
-              title: "An Error Occurred!",
-              description: "Refresh page and try again",
-            });
-          }
-        }} className="flex w-full items-center space-x-2">
+          }}
+          className="flex w-full items-center space-x-2"
+        >
           <Input type="text" defaultValue={displayedComment} name="comment" />
           <EditPostButton />
           <Button type="button" onClick={() => dispatch(closeEditComment())}>
