@@ -11,6 +11,7 @@ const initialState: User = {
   country: "",
   interests: [""],
   username: "",
+  bio: "",
 };
 
 export const authSlice = createSlice({
