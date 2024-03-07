@@ -10,6 +10,7 @@ const initialState: User = {
   gender: "",
   country: "",
   interests: [""],
+  username: "",
 };
 
 export const authSlice = createSlice({

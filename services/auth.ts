@@ -7,7 +7,16 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import { cookies } from "next/headers";
 import { User } from "@/types";
@@ -152,10 +161,16 @@ export const handleSignupAuthentication = async (
     return response;
   }
 
-  const existingUsernames = ["example1", "example2"];
-  while (existingUsernames.includes(username)) {
-    const randomChars = Math.random().toString(36).substring(2, 6);
-    username = `${username}${randomChars}`;
+  let q = query(collection(db, "users"), where("username", "==", username));
+  let querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    let randomChars = Math.random().toString(36).substring(2, 6);
+    while (!querySnapshot.empty) {
+      username = `${username}${randomChars}`;
+      q = query(collection(db, "users"), where("username", "==", username));
+      querySnapshot = await getDocs(q);
+    }
   }
 
   try {
@@ -167,7 +182,6 @@ export const handleSignupAuthentication = async (
     const user = userCredential.user;
     const { uid } = user;
 
-    // Create new user document with username
     await createNewUserDocument(uid, {
       ...newUser,
       hasFullAccess: true,
@@ -187,7 +201,7 @@ export const handleSignupAuthentication = async (
         gender: newUser.gender,
         country: newUser.country,
         interests: newUser.interests,
-        username, // Include username in user object
+        username,
       },
       message:
         "Yay! You've successfully created an account on clutch. Redirecting you now",
