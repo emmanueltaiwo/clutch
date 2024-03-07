@@ -3,9 +3,9 @@ import PostCard from "@/components/Feed/PostCard";
 import { fetchPostById } from "@/services/feed";
 import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
 import { User } from "@/types";
-import PageHeader from "./components/PageHeader";
-import CreateComment from "./components/CreateComment";
-import CommentContainer from "./components/CommentContainer";
+import PageHeader from "../../../../components/post-details/PageHeader";
+import CreateComment from "../../../../components/post-details/CreateComment";
+import CommentContainer from "../../../../components/post-details/CommentContainer";
 
 const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
   const [username, postId] = params.postId;
@@ -25,8 +25,6 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
   if (!userId || typeof userId !== "string") return;
   const user = (await getUserDocFromFirestore(userId)) as User;
 
-  const [firstName, lastName] = post.user.fullName.split(" ");
-
   return (
     <Container>
       <PageHeader postId={postId} postUserId={post.userId} userId={userId} />
@@ -35,8 +33,6 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
         <PostCard
           postId={postId}
           username={username}
-          firstName={firstName}
-          lastName={lastName}
           profilePic={post.user.profilePic}
           fullName={post.user.fullName}
           createdAtString={post.createdAtString}

@@ -18,6 +18,7 @@ export interface Signup {
   hasFullAccess?: boolean;
   status?: boolean;
   profilePic?: string;
+  username: string;
 }
 
 export interface AuthResponse {

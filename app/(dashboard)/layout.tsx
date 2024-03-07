@@ -1,35 +1,27 @@
-"use client";
-
-import React, { ReactNode, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { ReactNode } from "react";
 import { getSessionStatus } from "@/lib/session";
 import Sidebar from "@/components/Sidebar";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import { Toaster } from "@/components/ui/toaster";
+import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
+import { redirect } from "next/navigation";
 
-export default function AppLayout({
+export default async function AppLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  let isAuthenticated = false;
+  const userId = await handleCookies("get", "USER_ID");
+  if (typeof userId === "boolean") return;
 
-  useEffect(() => {
-    const checkUserStatus = async () => {
-      try {
-        const sessionStatus = await getSessionStatus();
+  const user = await getUserDocFromFirestore(userId);
+  if (typeof user === "boolean") return;
+  const sessionStatus = await getSessionStatus();
 
-        if (!sessionStatus) {
-          router.push("/");
-        } else {
-          setIsAuthenticated(sessionStatus);
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkUserStatus();
-  }, [router]);
+  if (!sessionStatus) {
+    redirect("/");
+  } else {
+    isAuthenticated = sessionStatus;
+  }
 
   return (
     <section>
@@ -41,7 +33,7 @@ export default function AppLayout({
 
       {isAuthenticated && (
         <section>
-          <Sidebar />
+          <Sidebar username={user.username} />
           {children}
           <Toaster />
         </section>

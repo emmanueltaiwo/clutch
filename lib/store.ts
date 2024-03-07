@@ -3,6 +3,7 @@ import authReducer from "./features/auth/authSlice";
 import sidebarReducer from "./features/sidebar/sidebarSlice";
 import editPostReducer from "./features/editPost/editPostSlice";
 import editCommentReducer from "./features/editComment/editCommentSlice";
+import profileFeedModeReducer from "./features/profileFeedMode/profileFeedModeSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -11,6 +12,7 @@ export const makeStore = () => {
       sidebar: sidebarReducer,
       editPost: editPostReducer,
       editComment: editCommentReducer,
+      profileFeedMode: profileFeedModeReducer,
     },
   });
 };

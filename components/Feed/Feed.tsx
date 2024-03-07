@@ -45,7 +45,9 @@ const Feed = () => {
               updatedAt: post.updatedAt,
               hasLikePost: hasLikePost,
               totalLikes: totalLikes,
+
               user: {
+                username: user.username,
                 fullName: user.fullName,
                 profilePic: user.profilePic,
                 country: user.country,
@@ -81,40 +83,41 @@ const Feed = () => {
     });
   }, [posts]);
 
+  function renderContent() {
+    if (showNoPostsMessage) {
+      return (
+        <div className="text-center py-5 text-[14px] text-gray-800 dark:text-gray-600">
+          Be the first to create a post on clutch!
+        </div>
+      );
+    } else if (posts.length === 0) {
+      return skeletonCards;
+    } else {
+      return sortedPosts.map((post) => {
+        return (
+          <PostCard
+            key={post.postId}
+            postId={post.postId}
+            username={post.user.username}
+            profilePic={post.user.profilePic}
+            fullName={post.user.fullName}
+            createdAtString={post.createdAtString}
+            updatedAtString={post.updatedAtString}
+            updatedAt={post.updatedAt}
+            createdAt={post.createdAt}
+            post={post.post}
+            totalLikes={post.totalLikes}
+            hasLikePost={post.hasLikePost}
+            defaultUserId=""
+          />
+        );
+      });
+    }
+  }
+
   return (
     <section className="w-full md:mx-auto h-full flex flex-col my-5">
-      {showNoPostsMessage ? (
-        <div className="text-center py-5 text-[14px] text-gray-800 dark:text-gray-600">
-          Be the first to comment
-        </div>
-      ) : posts.length === 0 ? (
-        skeletonCards
-      ) : (
-        sortedPosts.map((post) => {
-          const [firstName, lastName] = post.user.fullName.split(" ");
-          const username = `${firstName.toLowerCase()}${lastName.toLowerCase()}`;
-
-          return (
-            <PostCard
-              key={post.postId}
-              postId={post.postId}
-              username={username}
-              firstName={firstName}
-              lastName={lastName}
-              profilePic={post.user.profilePic}
-              fullName={post.user.fullName}
-              createdAtString={post.createdAtString}
-              updatedAtString={post.updatedAtString}
-              updatedAt={post.updatedAt}
-              createdAt={post.createdAt}
-              post={post.post}
-              totalLikes={post.totalLikes}
-              hasLikePost={post.hasLikePost}
-              defaultUserId=""
-            />
-          );
-        })
-      )}
+      {renderContent()}
     </section>
   );
 };
