@@ -83,6 +83,7 @@ const ProfileFeed: FC<Props> = ({ userId }) => {
             createdAt={post.createdAt}
             post={post.post}
             totalLikes={post.totalLikes}
+            totalComment={post.totalComment}
             hasLikePost={post.hasLikePost}
             defaultUserId={userId}
           />

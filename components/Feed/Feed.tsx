@@ -8,7 +8,11 @@ import { getUserDocFromFirestore } from "@/services/auth";
 import SkeletonCard from "./SkeletonCard";
 import { formatDate } from "@/utils/helpers";
 import PostCard from "./PostCard";
-import { fetchAllLikesForPost, findAllLikedPost } from "@/services/feed";
+import {
+  fetchAllLikesForPost,
+  fetchNumberOfComment,
+  findAllLikedPost,
+} from "@/services/feed";
 
 const Feed = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -25,6 +29,7 @@ const Feed = () => {
             const user = (await getUserDocFromFirestore(post.userId)) as User;
             const likeCount = await fetchAllLikesForPost(post.postId);
             const totalLikes = likeCount.length;
+            const totalComment = await fetchNumberOfComment(post.postId);
             const likedPosts = await findAllLikedPost();
             let hasLikePost: boolean = false;
             likedPosts.forEach((favPost) => {
@@ -45,7 +50,7 @@ const Feed = () => {
               updatedAt: post.updatedAt,
               hasLikePost: hasLikePost,
               totalLikes: totalLikes,
-
+              totalComment:totalComment,
               user: {
                 username: user.username,
                 fullName: user.fullName,
@@ -107,6 +112,7 @@ const Feed = () => {
             createdAt={post.createdAt}
             post={post.post}
             totalLikes={post.totalLikes}
+            totalComment={post.totalComment}
             hasLikePost={post.hasLikePost}
             defaultUserId=""
           />

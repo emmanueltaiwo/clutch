@@ -4,7 +4,11 @@ import { db } from "@/firebase";
 import { Post, User } from "@/types";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getUserDocFromFirestore } from "./auth";
-import { fetchAllLikesForPost, findAllLikedPost } from "./feed";
+import {
+  fetchAllLikesForPost,
+  fetchNumberOfComment,
+  findAllLikedPost,
+} from "./feed";
 import { formatDate } from "@/utils/helpers";
 
 export const verifyUserProfileExists = async (
@@ -40,6 +44,7 @@ export const fetchUserProfilePosts = async (userId: string, type: string) => {
         const user = (await getUserDocFromFirestore(userId)) as User;
         const likeCount = await fetchAllLikesForPost(post.postId);
         const totalLikes = likeCount.length;
+        const totalComment = await fetchNumberOfComment(post.postId);
         const likedPosts = await findAllLikedPost();
         let hasLikePost: boolean = false;
         likedPosts.forEach((favPost) => {
@@ -60,6 +65,7 @@ export const fetchUserProfilePosts = async (userId: string, type: string) => {
           updatedAt: post.updatedAt,
           hasLikePost: hasLikePost,
           totalLikes: totalLikes,
+          totalComment: totalComment,
           user: {
             username: user.username,
             fullName: user.fullName,
@@ -102,6 +108,7 @@ export const fetchSpecificPost = async (userId: string, type: string) => {
             const user = (await getUserDocFromFirestore(post.userId)) as User;
             const likeCount = await fetchAllLikesForPost(post.postId);
             const totalLikes = likeCount.length;
+            const totalComment = await fetchNumberOfComment(post.postId);
             const likedPosts = await findAllLikedPost();
             let hasLikePost: boolean = false;
             likedPosts.forEach((favPost) => {
@@ -122,6 +129,7 @@ export const fetchSpecificPost = async (userId: string, type: string) => {
               updatedAt: post.updatedAt,
               hasLikePost: hasLikePost,
               totalLikes: totalLikes,
+              totalComment: totalComment,
               user: {
                 username: user.username,
                 fullName: user.fullName,

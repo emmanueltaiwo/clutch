@@ -27,11 +27,7 @@ const ProfileHeader: FC<Props> = ({
 }) => {
   return (
     <section className="">
-      <div className="w-full h-[200px] bg-gray-800 flex items-center justify-center">
-        <h1 className="text-[30px] lg:text-[50px] font-[800] text-gray-400 mb-20">
-          {fullName.toUpperCase()}
-        </h1>
-      </div>
+      <div className="w-full h-[200px] bg-gradient-to-r from-cyan-700 to-blue-800 flex items-center justify-center" />
 
       <div className="relative top-[-75px] flex justify-center">
         {profilePic.length !== 0 ? (

@@ -28,6 +28,7 @@ type Props = {
   post: string;
   postDetailPage?: boolean;
   totalLikes: number;
+  totalComment: number;
   hasLikePost: boolean;
   defaultUserId: string;
 };
@@ -61,6 +62,7 @@ const PostCard: FC<Props> = ({
   totalLikes,
   hasLikePost,
   defaultUserId,
+  totalComment,
 }) => {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
@@ -148,8 +150,11 @@ const PostCard: FC<Props> = ({
       )}
 
       <div className="flex justify-between items-center">
-        <button className="text-gray-600 hover:bg-[rgba(58,94,255,0.12)] hover:text-blue-500 transition-all duration-300 px-[8px] py-[6px] rounded-full">
+        <button className="text-gray-600 hover:bg-[rgba(58,94,255,0.12)] hover:text-blue-500 transition-all duration-300 px-[8px] py-[14px] rounded-full flex items-center gap-1">
           <ChatBubbleOutlineRoundedIcon fontSize="small" />
+          <span className="text-[13px] font-[300] text-gray-500">
+            {totalComment}
+          </span>
         </button>
 
         <LikePost

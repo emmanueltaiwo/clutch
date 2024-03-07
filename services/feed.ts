@@ -62,6 +62,7 @@ export const fetchPostById = async (
     const user = (await getUserDocFromFirestore(postDetail.userId)) as User;
     const likeCount = await fetchAllLikesForPost(postId);
     const totalLikes = likeCount.length;
+    const totalComment = await fetchNumberOfComment(postId);
     const likedPosts = await findAllLikedPost();
     let hasLikePost: boolean = false;
     likedPosts.forEach((favPost) => {
@@ -82,6 +83,7 @@ export const fetchPostById = async (
       updatedAtString: formatDate(postDetail.updatedAt),
       totalLikes: totalLikes,
       hasLikePost: hasLikePost,
+      totalComment: totalComment,
       user: {
         username: user.username,
         fullName: user.fullName,
@@ -190,6 +192,16 @@ export const findAllLikedPost = async (): Promise<LikedPost[]> => {
     return allLikedPost;
   } catch (error) {
     throw new Error("Failed to fetch liked posts.");
+  }
+};
+
+export const fetchNumberOfComment = async (postId: string): Promise<number> => {
+  try {
+    const q = query(collection(db, "comments"), where("postId", "==", postId));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.size;
+  } catch (error) {
+    throw new Error("Failed to fetch number of comments.");
   }
 };
 
