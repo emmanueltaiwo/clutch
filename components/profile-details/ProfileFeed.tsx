@@ -48,7 +48,7 @@ const ProfileFeed: FC<Props> = ({ userId }) => {
   }, [userId, profileFeedMode]);
 
   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
-    <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3">
+    <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3 my-5">
       <SkeletonCard />
     </div>
   ));

@@ -9,6 +9,7 @@ export interface User {
   interests: string[];
   status?: boolean;
   username: string;
+  bio: string;
 }
 
 export type Post = {

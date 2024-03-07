@@ -19,6 +19,7 @@ export interface Signup {
   status?: boolean;
   profilePic?: string;
   username: string;
+  bio: string;
 }
 
 export interface AuthResponse {
