@@ -83,6 +83,7 @@ export const fetchPostById = async (
       totalLikes: totalLikes,
       hasLikePost: hasLikePost,
       user: {
+        username: user.username,
         fullName: user.fullName,
         profilePic: user.profilePic,
         country: user.country,
