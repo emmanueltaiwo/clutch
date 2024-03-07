@@ -2,8 +2,15 @@
 
 import { db } from "@/firebase";
 import { Post, User } from "@/types";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { getUserDocFromFirestore } from "./auth";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { getUserDocFromFirestore, handleCookies } from "./auth";
 import {
   fetchAllLikesForPost,
   fetchNumberOfComment,
@@ -149,3 +156,42 @@ export const fetchSpecificPost = async (userId: string, type: string) => {
     throw error;
   }
 };
+
+export const editProfile = async (
+  fullName: string,
+  username: string,
+  bio: string
+): Promise<string | boolean> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (typeof userId === "boolean")
+      return "An Error Occurred! Refresh the page and try again";
+
+    let q = query(collection(db, "users"), where("username", "==", username));
+    let querySnapshot = await getDocs(q);
+
+    if (querySnapshot.size > 1) {
+      return "Username is taken! Please try using another username.";
+    } else if (querySnapshot.size === 1) {
+      const userDoc = querySnapshot.docs[0];
+      const existingUserId = userDoc.id;
+
+      if (existingUserId !== userId) {
+        return "Username is taken! Please try using another username.";
+      }
+    }
+
+    const userRef = doc(db, "users", userId);
+
+    await updateDoc(userRef, {
+      fullName: fullName,
+      bio: bio,
+      username: username,
+    });
+
+    return true;
+  } catch (error: any) {
+    throw error;
+  }
+};
+

@@ -18,7 +18,7 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
   const user = await getUserDocFromFirestore(profileExist.userId);
   if (typeof user === "boolean") return;
 
-  const { country, email, fullName, gender, profilePic, username } = user;
+  const { country, email, fullName, gender, profilePic, username, bio } = user;
 
   return (
     <main>
@@ -33,10 +33,17 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
             username={username}
             userId={profileExist.userId}
             defaultUserId={defaultUserId}
+            bio={bio}
           />
-          <hr />
-          <ProfileTab userId={profileExist.userId} />
-          <ProfileFeed userId={profileExist.userId} />
+          <div
+            className={`relative ${
+              profileExist.userId === defaultUserId ? "top-[-80px]" : "top-[-55px]"
+            } `}
+          >
+            <hr />
+            <ProfileTab userId={profileExist.userId} />
+            <ProfileFeed userId={profileExist.userId} />
+          </div>
         </Container>
         <RightPanel />
       </div>

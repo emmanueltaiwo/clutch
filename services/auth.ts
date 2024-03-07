@@ -84,6 +84,7 @@ export const handleLoginAuthentication = async (
       country: storedUserData.country,
       interests: [storedUserData.interest],
       username: storedUserData.username,
+      bio: storedUserData.bio,
     };
 
     return {
@@ -150,6 +151,7 @@ export const handleSignupAuthentication = async (
     password,
     profilePic: "",
     username,
+    bio: "",
   };
 
   const isFormValid: boolean = validateSignupInput(newUser);
@@ -187,6 +189,7 @@ export const handleSignupAuthentication = async (
       hasFullAccess: true,
       status: true,
       username,
+      bio: "",
     });
 
     handleCookies("set", "USER_ID", uid);
@@ -202,6 +205,7 @@ export const handleSignupAuthentication = async (
         country: newUser.country,
         interests: newUser.interests,
         username,
+        bio: "",
       },
       message:
         "Yay! You've successfully created an account on clutch. Redirecting you now",
