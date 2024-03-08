@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { FC, useState } from "react";
 import PostAvatar from "./PostAvatar";
-import { ReloadIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { ReloadIcon, Pencil1Icon, ClockIcon } from "@radix-ui/react-icons";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import SharePost from "./SharePost";
 import LikePost from "./LikePost";
@@ -91,8 +91,8 @@ const PostCard: FC<Props> = ({
         </Link>
 
         <div className="flex items-center gap-5">
-          <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-            Created {createdAtString}
+          <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400 flex items-center gap-1">
+            <ClockIcon /> {createdAtString}
           </p>
 
           {updatedAt > createdAt && (

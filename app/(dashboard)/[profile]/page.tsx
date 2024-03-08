@@ -27,7 +27,7 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
   const isUserAlreadyFollowing = await hasUserAlreadyFollowed(
     profileExist.userId
   );
-  const totalFollowers = await fetchUserFollowers(profileExist.userId)
+  const totalFollowers = await fetchUserFollowers(profileExist.userId);
 
   return (
     <main>
@@ -47,11 +47,11 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
             totalFollowers={totalFollowers}
           />
           <div
-            className={`relative ${
+            className={`mt-3 md:mt-0 md:relative ${
               profileExist.userId === defaultUserId
-                ? "top-[-80px]"
-                : "top-[-55px]"
-            } `}
+                ? "md:top-[-100px]"
+                : "md:top-[-60px]"
+            }`}
           >
             <hr />
             <ProfileTab userId={profileExist.userId} />

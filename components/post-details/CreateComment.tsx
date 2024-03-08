@@ -45,7 +45,7 @@ const CreateComment: FC<Props> = ({ postId, user }) => {
           description: "Your comment has been created successfully",
         });
       }}
-      className="w-[95%] py-5 mx-auto flex gap-5 items-center justify-center"
+      className="w-[95%] py-5 mx-auto flex flex-col md:flex-row gap-5 md:items-center justify-center"
     >
       <div className="w-full flex items-center gap-5">
         <ProfileAvatar user={user} />
