@@ -1,50 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const FeedToggle = () => {
-  const [feedMode, setFeedMode] = useState<"forYou" | "following">("forYou");
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode");
 
-  const toggleForYou = () => {
-    try {
-      setFeedMode("forYou");
-      localStorage.setItem("feed-mode", feedMode);
-    } catch (error) {
-      throw new Error();
-    }
-  };
-
-  const toggleFollowing = () => {
-    try {
-      setFeedMode("following");
-      localStorage.setItem("feed-mode", feedMode);
-    } catch (error) {
-      throw new Error();
-    }
-  };
+  console.log("feed", mode);
 
   return (
     <div className="sticky top-0 w-full bg-background border-b-[0.5px] border-gray-500 h-[11vh]  flex justify-between gap-5 items-center z-50">
-      <button
-        onClick={toggleForYou}
+      <Link
+        href="/feed?mode=for-you"
         className={`${
-          feedMode === "forYou"
-            ? "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300 border-b-[3px] border-gray-500"
-            : "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300"
+          mode === "for-you" || mode === null
+            ? "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300 border-b-[3px] border-gray-500 flex items-center justify-center"
+            : "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300 flex items-center justify-center"
         }`}
       >
         For you
-      </button>
-      <button
-        onClick={toggleFollowing}
+      </Link>
+      <Link
+        href="/feed?mode=following"
         className={`${
-          feedMode === "following"
-            ? "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300 border-b-[3px] border-gray-500"
-            : "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300"
+          mode === "following"
+            ? "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300 border-b-[3px] border-gray-500 flex items-center justify-center"
+            : "w-full h-full text-gray-900 hover:bg-[rgba(48,48,48,0.29)] dark:text-gray-200 text-[15px] sm:text-[20px] transition-all duration-300 flex items-center justify-center"
         }`}
       >
         Following
-      </button>
+      </Link>
     </div>
   );
 };
