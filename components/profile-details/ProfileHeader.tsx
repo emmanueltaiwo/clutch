@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { FC, useRef } from "react";
+import { FC, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { capitalizeEachWord } from "@/utils/helpers";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
@@ -15,10 +15,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useFormStatus } from "react-dom";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { editProfile } from "@/services/profile";
+import { editProfile, handleFollowUser } from "@/services/profile";
 import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
@@ -31,6 +32,8 @@ type Props = {
   userId: string;
   defaultUserId: string;
   bio: string;
+  isUserAlreadyFollowing: boolean;
+  totalFollowers: number;
 };
 
 const Submit = () => {
@@ -58,9 +61,15 @@ const ProfileHeader: FC<Props> = ({
   userId,
   defaultUserId,
   bio,
+  isUserAlreadyFollowing,
+  totalFollowers,
 }) => {
   const { toast } = useToast();
   const ref = useRef<HTMLFormElement>(null);
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    isUserAlreadyFollowing
+  );
+  const [followers, setFollowers] = useState<number>(totalFollowers);
 
   return (
     <section className="flex flex-col">
@@ -155,9 +164,9 @@ const ProfileHeader: FC<Props> = ({
                     <Label htmlFor="bio" className="text-right">
                       Bio
                     </Label>
-                    <Input
-                      name="bio"
+                    <Textarea
                       defaultValue={bio}
+                      name="bio"
                       className="col-span-3"
                     />
                   </div>
@@ -199,7 +208,34 @@ const ProfileHeader: FC<Props> = ({
           </p>
         )}
 
-        {userId !== defaultUserId && <Button className="mt-2">Follow</Button>}
+        <Button variant="link">
+          {followers} {followers < 2 ? "Follower" : "Followers"}
+        </Button>
+
+        {userId !== defaultUserId && (
+          <Button
+            variant={isFollowing ? "outline" : "default"}
+            onClick={async () => {
+              const response = await handleFollowUser(userId);
+
+              if (response === "You just followed this user") {
+                setIsFollowing(true);
+                setFollowers((prevFollowers) => prevFollowers + 1);
+              } else if (response === "You Unfollowed this  user") {
+                setIsFollowing(false);
+                setFollowers((prevFollowers) => prevFollowers - 1);
+              } else {
+                setIsFollowing(false);
+              }
+              return toast({
+                description: response,
+              });
+            }}
+            className="mt-2"
+          >
+            {isFollowing ? "Unfollow" : "Follow"}
+          </Button>
+        )}
       </div>
     </section>
   );

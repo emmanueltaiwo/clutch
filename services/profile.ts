@@ -9,6 +9,8 @@ import {
   where,
   doc,
   updateDoc,
+  deleteDoc,
+  setDoc,
 } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
 import {
@@ -195,3 +197,95 @@ export const editProfile = async (
   }
 };
 
+export const generateFollowId = (userId: string): string => {
+  const currentDate = new Date();
+
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const year = currentDate.getFullYear().toString().substring(2);
+  const hours = currentDate.getHours().toString().padStart(2, "0");
+  const minutes = currentDate.getMinutes().toString().padStart(2, "0");
+  const seconds = currentDate.getSeconds().toString().padStart(2, "0");
+
+  const manipulatedUserId = userId.split("").reverse().join("");
+  const followIdBase = `${year}${month}${day}${hours}${minutes}${seconds}${manipulatedUserId}`;
+
+  const followId = followIdBase.substring(0, 11);
+
+  return followId;
+};
+
+export const handleFollowUser = async (
+  followingUserId: string
+): Promise<string> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (typeof userId === "boolean")
+      return "An Error Occurred! Refresh the page and try again";
+
+    const followId = generateFollowId(userId);
+
+    const documentId = `${userId}${followingUserId}`;
+    const q = query(
+      collection(db, "follows"),
+      where("followingUserId", "==", followingUserId),
+      where("followerUserId", "==", userId)
+    );
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      await deleteDoc(doc(db, "follows", documentId));
+      return "You Unfollowed this  user";
+    }
+
+    const newFollowDocument = {
+      followId: followId,
+      followerUserId: userId,
+      followingUserId: followingUserId,
+      createdAt: new Date().getTime(),
+    };
+
+    await setDoc(doc(db, "follows", documentId), newFollowDocument);
+
+    return "You just followed this user";
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+export const hasUserAlreadyFollowed = async (
+  followingUserId: string
+): Promise<boolean> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string")
+      throw new Error("Refresh the page");
+
+    const q = query(
+      collection(db, "follows"),
+      where("followingUserId", "==", followingUserId),
+      where("followerUserId", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      return true;
+    }
+    return false;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+export const fetchUserFollowers = async (userId: string): Promise<number> => {
+  try {
+    const q = query(
+      collection(db, "follows"),
+      where("followingUserId", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.size;
+  } catch (error: any) {
+    throw error;
+  }
+};

@@ -4,10 +4,15 @@ import ProfileFeed from "@/components/profile-details/ProfileFeed";
 import ProfileHeader from "@/components/profile-details/ProfileHeader";
 import ProfileTab from "@/components/profile-details/ProfileTab";
 import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
-import { verifyUserProfileExists } from "@/services/profile";
+import {
+  fetchUserFollowers,
+  hasUserAlreadyFollowed,
+  verifyUserProfileExists,
+} from "@/services/profile";
 
 const ProfilePage = async ({ params }: { params: { profile: string } }) => {
   const profileExist = await verifyUserProfileExists(params.profile);
+
   const defaultUserId = await handleCookies("get", "USER_ID");
   if (typeof defaultUserId === "boolean") return;
 
@@ -19,6 +24,10 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
   if (typeof user === "boolean") return;
 
   const { country, email, fullName, gender, profilePic, username, bio } = user;
+  const isUserAlreadyFollowing = await hasUserAlreadyFollowed(
+    profileExist.userId
+  );
+  const totalFollowers = await fetchUserFollowers(profileExist.userId)
 
   return (
     <main>
@@ -34,10 +43,14 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
             userId={profileExist.userId}
             defaultUserId={defaultUserId}
             bio={bio}
+            isUserAlreadyFollowing={isUserAlreadyFollowing}
+            totalFollowers={totalFollowers}
           />
           <div
             className={`relative ${
-              profileExist.userId === defaultUserId ? "top-[-80px]" : "top-[-55px]"
+              profileExist.userId === defaultUserId
+                ? "top-[-80px]"
+                : "top-[-55px]"
             } `}
           >
             <hr />
