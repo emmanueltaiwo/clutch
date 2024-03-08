@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { Comment } from "@/types";
 import Link from "next/link";
 import PostAvatar from "@/components/Feed/PostAvatar";
-import { Pencil1Icon } from "@radix-ui/react-icons";
+import { Pencil1Icon, ClockIcon } from "@radix-ui/react-icons";
 import AdminPostOptions from "./AdminPostOptions";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { Input } from "@/components/ui/input";
@@ -78,8 +78,8 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
         </Link>
 
         <div className="flex items-center">
-          <p className="p-2 font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-            Created {createdAtString}
+          <p className="p-2 font-[100] text-gray-800 text-[12px] dark:text-gray-400 flex items-center gap-1">
+            <ClockIcon /> {createdAtString}
           </p>
 
           {updatedAt > createdAt && (
@@ -132,13 +132,15 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
               });
             }
           }}
-          className="flex w-full items-center space-x-2"
+          className="flex flex-col md:flex-row w-full md:items-center space-x-2 gap-2"
         >
           <Input type="text" defaultValue={displayedComment} name="comment" />
-          <EditPostButton />
-          <Button type="button" onClick={() => dispatch(closeEditComment())}>
-            Cancel
-          </Button>
+          <div className="flex items-center gap-2">
+            <EditPostButton />
+            <Button type="button" onClick={() => dispatch(closeEditComment())}>
+              Cancel
+            </Button>
+          </div>
         </form>
       ) : (
         <p className="font-[400] text-gray-800 text-[14px] md:text-[15px] dark:text-gray-200">
