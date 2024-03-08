@@ -125,11 +125,11 @@ export const generateLikeId = (userId: string): string => {
   const minutes = currentDate.getMinutes().toString().padStart(2, "0");
   const seconds = currentDate.getSeconds().toString().padStart(2, "0");
 
-  const manipulatedUserId = userId.split("").reverse().join(""); // For example, reverse the user ID
+  const manipulatedUserId = userId.split("").reverse().join("");
 
   const likeIdBase = `${year}${month}${day}${hours}${minutes}${seconds}${manipulatedUserId}`;
 
-  const likeId = likeIdBase.substring(0, 11); // Truncate to 11 characters
+  const likeId = likeIdBase.substring(0, 11); 
 
   return likeId;
 };
