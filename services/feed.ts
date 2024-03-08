@@ -35,7 +35,7 @@ export const createNewPost = async (post: string): Promise<string> => {
     const newPost = {
       userId: userId,
       postId: postId,
-      category: userInterest,
+      category: userInterest.toLowerCase(),
       post: post,
       postImage: "",
       createdAt: new Date().getTime(),
@@ -129,7 +129,7 @@ export const generateLikeId = (userId: string): string => {
 
   const likeIdBase = `${year}${month}${day}${hours}${minutes}${seconds}${manipulatedUserId}`;
 
-  const likeId = likeIdBase.substring(0, 11); 
+  const likeId = likeIdBase.substring(0, 11);
 
   return likeId;
 };
@@ -306,5 +306,55 @@ export const editComment = async (
     return true;
   } catch (error) {
     return false;
+  }
+};
+
+export const getUserCategory = async (): Promise<string> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string")
+      throw new Error("Refresh the page");
+
+    const user = await getUserDocFromFirestore(userId);
+
+    if (typeof user === "boolean") {
+      throw new Error("Refresh the page");
+    }
+
+    const userCategory = user.interests[0] as string;
+
+    return userCategory;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+export const getUserFollowingIds = async (): Promise<string[]> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string")
+      throw new Error("Refresh the page");
+
+    const q = query(
+      collection(db, "follows"),
+      where("followerUserId", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return [""];
+    }
+
+    const followingIds: string[] = [];
+
+    querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+
+      followingIds.push(data.followingUserId);
+    });
+
+    return followingIds;
+  } catch (error: any) {
+    throw error;
   }
 };
