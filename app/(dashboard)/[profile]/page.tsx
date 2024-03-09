@@ -6,6 +6,7 @@ import ProfileTab from "@/components/profile-details/ProfileTab";
 import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
 import {
   fetchUserFollowers,
+  fetchUserFollowing,
   hasUserAlreadyFollowed,
   verifyUserProfileExists,
 } from "@/services/profile";
@@ -28,6 +29,7 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
     profileExist.userId
   );
   const totalFollowers = await fetchUserFollowers(profileExist.userId);
+  const totalFollowing = await fetchUserFollowing(profileExist.userId);
 
   return (
     <main>
@@ -45,6 +47,7 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
             bio={bio}
             isUserAlreadyFollowing={isUserAlreadyFollowing}
             totalFollowers={totalFollowers}
+            totalFollowing={totalFollowing}
           />
           <div
             className={`mt-3 md:mt-0 md:relative ${
