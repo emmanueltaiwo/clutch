@@ -77,7 +77,7 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
           </div>
         </Link>
 
-        <div className="flex items-center">
+        <div className="flex flex-col md:flex-row items-center">
           <p className="p-2 font-[100] text-gray-800 text-[12px] dark:text-gray-400 flex items-center gap-1">
             <ClockIcon /> {createdAtString}
           </p>

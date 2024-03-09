@@ -21,7 +21,11 @@ const Logo = () => {
         width={100}
         height={100}
         alt="Clutch logo"
-        className="dark:invert-0 invert"
+        className={` ${
+          pathName !== "/" && pathName !== "/login" && pathName !== "/signup"
+            ? "dark:invert-0 invert"
+            : ""
+        }`}
       />
     </Link>
   );

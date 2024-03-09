@@ -289,3 +289,17 @@ export const fetchUserFollowers = async (userId: string): Promise<number> => {
     throw error;
   }
 };
+
+export const fetchUserFollowing = async (userId: string): Promise<number> => {
+  try {
+    const q = query(
+      collection(db, "follows"),
+      where("followerUserId", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.size;
+  } catch (error: any) {
+    throw error;
+  }
+};

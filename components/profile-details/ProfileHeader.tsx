@@ -36,6 +36,7 @@ type Props = {
   bio: string;
   isUserAlreadyFollowing: boolean;
   totalFollowers: number;
+  totalFollowing: number;
 };
 
 const Submit = () => {
@@ -65,6 +66,7 @@ const ProfileHeader: FC<Props> = ({
   bio,
   isUserAlreadyFollowing,
   totalFollowers,
+  totalFollowing,
 }) => {
   const { toast } = useToast();
   const ref = useRef<HTMLFormElement>(null);
@@ -218,14 +220,18 @@ const ProfileHeader: FC<Props> = ({
               || {email.toLowerCase()}
             </p>
           ) : (
-            <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 w-[90] text-center">
+            <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 w-[90%] text-center">
               {capitalizeEachWord(bio)}
             </p>
           )}
 
-          <Button variant="link">
-            {followers} {followers < 2 ? "Follower" : "Followers"}
-          </Button>
+          <div className="flex items-center">
+            <Button variant="link">
+              {followers} {followers < 2 ? "Follower" : "Followers"}
+            </Button>
+
+            <Button variant="link">{totalFollowing} Following</Button>
+          </div>
 
           {userId !== defaultUserId && (
             <Button
