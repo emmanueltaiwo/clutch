@@ -49,6 +49,78 @@ export const createNewPost = async (post: string): Promise<string> => {
   }
 };
 
+export const fetchFeedPosts = async (mode: string | null): Promise<Post[]> => {
+  try {
+    let q: any;
+
+    if (mode === "for-you" || mode === null) {
+      const userCategory = await getUserCategory();
+      q = query(collection(db, "posts"), where("category", "==", userCategory));
+    } else if (mode === "following") {
+      const followingIds = await getUserFollowingIds();
+      q = query(collection(db, "posts"), where("userId", "in", followingIds));
+    } else {
+      q = query(collection(db, "posts"));
+    }
+
+    const posts: Post[] = [];
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const post = doc.data() as Post;
+      posts.push(post);
+    });
+
+    if ((mode === "for-you" || mode === null) && posts.length === 0) {
+      const allPostsQuery = query(collection(db, "posts"));
+      const allPostsSnapshot = await getDocs(allPostsQuery);
+      allPostsSnapshot.forEach((doc) => {
+        const post = doc.data() as Post;
+        posts.push(post);
+      });
+    }
+
+    const promises = posts.map(async (post) => {
+      const user = (await getUserDocFromFirestore(post.userId)) as User;
+      const likeCount = await fetchAllLikesForPost(post.postId);
+      const totalLikes = likeCount.length;
+      const totalComment = await fetchNumberOfComment(post.postId);
+      const likedPosts = await findAllLikedPost();
+      let hasLikePost: boolean = false;
+      likedPosts.forEach((favPost) => {
+        if (favPost.postId === post.postId) {
+          hasLikePost = true;
+        }
+      });
+
+      return {
+        postId: post.postId,
+        userId: post.userId,
+        post: post.post,
+        postImage: post.postImage,
+        category: post.category,
+        createdAt: post.createdAt,
+        createdAtString: formatDate(post.createdAt),
+        updatedAtString: formatDate(post.updatedAt),
+        updatedAt: post.updatedAt,
+        hasLikePost: hasLikePost,
+        totalLikes: totalLikes,
+        totalComment: totalComment,
+        user: {
+          username: user.username,
+          fullName: user.fullName,
+          profilePic: user.profilePic,
+          country: user.country,
+        },
+      };
+    });
+
+    const allPosts = (await Promise.all(promises)) as Post[];
+    return allPosts;
+  } catch (error) {
+    throw error;
+  }
+};
 export const fetchPostById = async (
   postId: string
 ): Promise<Post | boolean> => {
