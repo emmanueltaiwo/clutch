@@ -16,18 +16,26 @@ import ProfileAvatar from "../ProfileAvatar";
 import { createNewPost } from "@/services/feed";
 import { useToast } from "@/components/ui/use-toast";
 import { User } from "@/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CreatePost = ({ user }: { user: User }) => {
+  const queryClient = useQueryClient();
   const { toast } = useToast();
   const [post, setPost] = useState<string>("");
+
+  const { mutate: mutateCreatePost } = useMutation({
+    mutationFn: () => hanldePostCreation(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["feed-posts"] });
+    },
+  });
 
   const hanldePostCreation = async () => {
     try {
       const postResponse = await createNewPost(post);
 
       toast({
-        title: postResponse,
-        description: "Your Post Has Been Created! Enjoy Clutch!",
+        description: postResponse,
       });
       setPost("");
     } catch (error) {
@@ -61,7 +69,7 @@ const CreatePost = ({ user }: { user: User }) => {
           </div>
           <DialogClose>
             <DialogFooter>
-              <Button onClick={hanldePostCreation} type="submit">
+              <Button onClick={() => mutateCreatePost()} type="submit">
                 Post
               </Button>
             </DialogFooter>
