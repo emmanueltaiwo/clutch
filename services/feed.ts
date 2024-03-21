@@ -13,7 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
-import { LikedPost, Post, User } from "@/types";
+import { LikedPost, Post, User, Comment } from "@/types";
 import { formatDate } from "@/utils/helpers";
 
 export const createNewPost = async (post: string): Promise<string> => {
@@ -163,7 +163,7 @@ export const fetchPostById = async (
         country: user.country,
       },
     };
-
+    
     return post;
   } catch (error) {
     return false;
@@ -360,6 +360,43 @@ export const createNewComment = async (postId: string, commentText: string) => {
     return true;
   } catch (error) {
     return false;
+  }
+};
+
+export const fetchPostComments = async (postId: string): Promise<Comment[]> => {
+  try {
+    const q = query(collection(db, "comments"));
+
+    const querySnapshot = await getDocs(q);
+
+    const promises = querySnapshot.docs
+      .filter((doc) => doc.data().postId === postId)
+      .map(async (doc) => {
+        const comment = doc.data() as Comment;
+        const user = (await getUserDocFromFirestore(comment.userId)) as User;
+
+        return {
+          commentId: comment.commentId,
+          userId: comment.userId,
+          postId: comment.postId,
+          commentText: comment.commentText,
+          createdAt: comment.createdAt,
+          updatedAt: comment.updatedAt,
+          createdAtString: formatDate(comment.createdAt),
+          updatedAtString: formatDate(comment.updatedAt),
+          user: {
+            fullName: user.fullName,
+            profilePic: user.profilePic,
+            country: user.country,
+          },
+        };
+      });
+
+    const allComments = (await Promise.all(promises)) as Comment[];
+
+    return allComments;
+  } catch (error) {
+    throw error;
   }
 };
 

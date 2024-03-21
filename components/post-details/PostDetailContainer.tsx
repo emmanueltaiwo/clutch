@@ -30,17 +30,17 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
   });
 
   if (isLoading) {
-    const skeletonCards = Array.from({ length: 5 }, (_, index) => (
-      <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3">
+    const skeletonCards = Array.from({ length: 1 }, (_, index) => (
+      <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3 pb-20">
         <SkeletonCard />
       </div>
     ));
     return (
-      <>
+      <div>
         <PageHeader postId={postId} postUserId={userId} userId={userId} />
         {skeletonCards}
         <CommentContainer postId={postId} defaultUserId={userId} />
-      </>
+      </div>
     );
   }
 
