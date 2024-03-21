@@ -31,7 +31,7 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
 
   if (isLoading) {
     const skeletonCards = Array.from({ length: 1 }, (_, index) => (
-      <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3 pb-20">
+      <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3 pb-10">
         <SkeletonCard />
       </div>
     ));
