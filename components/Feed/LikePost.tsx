@@ -5,6 +5,7 @@ import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { handleLikePost } from "@/services/feed";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   postId: string;
@@ -13,9 +14,18 @@ type Props = {
 };
 
 const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
+  const queryClient = useQueryClient();
   const { toast } = useToast();
   const [favouritedPost, setFavouritedPost] = useState<boolean>(hasLikePost);
-  const [totalPostLikes, setTotalPostLikes] = useState<number>(totalLikes);
+  const { mutate: mutateLikePost, isPending } = useMutation({
+    mutationFn: (e: {
+      preventDefault: () => void;
+      stopPropagation: () => void;
+    }) => favouritePost(e),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["feed-posts"] });
+    },
+  });
 
   const favouritePost = async (e: {
     preventDefault: () => void;
@@ -24,20 +34,16 @@ const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      setFavouritedPost(true);
+      setFavouritedPost(hasLikePost ? false : true);
       const response = await handleLikePost(postId);
 
       if (response !== "Post Favourited Successfully") {
-        setFavouritedPost(false);
-        setTotalPostLikes((prevLikes) => prevLikes - 1);
         return toast({
           title: response,
           description: response,
         });
       }
 
-      setFavouritedPost(true);
-      setTotalPostLikes((prevLikes) => prevLikes + 1);
       return toast({
         title: response,
         description: "Yay! This post has been added to your favourites",
@@ -49,10 +55,11 @@ const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
 
   return (
     <button
-      onClick={favouritePost}
+      disabled={isPending}
+      onClick={(e) => mutateLikePost(e)}
       className={`transition-all duration-300 px-[8px] py-[13px] rounded-full hover:text-red-500 flex items-center gap-1 hover:bg-[rgba(248,79,79,0.1)] ${
         !favouritedPost && "text-gray-600"
-      } `}
+      } ${isPending && "cursor-progress"} `}
     >
       {favouritedPost ? (
         <FavoriteRoundedIcon className="text-red-500" fontSize="small" />
@@ -60,9 +67,7 @@ const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
         <FavoriteBorderRoundedIcon fontSize="small" />
       )}
 
-      <span className="text-[13px] font-[300] text-gray-500">
-        {totalPostLikes}
-      </span>
+      <span className="text-[13px] font-[300] text-gray-500">{totalLikes}</span>
     </button>
   );
 };
