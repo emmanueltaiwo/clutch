@@ -1,5 +1,4 @@
 import Container from "@/components/Container";
-import { fetchPostById } from "@/services/feed";
 import { getUserDocFromFirestore, handleCookies } from "@/services/auth";
 import { User } from "@/types";
 import PostDetailContainer from "@/components/post-details/PostDetailContainer";
