@@ -42,19 +42,11 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
   const { editUserId, editCommentId, isEditComment } = edit;
 
   useEffect(() => {
-    const validateAdminAccess = async () => {
-      try {
-        if (userId === defaultUserId) {
-          return setCommentCreatedByUser(true);
-        }
+    if (userId === defaultUserId) {
+      return setCommentCreatedByUser(true);
+    }
 
-        return setCommentCreatedByUser(false);
-      } catch (error) {
-        throw new Error();
-      }
-    };
-
-    validateAdminAccess();
+    return setCommentCreatedByUser(false);
   }, [userId, defaultUserId]);
 
   return (

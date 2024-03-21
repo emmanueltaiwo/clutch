@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import { editComment } from "@/lib/features/editComment/editCommentSlice";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AdminPostOptions = ({
   postId,
@@ -36,9 +37,36 @@ const AdminPostOptions = ({
   userId: string;
   type: string;
 }) => {
+  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { toast } = useToast();
+
+  const { mutate: mutateDelete, isPending } = useMutation({
+    mutationFn: () => handleDelete(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["post-comment", postId] });
+    },
+  });
+
+  const handleDelete = async () => {
+    const response = await deletePost(postId, type);
+    if (!response) {
+      return toast({
+        title: "An Error Occured!",
+        description: "Refresh page and try again",
+      });
+    }
+
+    if (type === "post") router.back();
+
+    return toast({
+      title: `${type === "post" ? "Post" : "Comment"} Deleted Succesfully`,
+      description: `Your ${
+        type === "post" ? "post" : "comment"
+      } Has Been Deleted! Enjoy Clutch!`,
+    });
+  };
 
   return (
     <div className="ml-auto w-fit">
@@ -84,25 +112,12 @@ const AdminPostOptions = ({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={async () => {
-                const response = await deletePost(postId, type);
-                if (!response) {
-                  return toast({
-                    title: "An Error Occured!",
-                    description: "Refresh page and try again",
-                  });
+              onClick={() => {
+                if (type === "post") {
+                  return handleDelete();
+                } else {
+                  return mutateDelete();
                 }
-
-                if (type === "post") router.back();
-
-                return toast({
-                  title: `${
-                    type === "post" ? "Post" : "Comment"
-                  } Deleted Succesfully`,
-                  description: `Your ${
-                    type === "post" ? "post" : "comment"
-                  } Has Been Deleted! Enjoy Clutch!`,
-                });
               }}
             >
               Continue
