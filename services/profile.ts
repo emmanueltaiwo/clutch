@@ -96,23 +96,24 @@ export const fetchUserProfilePosts = async (userId: string, type: string) => {
 export const fetchSpecificPost = async (userId: string, type: string) => {
   try {
     const allPosts: Post[] = [];
-    const q = query(collection(db, type), where("userId", "==", userId));
+    const uniquePostIds = new Set<string>();
 
+    const q = query(collection(db, type), where("userId", "==", userId));
     const querySnapshot = await getDocs(q);
 
     await Promise.all(
       querySnapshot.docs.map(async (doc) => {
         const postId = doc.data().postId;
 
-        const qPost = query(
-          collection(db, "posts"),
-          where("postId", "==", postId)
-        );
-        const queryPostSnapshot = await getDocs(qPost);
+        if (!uniquePostIds.has(postId)) {
+          const qPost = query(
+            collection(db, "posts"),
+            where("postId", "==", postId)
+          );
+          const queryPostSnapshot = await getDocs(qPost);
 
-        await Promise.all(
-          queryPostSnapshot.docs.map(async (doc) => {
-            const post = doc.data() as Post;
+          if (!queryPostSnapshot.empty) {
+            const post = queryPostSnapshot.docs[0].data() as Post;
 
             const user = (await getUserDocFromFirestore(post.userId)) as User;
             const likeCount = await fetchAllLikesForPost(post.postId);
@@ -148,12 +149,18 @@ export const fetchSpecificPost = async (userId: string, type: string) => {
             };
 
             allPosts.push(fullPost);
-          })
-        );
+            uniquePostIds.add(post.postId);
+          }
+        }
       })
     );
 
-    return allPosts;
+    const uniquePosts = allPosts.filter(
+      (post, index, self) =>
+        index === self.findIndex((p) => p.postId === post.postId)
+    );
+
+    return uniquePosts;
   } catch (error: any) {
     throw error;
   }

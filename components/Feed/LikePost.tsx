@@ -1,5 +1,3 @@
-"use client";
-
 import { FC, useState } from "react";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
@@ -21,7 +19,12 @@ const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
     mutationFn: (e: {
       preventDefault: () => void;
       stopPropagation: () => void;
-    }) => favouritePost(e),
+    }) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      return favouritePost(e);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["feed-posts"] });
     },
@@ -53,10 +56,15 @@ const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
     }
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault(); // Prevents the default link behavior
+    mutateLikePost(e);
+  };
+
   return (
     <button
       disabled={isPending}
-      onClick={(e) => mutateLikePost(e)}
+      onClick={handleClick}
       className={`transition-all duration-300 px-[8px] py-[13px] rounded-full hover:text-red-500 flex items-center gap-1 hover:bg-[rgba(248,79,79,0.1)] ${
         !favouritedPost && "text-gray-600"
       } ${isPending && "cursor-progress"} `}
