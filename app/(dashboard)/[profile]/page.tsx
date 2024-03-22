@@ -15,7 +15,7 @@ const ProfilePage = async ({ params }: { params: { profile: string } }) => {
   const profileExist = await verifyUserProfileExists(params.profile);
 
   const defaultUserId = await handleCookies("get", "USER_ID");
-  if (typeof defaultUserId === "boolean") return;
+  if (typeof defaultUserId === "boolean") return null;
 
   if (!profileExist.exists) {
     return <Container>User does not exist</Container>;

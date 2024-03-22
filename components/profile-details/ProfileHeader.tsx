@@ -74,6 +74,15 @@ const ProfileHeader: FC<Props> = ({
     isUserAlreadyFollowing
   );
   const [followers, setFollowers] = useState<number>(totalFollowers);
+  const [user, setUser] = useState({
+    profilePic: profilePic,
+    fullName: fullName,
+    username: username,
+    country: country,
+    gender: gender,
+    email: email,
+    bio: bio,
+  });
   const dispatch = useAppDispatch();
 
   return (
@@ -89,9 +98,9 @@ const ProfileHeader: FC<Props> = ({
       <div className="w-full h-[200px] bg-gradient-to-r from-cyan-700 to-blue-800 flex items-center justify-center" />
 
       <div className="absolute left-0 right-0 top-[120px] md:relative md:top-[-80px] flex justify-center">
-        {profilePic.length !== 0 ? (
+        {user.profilePic.length !== 0 ? (
           <Image
-            src={profilePic}
+            src={user.profilePic}
             width={2000}
             height={150}
             className="rounded-[10px] invert-0 h-[150px] w-[150px]"
@@ -99,7 +108,7 @@ const ProfileHeader: FC<Props> = ({
           />
         ) : (
           <div className="w-[150px] h-[150px] flex items-center justify-center text-[50px] font-bold rounded-[10px] text-white bg-gray-900">
-            {fullName
+            {user.fullName
               .split(" ")
               .map((n) => n[0])
               .join("")}
@@ -152,9 +161,16 @@ const ProfileHeader: FC<Props> = ({
                     }
 
                     ref.current?.reset();
+
+                    setUser({
+                      ...user,
+                      fullName: newFullName,
+                      username: newUsername,
+                      bio: newBio,
+                    });
                     return toast({
                       description:
-                        "Profile updated successfully! Refresh to see changes",
+                        "Profile updated successfully!",
                     });
                   }}
                 >
@@ -165,7 +181,7 @@ const ProfileHeader: FC<Props> = ({
                       </Label>
                       <Input
                         name="fullName"
-                        defaultValue={fullName}
+                        defaultValue={user.fullName}
                         className="col-span-3"
                       />
                     </div>
@@ -175,7 +191,7 @@ const ProfileHeader: FC<Props> = ({
                       </Label>
                       <Input
                         name="username"
-                        defaultValue={username.toLowerCase()}
+                        defaultValue={user.username.toLowerCase()}
                         className="col-span-3"
                       />
                     </div>
@@ -184,7 +200,7 @@ const ProfileHeader: FC<Props> = ({
                         Bio
                       </Label>
                       <Textarea
-                        defaultValue={bio}
+                        defaultValue={user.bio}
                         name="bio"
                         className="col-span-3"
                       />
@@ -202,26 +218,26 @@ const ProfileHeader: FC<Props> = ({
         <div
           className={`flex flex-col gap-1 items-center justify-center mt-3 relative`}
         >
-          <h4 className="text-gray-200 font-[600] text-[24px]">{fullName}</h4>
+          <h4 className="text-gray-200 font-[600] text-[24px]">{user.fullName}</h4>
           <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400 flex items-center gap-2">
-            @{username.toLowerCase()} <span>||</span>{" "}
+            @{user.username.toLowerCase()} <span>||</span>{" "}
             <span className="flex items-center gap-1">
               <AddLocationAltIcon fontSize="small" />
-              {capitalizeEachWord(country)}
+              {capitalizeEachWord(user.country)}
             </span>
           </p>
-          {bio.length < 1 ? (
+          {user.bio.length < 1 ? (
             <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 flex items-center gap-2">
-              {capitalizeEachWord(gender)} ||{" "}
+              {capitalizeEachWord(user.gender)} ||{" "}
               <span className="flex items-center gap-1">
                 <AddLocationAltIcon fontSize="small" />
-                {capitalizeEachWord(country)}
+                {capitalizeEachWord(user.country)}
               </span>{" "}
-              || {email.toLowerCase()}
+              || {user.email.toLowerCase()}
             </p>
           ) : (
-            <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 w-[90%] text-center">
-              {capitalizeEachWord(bio)}
+            <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 w-[90%] lg:w-[40%] text-center">
+              {capitalizeEachWord(user.bio)}
             </p>
           )}
 
