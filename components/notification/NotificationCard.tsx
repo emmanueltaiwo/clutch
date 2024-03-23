@@ -6,15 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotificationAsRead } from "@/services/notifications";
 import { useToast } from "../ui/use-toast";
 import { formatDate } from "@/utils/helpers";
-import { BellRing, Check } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { BellRing } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 const NotificationCard = ({ notification }: { notification: Notification }) => {
   const { toast } = useToast();
