@@ -10,24 +10,25 @@ import { useQuery } from "@tanstack/react-query";
 
 const Feed = () => {
   const [showNoPostsMessage, setShowNoPostsMessage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode");
-  const {
-    data: posts,
-    isLoading,
-    refetch,
-  } = useQuery<Post[]>({
+  const { data: posts, refetch } = useQuery<Post[]>({
     queryKey: ["feed-posts"],
     queryFn: async () => await fetchFeedPosts(mode),
     staleTime: 0,
+    enabled: false,
   });
 
   useEffect(() => {
-    setShowNoPostsMessage(posts?.length === 0);
-  }, [posts]);
+    refetch();
+  }, [mode, refetch]);
 
   useEffect(() => {
-    refetch();
+    setIsLoading(true);
+    refetch().then(() => {
+      setIsLoading(false);
+    });
   }, [mode, refetch]);
 
   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
@@ -52,7 +53,7 @@ const Feed = () => {
           Ooops! No post was found
         </div>
       );
-    } else if (isLoading) {
+    } else if (isLoading || !posts) {
       return skeletonCards;
     } else {
       return sortedPosts?.map((post) => {
