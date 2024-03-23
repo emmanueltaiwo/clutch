@@ -13,12 +13,11 @@ import {
 } from "firebase/firestore";
 import { handleCookies } from "./auth";
 
-export const createNewNotification = async (notification: {
-  notificationText: string;
-  userId: string;
-}): Promise<boolean> => {
+export const createNewNotification = async (
+  notificationText: string,
+  userId: string
+): Promise<boolean> => {
   try {
-    const { notificationText, userId } = notification;
     const notificationId = generateNotificationId(notificationText);
 
     const newNotification: Notification = {

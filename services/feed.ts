@@ -15,6 +15,7 @@ import {
 import { getUserDocFromFirestore, handleCookies } from "./auth";
 import { LikedPost, Post, User, Comment } from "@/types";
 import { formatDate } from "@/utils/helpers";
+import { createNewNotification } from "./notifications";
 
 export const createNewPost = async (post: string): Promise<string> => {
   try {
@@ -163,7 +164,7 @@ export const fetchPostById = async (
         country: user.country,
       },
     };
-    
+
     return post;
   } catch (error) {
     return false;
@@ -233,6 +234,8 @@ export const handleLikePost = async (postId: string): Promise<string> => {
     };
 
     await setDoc(doc(db, "likes", documentId), newLikeDocument);
+
+    await createNewNotification("You liked your post", userId);
 
     return "Post Favourited Successfully";
   } catch (error) {
