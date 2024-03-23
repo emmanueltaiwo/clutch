@@ -18,6 +18,7 @@ import WrapperComponent from "./Wrapper";
 
 type Props = {
   postId: string;
+  userId: string;
   username: string;
   profilePic: string;
   fullName: string;
@@ -50,6 +51,7 @@ export const EditPostButton: FC = () => {
 
 const PostCard: FC<Props> = ({
   postId,
+  userId,
   username,
   profilePic,
   fullName,
@@ -77,7 +79,7 @@ const PostCard: FC<Props> = ({
       postDetailPage={postDetailPage}
     >
       <div className="flex justify-between items-center gap-3">
-        <Link href={`/${username}`} className="flex items-center gap-3">
+        <Link href={`/profile/${username}`} className="flex items-center gap-3">
           <PostAvatar profilePic={profilePic} fullName={fullName} />
 
           <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
@@ -159,6 +161,7 @@ const PostCard: FC<Props> = ({
 
         <LikePost
           postId={postId}
+          postUserId={userId}
           totalLikes={totalLikes}
           hasLikePost={hasLikePost}
         />

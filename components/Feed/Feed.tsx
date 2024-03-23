@@ -60,6 +60,7 @@ const Feed = () => {
           <PostCard
             key={post.postId}
             postId={post.postId}
+            userId={post.userId}
             username={post.user.username}
             profilePic={post.user.profilePic}
             fullName={post.user.fullName}

@@ -84,6 +84,7 @@ const ProfileFeed: FC<Props> = ({ userId }) => {
       return sortedPosts.map((post) => (
         <PostCard
           key={post.postId}
+          userId={post.userId}
           postId={post.postId}
           username={post.user.username}
           profilePic={post.user.profilePic}

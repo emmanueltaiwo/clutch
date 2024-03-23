@@ -31,8 +31,9 @@ const NotificationCard = ({ notification }: { notification: Notification }) => {
 
   return (
     <div
-      className={`w-full flex flex-col gap-5 border-t-[1px] p-5 cursor-pointer ${
-        !notification.hasRead && "bg-[rgba(48,48,48,0.29)] animate-pulse"
+      className={`w-full flex flex-col gap-5 border-t-[1px] p-5 cursor-pointer transition-all duration-300 hover:bg-[rgba(48,48,48,0.29)] ${
+        !notification.hasRead &&
+        "bg-[rgba(48,48,48,0.29)] animate-pulse transition-none duration-1000"
       }`}
     >
       <div className="flex gap-10">
@@ -49,21 +50,21 @@ const NotificationCard = ({ notification }: { notification: Notification }) => {
           <p>{notification.notificationText}</p>
 
           {notification.hasRead ? (
-            <Button disabled className="w-fit rounded-md">
+            <Button variant="link" disabled className="w-fit rounded-md p-0">
               Marked as read
             </Button>
           ) : (
             <Button
               disabled={isPending}
               onClick={async () => mutateLikePost(notification.notificationId)}
-              className="w-fit rounded-md"
+              className="w-fit rounded-md px-3"
             >
               Mark as read
             </Button>
           )}
         </div>
 
-        <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400 gap-1 w-full flex justify-end">
+        <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400 gap-1 w-[30%] flex justify-end">
           {formatDate(notification.createdAt)}
         </p>
       </div>

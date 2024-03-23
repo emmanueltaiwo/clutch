@@ -23,18 +23,22 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
     data: post,
     isLoading,
     isError,
-  } = useQuery<Post | boolean>({
+  } = useQuery<Post>({
     queryKey: ["feed-posts", postId],
     queryFn: async () => await fetchPostById(postId),
     staleTime: 0,
   });
 
+  const skeletonCards = Array.from({ length: 1 }, (_, index) => (
+    <div
+      key={index}
+      className="w-[95%] mx-auto h-full flex flex-col gap-3 pb-10"
+    >
+      <SkeletonCard />
+    </div>
+  ));
+
   if (isLoading) {
-    const skeletonCards = Array.from({ length: 1 }, (_, index) => (
-      <div key={index} className="w-[95%] mx-auto h-full flex flex-col gap-3 pb-10">
-        <SkeletonCard />
-      </div>
-    ));
     return (
       <div>
         <PageHeader postId={postId} postUserId={userId} userId={userId} />
@@ -44,13 +48,23 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
     );
   }
 
-  if (isError || typeof post === "boolean" || !post) {
+  if (isError) {
     return (
       <Container>
         <p className="text-white font-bold text-[40px] text-center mt-20">
           {isError ? "An error occurred." : "Post does not exist."}
         </p>
       </Container>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div>
+        <PageHeader postId={postId} postUserId={userId} userId={userId} />
+        {skeletonCards}
+        <CommentContainer postId={postId} defaultUserId={userId} />
+      </div>
     );
   }
 
@@ -61,6 +75,7 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
       <section className="border-b-[0.5px] flex flex-col gap-3 pb-5">
         <PostCard
           postId={postId}
+          userId={post.userId}
           username={username}
           profilePic={post.user.profilePic}
           fullName={post.user.fullName}
@@ -78,7 +93,7 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
 
-        <CreateComment user={user} postId={postId} />
+        <CreateComment postUserId={post.userId} user={user} postId={postId} />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
       </section>
