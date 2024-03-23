@@ -8,7 +8,7 @@ import SettingsInputSvideoRoundedIcon from "@mui/icons-material/SettingsInputSvi
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 const PROJECT_NAME = "Clutch";
-const DOMAIN_NAME = 'https://clutchapp.vercel.app'
+const DOMAIN_NAME = "https://clutchapp.vercel.app";
 const BASE_WEBSITE_URL = "https://clutch.com.ng/";
 const BASE_GITHUB_URL = "https://github.com/realemmanuel";
 const BASE_GITHUB_PROJECT_URL = BASE_GITHUB_URL + "/clutch";
@@ -225,6 +225,60 @@ const subIconComponents: { [key: string]: IconType } = {
   GitHubIcon,
 };
 
+const COMMUNITY_TYPES = [
+  {
+    id: 1,
+    name: "Technology",
+    value: "technology",
+  },
+  {
+    id: 2,
+    name: "Art",
+    value: "art",
+  },
+  {
+    id: 3,
+    name: "Science",
+    value: "science",
+  },
+  {
+    id: 4,
+    name: "Music",
+    value: "music",
+  },
+  {
+    id: 5,
+    name: "Health",
+    value: "health",
+  },
+  {
+    id: 6,
+    name: "Sports",
+    value: "sports",
+  },
+  {
+    id: 7,
+    name: "Fashion",
+    value: "fashion",
+  },
+  {
+    id: 8,
+    name: "Food",
+    value: "food",
+  },
+  {
+    id: 9,
+    name: "Travel",
+    value: "travel",
+  },
+  {
+    id: 10,
+    name: "Photography",
+    value: "photography",
+  },
+];
+
+
 export {
   FEATURES,
   GENDER,
@@ -239,4 +293,5 @@ export {
   BASE_WEBSITE_URL,
   BASE_GITHUB_URL,
   BASE_GITHUB_PROJECT_URL,
+  COMMUNITY_TYPES
 };
