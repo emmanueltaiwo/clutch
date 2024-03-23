@@ -155,7 +155,7 @@ const Sidebar = ({ username }: { username: string }) => {
               return (
                 <Link
                   key={item.id}
-                  href={item.route === "/profile" ? `/${username}` : item.route}
+                  href={item.route === "/profile" ? `/profile/${username}` : item.route}
                   className={`${
                     isActiveLink
                       ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
