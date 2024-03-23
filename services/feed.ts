@@ -57,7 +57,7 @@ export const fetchFeedPosts = async (mode: string | null): Promise<Post[]> => {
 
     if (mode === "for-you" || mode === null) {
       const userCategory = await getUserCategory();
-      q = query(collection(db, "posts"), where("category", "==", userCategory));
+      q = query(collection(db, "posts"));
     } else if (mode === "following") {
       const followingIds = await getUserFollowingIds();
       q = query(collection(db, "posts"), where("userId", "in", followingIds));

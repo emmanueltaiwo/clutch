@@ -31,10 +31,9 @@ const NotificationCard = ({ notification }: { notification: Notification }) => {
 
   return (
     <div
-      className={`w-full flex flex-col gap-5 border-t-[1px] p-5 cursor-pointer transition-all duration-300 hover:bg-[rgba(48,48,48,0.29)] ${
-        !notification.hasRead &&
-        "bg-[rgba(48,48,48,0.29)] animate-pulse transition-none duration-1000"
-      }`}
+      className={`w-full flex flex-col gap-5 border-t-[1px] p-5 cursor-pointer hover:bg-[rgba(48,48,48,0.29)] ${
+        !notification.hasRead && "bg-[rgba(48,48,48,0.29)] animate-pulse"
+      } ${notification.hasRead && "transition-all duration-300"}`}
     >
       <div className="flex gap-10">
         <div className="min-w-[50px] h-[50px] rounded-full bg-gray-600 flex items-center justify-center">
