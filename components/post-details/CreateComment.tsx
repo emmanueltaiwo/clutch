@@ -13,9 +13,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 type Props = {
   postId: string;
   user: User;
+  postUserId: string;
 };
 
-const CreateComment: FC<Props> = ({ postId, user }) => {
+const CreateComment: FC<Props> = ({ postId, user, postUserId }) => {
   const queryClient = useQueryClient();
 
   const { mutate: mutateCreateComment, isPending } = useMutation({
@@ -37,7 +38,7 @@ const CreateComment: FC<Props> = ({ postId, user }) => {
       });
     }
 
-    const response = await createNewComment(postId, comment);
+    const response = await createNewComment(postId, comment, postUserId);
     if (!response) {
       return toast({
         title: "An error occurred",

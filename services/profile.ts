@@ -11,6 +11,7 @@ import {
   updateDoc,
   deleteDoc,
   setDoc,
+  DocumentData,
 } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
 import {
@@ -19,6 +20,7 @@ import {
   findAllLikedPost,
 } from "./feed";
 import { formatDate } from "@/utils/helpers";
+import { createNewNotification } from "./notifications";
 
 export const verifyUserProfileExists = async (
   username: string
@@ -198,6 +200,8 @@ export const editProfile = async (
       username: username,
     });
 
+    await createNewNotification("You edited your profile details", userId);
+
     return true;
   } catch (error: any) {
     throw error;
@@ -232,6 +236,14 @@ export const handleFollowUser = async (
 
     const followId = generateFollowId(userId);
 
+    const followingUserData = (await getUserDocFromFirestore(
+      followingUserId
+    )) as DocumentData;
+
+    const followerUserData = (await getUserDocFromFirestore(
+      userId
+    )) as DocumentData;
+
     const documentId = `${userId}${followingUserId}`;
     const q = query(
       collection(db, "follows"),
@@ -242,6 +254,15 @@ export const handleFollowUser = async (
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
       await deleteDoc(doc(db, "follows", documentId));
+      await createNewNotification(
+        `You unfollowed ${followingUserData.fullName}`,
+        userId
+      );
+  
+      await createNewNotification(
+        `${followerUserData.fullName} unfollowed You`,
+        followingUserId
+      );
       return "You Unfollowed this  user";
     }
 
@@ -253,6 +274,16 @@ export const handleFollowUser = async (
     };
 
     await setDoc(doc(db, "follows", documentId), newFollowDocument);
+
+    await createNewNotification(
+      `You followed ${followingUserData.fullName}`,
+      userId
+    );
+
+    await createNewNotification(
+      `${followerUserData.fullName} Followed You`,
+      followingUserId
+    );
 
     return "You just followed this user";
   } catch (error: any) {

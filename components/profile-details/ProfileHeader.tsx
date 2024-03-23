@@ -236,7 +236,7 @@ const ProfileHeader: FC<Props> = ({
               || {user.email.toLowerCase()}
             </p>
           ) : (
-            <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 w-[90%] lg:w-[40%] text-center">
+            <p className="font-[400] text-gray-400 text-[16px] dark:text-gray-200 w-[90%] lg:w-[60%] text-center">
               {capitalizeEachWord(user.bio)}
             </p>
           )}

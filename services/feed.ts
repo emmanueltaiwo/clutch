@@ -11,6 +11,7 @@ import {
   getDocs,
   deleteDoc,
   updateDoc,
+  DocumentData,
 } from "firebase/firestore";
 import { getUserDocFromFirestore, handleCookies } from "./auth";
 import { LikedPost, Post, User, Comment } from "@/types";
@@ -122,14 +123,24 @@ export const fetchFeedPosts = async (mode: string | null): Promise<Post[]> => {
     throw error;
   }
 };
-export const fetchPostById = async (
-  postId: string
-): Promise<Post | boolean> => {
+
+export const verifyPostExists = async (postId: string): Promise<boolean> => {
   try {
     const docRef = doc(db, "posts", postId);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) return false;
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const fetchPostById = async (postId: string): Promise<Post> => {
+  try {
+    const docRef = doc(db, "posts", postId);
+    const docSnap = await getDoc(docRef);
+
     const postDetail = docSnap.data() as Post;
 
     const user = (await getUserDocFromFirestore(postDetail.userId)) as User;
@@ -167,7 +178,7 @@ export const fetchPostById = async (
 
     return post;
   } catch (error) {
-    return false;
+    throw error;
   }
 };
 
@@ -207,11 +218,20 @@ export const generateLikeId = (userId: string): string => {
   return likeId;
 };
 
-export const handleLikePost = async (postId: string): Promise<string> => {
+export const handleLikePost = async (
+  postId: string,
+  postUserId: string
+): Promise<string> => {
   try {
     const userId = await handleCookies("get", "USER_ID");
     if (!userId || typeof userId !== "string") return "User Id Not Found";
     const likeId = generateLikeId(userId);
+
+    const userData = (await getUserDocFromFirestore(userId)) as DocumentData;
+
+    const postUserData = (await getUserDocFromFirestore(
+      postUserId
+    )) as DocumentData;
 
     const documentId = `${userId}${postId}`;
     const q = query(
@@ -223,6 +243,14 @@ export const handleLikePost = async (postId: string): Promise<string> => {
 
     if (!querySnapshot.empty) {
       await deleteDoc(doc(db, "likes", documentId));
+      await createNewNotification(
+        `You removed ${postUserData.fullName} post from your favourite`,
+        userId
+      );
+      await createNewNotification(
+        `${userData.fullName} removed your post from favourite`,
+        postUserId
+      );
       return "You've Removed This Post From Your Favorites";
     }
 
@@ -235,7 +263,14 @@ export const handleLikePost = async (postId: string): Promise<string> => {
 
     await setDoc(doc(db, "likes", documentId), newLikeDocument);
 
-    await createNewNotification("You liked your post", userId);
+    await createNewNotification(
+      `You added ${postUserData.fullName} post to your favourite`,
+      userId
+    );
+    await createNewNotification(
+      `${userData.fullName} added your post to favourite`,
+      postUserId
+    );
 
     return "Post Favourited Successfully";
   } catch (error) {
@@ -341,12 +376,22 @@ export const deletePost = async (
   }
 };
 
-export const createNewComment = async (postId: string, commentText: string) => {
+export const createNewComment = async (
+  postId: string,
+  commentText: string,
+  postUserId: string
+) => {
   try {
     if (!postId || !commentText) return false;
 
     const userId = await handleCookies("get", "USER_ID");
     if (!userId || typeof userId !== "string") return false;
+
+    const userData = (await getUserDocFromFirestore(userId)) as DocumentData;
+
+    const postUserData = (await getUserDocFromFirestore(
+      postUserId
+    )) as DocumentData;
 
     const commentId = generatePostId(commentText);
 
@@ -360,6 +405,16 @@ export const createNewComment = async (postId: string, commentText: string) => {
     };
 
     await setDoc(doc(db, "comments", commentId), newComment);
+
+    await createNewNotification(
+      `You added a comment on ${postUserData.fullName} post`,
+      userId
+    );
+    await createNewNotification(
+      `${userData.fullName} added a comment to your post`,
+      postUserId
+    );
+
     return true;
   } catch (error) {
     return false;

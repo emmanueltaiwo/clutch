@@ -9,9 +9,15 @@ type Props = {
   postId: string;
   totalLikes: number;
   hasLikePost: boolean;
+  postUserId: string;
 };
 
-const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
+const LikePost: FC<Props> = ({
+  postId,
+  totalLikes,
+  hasLikePost,
+  postUserId,
+}) => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [favouritedPost, setFavouritedPost] = useState<boolean>(hasLikePost);
@@ -38,7 +44,7 @@ const LikePost: FC<Props> = ({ postId, totalLikes, hasLikePost }) => {
     e.stopPropagation();
     try {
       setFavouritedPost(hasLikePost ? false : true);
-      const response = await handleLikePost(postId);
+      const response = await handleLikePost(postId, postUserId);
 
       if (response !== "Post Favourited Successfully") {
         return toast({
