@@ -25,3 +25,12 @@ export const capitalizeEachWord = (string: string) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
+
+export const trimWord = (word: string) => {
+  const words = word.split(" ");
+  if (words.length > 40) {
+    return words.slice(0, 40).join(" ") + "...";
+  } else {
+    return word;
+  }
+};
