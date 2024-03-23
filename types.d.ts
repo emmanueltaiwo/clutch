@@ -64,3 +64,11 @@ export type Comment = {
     country: string;
   };
 };
+
+export type Notification = {
+  notificationId: string;
+  userId: string;
+  notificationText: string;
+  hasRead: boolean;
+  createdAt:number
+};
