@@ -9,9 +9,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { fetchUserCommunities } from "@/services/communities";
 import { handleUserSignout } from "@/services/auth";
-import { Community } from "@/types/communities-types";
+import { Community } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { openSidebar, closeSidebar } from "@/lib/features/sidebar/sidebarSlice";
@@ -22,6 +21,7 @@ import {
   subIconComponents,
 } from "@/constants";
 import CommunitySkeleton from "./CommunitySkeleton";
+import { fetchUserCommunities } from "@/services/communities";
 
 const Sidebar = ({ username }: { username: string }) => {
   const router = useRouter();
@@ -30,9 +30,8 @@ const Sidebar = ({ username }: { username: string }) => {
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState<string>("");
   const { data, isLoading } = useQuery<Community[]>({
-    queryKey: ["user-communities"],
+    queryKey: ["my-communities"],
     queryFn: async () => await fetchUserCommunities(),
-    staleTime: 0,
   });
 
   useEffect(() => {
@@ -125,18 +124,23 @@ const Sidebar = ({ username }: { username: string }) => {
             ) : (
               data?.slice(0, 5).map((community) => (
                 <Link
-                  key={community.communityID}
-                  href={`communities/${community.communityCategory}/${community.communityID}`}
+                  key={community.communityId}
+                  href={`/communities/${community.communityId}`}
                   className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[10px] hover:bg-[rgb(222,222,222)] dark:hover:bg-[rgba(38,47,66,0.86)]"
                 >
                   <Image
-                    src={community.communityPic ?? "/assets/Images/cover.png"}
+                    src={
+                      community.communityImage.length > 1
+                        ? community.communityImage
+                        : "/assets/Images/cover.png"
+                    }
                     width={50}
                     height={50}
                     alt="community image"
                     className="rounded-full w-[30px] h-[30px]"
                   />
-                  {community.communityName} ({community.members || "0"} Members)
+                  {community.name} ({community.members || "0"}{" "}
+                  {community.members > 1 ? "members" : "member"})
                 </Link>
               ))
             )}
@@ -155,7 +159,11 @@ const Sidebar = ({ username }: { username: string }) => {
               return (
                 <Link
                   key={item.id}
-                  href={item.route === "/profile" ? `/profile/${username}` : item.route}
+                  href={
+                    item.route === "/profile"
+                      ? `/profile/${username}`
+                      : item.route
+                  }
                   className={`${
                     isActiveLink
                       ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] bg-[rgb(222,222,222)] dark:bg-[rgba(38,47,66,0.86)]"
@@ -246,12 +254,16 @@ const Sidebar = ({ username }: { username: string }) => {
               <div className="w-full flex flex-col gap-3">
                 {data?.slice(0, 5).map((community) => (
                   <Link
-                    key={community.communityID}
-                    href={`communities/${community.communityCategory}/${community.communityID}`}
+                    key={community.communityId}
+                    href={`/communities/${community.communityId}`}
                     className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center justify-center py-2 hover:animate-spin"
                   >
                     <Image
-                      src={community.communityPic ?? "/assets/Images/cover.png"}
+                      src={
+                        community.communityImage.length > 1
+                          ? community.communityImage
+                          : "/assets/Images/cover.png"
+                      }
                       width={50}
                       height={50}
                       alt="community image"

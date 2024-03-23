@@ -12,8 +12,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { COMMUNITY_TYPES } from "@/constants";
+import { fetchUserCommunities } from "@/services/communities";
+import { Community } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { Card, CardDescription } from "@/components/ui/card";
 
 const YourCommunities = () => {
+  const { data: communities, isLoading } = useQuery<Community[]>({
+    queryKey: ["my-communities"],
+    queryFn: async () => await fetchUserCommunities(),
+  });
+
   return (
     <section className="min-w-full mt-5 flex flex-col gap-5">
       <div className="flex flex-col md:flex-row items-center gap-2">
@@ -34,8 +43,42 @@ const YourCommunities = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
+
+        <Select>
+          <SelectTrigger className="w-full md:w-[300px]">
+            <SelectValue placeholder="Filter by visibility" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Visibility</SelectLabel>
+              <SelectItem value="public">Public</SelectItem>
+              <SelectItem value="private">Private</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
-      <CommunityCard />
+
+      {isLoading && <p>Loading...</p>}
+
+      {communities && communities.length === 0 && (
+        <Card className="p-5">
+          <CardDescription className="text-center">
+            You have not joined any community
+          </CardDescription>
+        </Card>
+      )}
+
+      {communities && communities.length >= 1 && (
+        <div className="flex flex-col gap-5">
+          {communities?.map((community) => (
+            <CommunityCard
+              key={community.communityId}
+              hasJoined={true}
+              community={community}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

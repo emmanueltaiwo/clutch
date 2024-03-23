@@ -3,18 +3,17 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { recommendCommunityToUser } from "@/services/communities";
-import { Community } from "@/types/communities-types";
+import { Community } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import SearchIcon from "@mui/icons-material/Search";
 import CommunitySkeleton from "./CommunitySkeleton";
 import { Button } from "@/components/ui/button";
+import { fetchUserCommunities } from "@/services/communities";
 
 const RightPanel = () => {
   const { data, isLoading } = useQuery<Community[]>({
-    queryKey: ["communities"],
-    queryFn: async () => await recommendCommunityToUser(),
-    staleTime: 0,
+    queryKey: ["my-communities"],
+    queryFn: async () => await fetchUserCommunities(),
   });
 
   const skeletonCards = Array.from({ length: 2 }, (_, index) => (
@@ -64,18 +63,22 @@ const RightPanel = () => {
               </h3>
 
               <Button asChild>
-                <Link href="/communities/create">Create Community</Link>
+                <Link href="/communities">Create Community</Link>
               </Button>
             </div>
           ) : (
             data?.slice(0, 10).map((community) => (
               <Link
-                key={community.communityID}
-                href={`communities/${community.communityCategory}/${community.communityID}`}
+                key={community.communityId}
+                href={`/communities/${community.communityId}`}
                 className="w-full flex items-center gap-2 mx-auto transition-all duration-300 hover:bg-[rgba(0,0,0,0.18)] p-2 rounded-[15px]"
               >
                 <Image
-                  src={community.communityPic ?? "/assets/Images/cover.png"}
+                  src={
+                    community.communityImage.length > 1
+                      ? community.communityImage
+                      : "/assets/Images/cover.png"
+                  }
                   width={100}
                   height={100}
                   alt="community image"
@@ -83,11 +86,11 @@ const RightPanel = () => {
                 />
                 <div className="flex flex-col gap-1">
                   <h4 className="font-bold text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
-                    {community.communityName}
+                    {community.name}
                   </h4>
                   <div className="flex gap-1 flex-wrap items-center">
                     <p className="text-[13px] font-[200] text-gray-700 dark:text-gray-300 italic">
-                      {community.communityCategory}
+                      {community.type}
                     </p>
                   </div>
                 </div>
