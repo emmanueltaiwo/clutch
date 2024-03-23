@@ -42,7 +42,7 @@ const NotificationContainer = () => {
   if (!Array.isArray(notifications)) return skeletonCards;
 
   return (
-    <section className="w-full mx-auto">
+    <section className="w-full mx-auto pb-20">
       <NotificationHeader notifications={notifications} />
 
       <div className="mt-10 flex flex-col gap-5">
