@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Community } from "@/types";
@@ -21,6 +21,15 @@ const RightPanel = () => {
     queryKey: ["my-communities"],
     queryFn: async () => await fetchUserCommunities(),
   });
+
+  const sortedCommunities = useMemo(() => {
+    return (
+      data &&
+      [...data].sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
+  }, [data]);
 
   const skeletonCards = Array.from({ length: 2 }, (_, index) => (
     <div key={index} className="w-full flex flex-col gap-3">
@@ -62,7 +71,7 @@ const RightPanel = () => {
 
           {isLoading && skeletonCards}
 
-          {data && data.length < 1 ? (
+          {sortedCommunities && sortedCommunities.length < 1 ? (
             <Card className="flex flex-col gap-3 items-center justify-center p-5 rounded-[15px] transition-all duration-200">
               <CardTitle>No community was found</CardTitle>
 
@@ -71,7 +80,7 @@ const RightPanel = () => {
               </Button>
             </Card>
           ) : (
-            data?.slice(0, 10).map((community) => (
+            sortedCommunities?.slice(0, 10).map((community) => (
               <Button
                 key={community.communityId}
                 variant="outline"
