@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import BackButton from "./BackButton";
 import AdminPostOptions from "./AdminPostOptions";
 
-const PageHeader = ({
+const PostDetailHeader = ({
   postUserId,
   userId,
   postId,
@@ -47,4 +47,4 @@ const PageHeader = ({
   );
 };
 
-export default PageHeader;
+export default PostDetailHeader;
