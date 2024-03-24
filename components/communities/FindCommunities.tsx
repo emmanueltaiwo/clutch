@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -29,11 +29,20 @@ const FindCommunities = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [visibilityFilter, setVisibilityFilter] = useState<string>("");
 
-  useEffect(() => {
-    if (Array.isArray(communities)) {
-      setFilteredCommunities(communities);
-    }
+  const sortedCommunities = useMemo(() => {
+    return (
+      communities &&
+      [...communities].sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
   }, [communities]);
+
+  useEffect(() => {
+    if (Array.isArray(sortedCommunities)) {
+      setFilteredCommunities(sortedCommunities);
+    }
+  }, [sortedCommunities]);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const search = e.target.value;

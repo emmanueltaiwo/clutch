@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Logo from "./Logo";
 import Link from "next/link";
 import { ModeToggle } from "./ToogleTheme";
@@ -40,6 +40,15 @@ const Sidebar = ({ username }: { username: string }) => {
   useEffect(() => {
     setActiveLink(pathname);
   }, [pathname]);
+
+  const sortedCommunities = useMemo(() => {
+    return (
+      data &&
+      [...data].sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
+  }, [data]);
 
   const isSmallDevice = useMediaQuery({ maxWidth: 768 });
 
@@ -129,7 +138,7 @@ const Sidebar = ({ username }: { username: string }) => {
 
               {isLoading && skeletonCards}
 
-              {data && data.length < 1 ? (
+              {sortedCommunities && sortedCommunities.length < 1 ? (
                 <Link
                   onClick={
                     isSmallDevice ? () => dispatch(closeSidebar()) : undefined
@@ -140,7 +149,7 @@ const Sidebar = ({ username }: { username: string }) => {
                   Find Communities
                 </Link>
               ) : (
-                data?.slice(0, 5).map((community) => (
+                sortedCommunities?.slice(0, 5).map((community) => (
                   <Link
                     onClick={
                       isSmallDevice ? () => dispatch(closeSidebar()) : undefined

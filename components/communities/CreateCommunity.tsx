@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect,useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -81,11 +81,20 @@ const CreateCommunity = () => {
     },
   });
 
-  useEffect(() => {
-    if (Array.isArray(communities)) {
-      setFilteredCommunity(communities);
-    }
+  const sortedCommunities = useMemo(() => {
+    return (
+      communities &&
+      [...communities].sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
   }, [communities]);
+
+  useEffect(() => {
+    if (Array.isArray(sortedCommunities)) {
+      setFilteredCommunity(sortedCommunities);
+    }
+  }, [sortedCommunities]);
 
   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
     <div key={index} className="w-[95%] mx-auto flex flex-col gap-3">
