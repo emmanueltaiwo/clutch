@@ -2,7 +2,14 @@
 
 import { getUserDocFromFirestore, handleCookies } from "./auth";
 import { db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  Query,
+  DocumentData,
+} from "firebase/firestore";
 import { Community, User } from "@/types";
 
 export const recommendCommunitiesToUser = async (): Promise<Community[]> => {
@@ -29,11 +36,14 @@ export const recommendCommunitiesToUser = async (): Promise<Community[]> => {
 
     const recommendedCommunities: Community[] = [];
 
-    const q = query(
+    let q: Query<DocumentData> = query(
       collection(db, "communities"),
-      where("type", "==", interest),
-      where("communityId", "not-in", userPostIds)
+      where("type", "==", interest)
     );
+
+    if (userPostIds.length > 0) {
+      q = query(q, where("communityId", "not-in", userPostIds));
+    }
 
     const querySnapshot = await getDocs(q);
 

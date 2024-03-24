@@ -168,15 +168,40 @@ export const findCommunitiesToJoin = async (): Promise<Community[]> => {
 
 export const fetchActiveCommunities = async (): Promise<Community[]> => {
   try {
-    const communities: Community[] = [];
-    const q = query(collection(db, "communities"), where("active", "==", true));
-    const querySnapshot = await getDocs(q);
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string")
+      throw new Error("UserId Not Found");
 
-    querySnapshot.forEach((doc) => {
-      communities.push(doc.data() as Community);
+    const userCommunitiesSnapshot = await getDocs(
+      collection(db, "communityMembers")
+    );
+
+    const userCommunityIds: string[] = [];
+
+    userCommunitiesSnapshot.forEach((doc) => {
+      const communityData = doc.data();
+      if (communityData[userId] === true) {
+        userCommunityIds.push(doc.id);
+      }
     });
 
-    return communities;
+    const activeUserCommunities: Community[] = [];
+
+    if (userCommunityIds.length > 0) {
+      const q = query(
+        collection(db, "communities"),
+        where("active", "==", true),
+        where("communityId", "in", userCommunityIds)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) => {
+        activeUserCommunities.push(doc.data() as Community);
+      });
+    }
+
+    return activeUserCommunities;
   } catch (error) {
     throw error;
   }
