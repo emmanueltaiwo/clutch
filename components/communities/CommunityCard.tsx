@@ -14,6 +14,7 @@ import { Community } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trimWord } from "@/utils/helpers";
+import { DotFilledIcon } from "@radix-ui/react-icons";
 
 const CommunityCard = ({
   community,
@@ -25,7 +26,18 @@ const CommunityCard = ({
   return (
     <Card className="hover:bg-[rgba(48,48,48,0.15)] transition-all duration-300 cursor-pointer">
       <CardHeader>
-        <CardTitle>{community.name}</CardTitle>
+        <div className="flex gap-3 items-center">
+          <CardTitle>{community.name}</CardTitle>
+
+          {community.active && (
+            <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
+          )}
+
+          {!community.active && (
+            <DotFilledIcon className="w-8 h-8 text-gray-500" />
+          )}
+        </div>
+
         <CardDescription>{trimWord(community.description)}</CardDescription>
         {community.visibility !== "private" && (
           <CardDescription>
