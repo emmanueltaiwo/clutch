@@ -1,7 +1,7 @@
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const SkeletonCard = () => {
+const NotificationSkeleton = () => {
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="flex items-center gap-3">
@@ -16,4 +16,4 @@ const SkeletonCard = () => {
   );
 };
 
-export default SkeletonCard;
+export default NotificationSkeleton;
