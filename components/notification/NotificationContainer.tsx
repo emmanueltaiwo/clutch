@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Notification } from "@/types";
+import { Notification, User } from "@/types";
 import NotificationHeader from "./NotificationHeader";
 import NotificationCard from "./NotificationCard";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import { fetchNotifications } from "@/services/notifications";
 import NotificationSkeleton from "./NotificationSkeleton";
 import { Card } from "../ui/card";
 
-const NotificationContainer = () => {
+const NotificationContainer = ({ user }: { user: User }) => {
   const { data: notifications, isLoading } = useQuery<Notification[]>({
     queryKey: ["notifications"],
     queryFn: async () => await fetchNotifications(),
@@ -44,7 +44,7 @@ const NotificationContainer = () => {
 
   return (
     <section className="w-full mx-auto pb-20">
-      <NotificationHeader notifications={notifications} />
+      <NotificationHeader user={user} notifications={notifications} />
 
       <div className="mt-5 flex flex-col gap-5">
         {notifications.length === 0 ? (

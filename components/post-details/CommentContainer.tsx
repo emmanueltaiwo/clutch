@@ -52,7 +52,6 @@ const CommentContainer = ({
     );
   }
 
-  // Render based on conditions using if statements
   if (showNoCommentsMessage) {
     return (
       <section className="w-full flex flex-col pb-20">

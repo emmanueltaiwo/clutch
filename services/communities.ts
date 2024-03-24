@@ -15,6 +15,7 @@ import {
   Query,
 } from "firebase/firestore";
 import { Community } from "@/types";
+import { createNewNotification } from "./notifications";
 
 export const createNewCommunity = async (
   communityName: string,
@@ -49,6 +50,11 @@ export const createNewCommunity = async (
         [userId]: true,
       },
       { merge: true }
+    );
+
+    await createNewNotification(
+      `You created a new community called "${communityName}"`,
+      userId
     );
 
     return true;

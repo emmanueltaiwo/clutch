@@ -7,6 +7,7 @@ import PostCard from "./PostCard";
 import { fetchFeedPosts } from "@/services/feed";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { Card } from "../ui/card";
 
 const Feed = () => {
   const [showNoPostsMessage, setShowNoPostsMessage] = useState(false);
@@ -45,6 +46,14 @@ const Feed = () => {
       })
     );
   }, [posts]);
+
+  if (posts && posts.length === 0) {
+    return (
+      <Card className="w-[95%] mx-auto text-center p-5 mt-5">
+        <p>No posts was found</p>
+      </Card>
+    );
+  }
 
   function renderContent() {
     if (showNoPostsMessage) {
