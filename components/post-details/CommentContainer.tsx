@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useMemo } from "react";
 import { Comment } from "@/types";
 import CommentCard from "./CommentCard";
@@ -54,25 +52,32 @@ const CommentContainer = ({
     );
   }
 
-  return (
-    <section className="w-full flex flex-col pb-20">
-      {showNoCommentsMessage ? (
+  // Render based on conditions using if statements
+  if (showNoCommentsMessage) {
+    return (
+      <section className="w-full flex flex-col pb-20">
         <div className="text-center py-5 text-[14px] text-gray-800 dark:text-gray-600">
           Be the first to comment
         </div>
-      ) : isLoading ? (
-        skeletonCards
-      ) : (
-        sortedComments?.map((comment) => (
+      </section>
+    );
+  } else if (isLoading) {
+    return (
+      <section className="w-full flex flex-col pb-20">{skeletonCards}</section>
+    );
+  } else {
+    return (
+      <section className="w-full flex flex-col pb-20">
+        {sortedComments?.map((comment) => (
           <CommentCard
             defaultUserId={defaultUserId}
             key={comment.commentId}
             comment={comment}
           />
-        ))
-      )}
-    </section>
-  );
+        ))}
+      </section>
+    );
+  }
 };
 
 export default CommentContainer;
