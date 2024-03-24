@@ -22,12 +22,12 @@ import {
   createNewCommunity,
   fetchUserCreatedCommunities,
 } from "@/services/communities";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useQuery } from "@tanstack/react-query";
 import { Community } from "@/types";
 import CommunityCard from "./CommunityCard";
+import CommunityLoader from "./CommunityLoader";
 
 const CreateCommunity = () => {
   const queryClient = useQueryClient();
@@ -72,6 +72,12 @@ const CreateCommunity = () => {
       queryClient.invalidateQueries({ queryKey: ["created-communities"] });
     },
   });
+
+   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
+    <div key={index} className="w-[95%] mx-auto flex flex-col gap-3">
+      <CommunityLoader />
+    </div>
+  ));
 
   return (
     <section className="w-full flex flex-col gap-10">
@@ -144,7 +150,7 @@ const CreateCommunity = () => {
         </CardContent>
       </Card>
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && skeletonCards}
 
       {communities && communities.length === 0 && (
         <Card className="p-5">

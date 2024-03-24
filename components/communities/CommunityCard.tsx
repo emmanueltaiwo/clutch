@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LockClosedIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Community } from "@/types";

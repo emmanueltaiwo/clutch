@@ -16,12 +16,19 @@ import { fetchUserCommunities } from "@/services/communities";
 import { Community } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardDescription } from "@/components/ui/card";
+import CommunityLoader from "./CommunityLoader";
 
 const YourCommunities = () => {
   const { data: communities, isLoading } = useQuery<Community[]>({
     queryKey: ["my-communities"],
     queryFn: async () => await fetchUserCommunities(),
   });
+
+  const skeletonCards = Array.from({ length: 5 }, (_, index) => (
+    <div key={index} className="w-[95%] mx-auto flex flex-col gap-3">
+      <CommunityLoader />
+    </div>
+  ));
 
   return (
     <section className="min-w-full mt-5 flex flex-col gap-5">
@@ -58,7 +65,7 @@ const YourCommunities = () => {
         </Select>
       </div>
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && skeletonCards}
 
       {communities && communities.length === 0 && (
         <Card className="p-5">
