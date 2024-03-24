@@ -4,7 +4,7 @@ import { FC } from "react";
 import PostCard from "../Feed/PostCard";
 import CreateComment from "./CreateComment";
 import { Post, User } from "@/types";
-import PageHeader from "./PageHeader";
+import PostDetailHeader from "./PostDetailHeader";
 import CommentContainer from "./CommentContainer";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPostById } from "@/services/feed";
@@ -41,7 +41,7 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
   if (isLoading) {
     return (
       <div>
-        <PageHeader postId={postId} postUserId={userId} userId={userId} />
+        <PostDetailHeader postId={postId} postUserId={userId} userId={userId} />
         {skeletonCards}
         <CommentContainer postId={postId} defaultUserId={userId} />
       </div>
@@ -61,7 +61,7 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
   if (!post) {
     return (
       <div>
-        <PageHeader postId={postId} postUserId={userId} userId={userId} />
+        <PostDetailHeader postId={postId} postUserId={userId} userId={userId} />
         {skeletonCards}
         <CommentContainer postId={postId} defaultUserId={userId} />
       </div>
@@ -70,7 +70,11 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
 
   return (
     <>
-      <PageHeader postId={postId} postUserId={post.userId} userId={userId} />
+      <PostDetailHeader
+        postId={postId}
+        postUserId={post.userId}
+        userId={userId}
+      />
 
       <section className="border-b-[0.5px] flex flex-col gap-3 pb-5">
         <PostCard

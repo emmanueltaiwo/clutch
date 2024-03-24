@@ -1,6 +1,7 @@
 "use client";
 
 import { Notification } from "@/types";
+import PageHeader from "../PageHeader";
 
 const NotificationHeader = ({
   notifications,
@@ -8,7 +9,7 @@ const NotificationHeader = ({
   notifications: Notification[];
 }) => {
   return (
-    <div className="w-full flex items-center gap-2 mt-5 p-5">
+    <PageHeader>
       <h2 className="font-bold text-[25px] cursor-pointer">Notifications</h2>
       <span className="font-[300] text-[17px]">
         Unread (
@@ -18,7 +19,7 @@ const NotificationHeader = ({
         }
         )
       </span>
-    </div>
+    </PageHeader>
   );
 };
 

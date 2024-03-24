@@ -7,6 +7,7 @@ import NotificationCard from "./NotificationCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNotifications } from "@/services/notifications";
 import NotificationSkeleton from "./NotificationSkeleton";
+import { Card } from "../ui/card";
 
 const NotificationContainer = () => {
   const { data: notifications, isLoading } = useQuery<Notification[]>({
@@ -45,11 +46,11 @@ const NotificationContainer = () => {
     <section className="w-full mx-auto pb-20">
       <NotificationHeader notifications={notifications} />
 
-      <div className="mt-10 flex flex-col gap-5">
+      <div className="mt-5 flex flex-col gap-5">
         {notifications.length === 0 ? (
-          <p className="text-center">
+          <Card className="text-center p-5 w-[95%] mx-auto">
             You don&apos;t have any notification at this time
-          </p>
+          </Card>
         ) : (
           sortedNotifications?.map((notification) => (
             <NotificationCard
