@@ -75,7 +75,7 @@ export type Notification = {
 
 export type Community = {
   communityId: string;
-  createdAt:number;
+  createdAt: number;
   creator: string;
   name: string;
   type: string;
@@ -83,4 +83,5 @@ export type Community = {
   description: string;
   members: number;
   communityImage: string;
+  active: boolean;
 };

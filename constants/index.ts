@@ -114,43 +114,43 @@ const COUNTRIES = [
 const INTERESTS = [
   {
     id: 1,
-    name: "Tech",
+    name: "technology",
   },
   {
     id: 2,
-    name: "Travel",
+    name: "art",
   },
   {
     id: 3,
-    name: "Food",
+    name: "science",
   },
   {
     id: 4,
-    name: "Sports",
+    name: "music",
   },
   {
     id: 5,
-    name: "Music",
+    name: "health",
   },
   {
     id: 6,
-    name: "Art",
+    name: "sports",
   },
   {
     id: 7,
-    name: "Reading",
+    name: "fashion",
   },
   {
     id: 8,
-    name: "Fitness",
+    name: "food",
   },
   {
     id: 9,
-    name: "Gaming",
+    name: "travel",
   },
   {
     id: 10,
-    name: "Photography",
+    name: "photography",
   },
   // Add more interests as needed
 ];

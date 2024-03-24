@@ -8,18 +8,26 @@ import { useQuery } from "@tanstack/react-query";
 import SearchIcon from "@mui/icons-material/Search";
 import CommunitySkeleton from "./CommunitySkeleton";
 import { Button } from "@/components/ui/button";
-import { fetchUserCommunities } from "@/services/communities";
+import { fetchActiveCommunities } from "@/services/communities";
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
+import { DotFilledIcon } from "@radix-ui/react-icons";
+import { recommendCommunitiesToUser } from "@/services/recommendation";
 
 const RightPanel = () => {
+  const { data: activeCommunities, isLoading: activeCommunitiesLoading } =
+    useQuery<Community[]>({
+      queryKey: ["active-communities"],
+      queryFn: async () => await fetchActiveCommunities(),
+    });
+
   const { data, isLoading } = useQuery<Community[]>({
-    queryKey: ["my-communities"],
-    queryFn: async () => await fetchUserCommunities(),
+    queryKey: ["recommended-communities"],
+    queryFn: async () => await recommendCommunitiesToUser(),
   });
 
   const sortedCommunities = useMemo(() => {
@@ -49,23 +57,70 @@ const RightPanel = () => {
           />
         </Card>
 
-        <Card className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] overflow-y-auto p-4">
-          <h1 className="text-gray-900 dark:text-gray-100 text-[20px] font-[600]">
+        <Card className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] max-h-[300px] overflow-y-auto p-4">
+          <h1 className="text-gray-900 dark:text-gray-100 text-[18px] font-[900]">
             Active Communities
           </h1>
 
-          <CardContent className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-gray-900/50 overflow-y-auto p-3">
-            <h4 className="font-[300] text-[rgb(26,32,44)] dark:text-[rgb(205,211,226)] text-[15px] text-center">
-              None of your communities are currently active
-            </h4>
-            <Button asChild>
-              <Link href="/communities">Find Community</Link>
-            </Button>
+          {activeCommunitiesLoading && skeletonCards}
+
+          <CardContent className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-gray-900/50 overflow-y-auto py-3 px-2">
+            {activeCommunities && activeCommunities.length < 1 ? (
+              <div className="flex flex-col gap-3 items-center justify-center p-5 rounded-[15px] transition-all duration-200">
+                <CardTitle>No community was found</CardTitle>
+
+                <Button asChild>
+                  <Link href="/communities">Create Community</Link>
+                </Button>
+              </div>
+            ) : (
+              activeCommunities?.slice(0, 10).map((community) => (
+                <Button
+                  key={community.communityId}
+                  variant="outline"
+                  asChild
+                  className="w-full h-fit justify-start px-3 py-[0.5rem]"
+                >
+                  <Link
+                    className="w-full flex gap-4 justify-start"
+                    href={`/communities/${community.communityId}`}
+                  >
+                    <Image
+                      src={
+                        community.communityImage.length > 1
+                          ? community.communityImage
+                          : "/assets/Images/cover.png"
+                      }
+                      width={100}
+                      height={100}
+                      alt="community image"
+                      className="rounded-full w-[40px] h-[40px]"
+                    />
+                    <div className="flex flex-col">
+                      <div className="flex gap-3 items-center">
+                        <CardTitle>{community.name}</CardTitle>
+
+                        {community.active && (
+                          <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
+                        )}
+                      </div>
+                      <div className="flex gap-2 flex-wrap items-center">
+                        <CardDescription>{community.type}</CardDescription>
+                        <span>-</span>
+                        <CardDescription>
+                          <span> {community.members} member</span>
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </Link>
+                </Button>
+              ))
+            )}
           </CardContent>
         </Card>
 
-        <Card className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit max-h-[500px] overflow-y-auto p-4">
-          <h1 className="text-gray-900 dark:text-gray-100 lg:text-[15px] xl:text-[20px] font-[600]">
+        <Card className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] h-fit max-h-[300px] overflow-y-auto p-4">
+          <h1 className="text-gray-900 dark:text-gray-100 lg:text-[15px] xl:text-[18px] font-[900]">
             Recommended for you
           </h1>
 
@@ -80,41 +135,53 @@ const RightPanel = () => {
               </Button>
             </Card>
           ) : (
-            sortedCommunities?.slice(0, 10).map((community) => (
-              <Button
-                key={community.communityId}
-                variant="outline"
-                asChild
-                className="w-full h-fit justify-start px-3 py-2.5"
-              >
-                <Link
-                  className="w-full flex gap-4 justify-start"
-                  href={`/communities/${community.communityId}`}
+            <CardContent className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-gray-900/50 overflow-y-auto py-3 px-2">
+              {sortedCommunities?.slice(0, 10).map((community) => (
+                <Button
+                  key={community.communityId}
+                  variant="outline"
+                  asChild
+                  className="w-full h-fit justify-start px-3 py-[0.5rem]"
                 >
-                  <Image
-                    src={
-                      community.communityImage.length > 1
-                        ? community.communityImage
-                        : "/assets/Images/cover.png"
-                    }
-                    width={100}
-                    height={100}
-                    alt="community image"
-                    className="rounded-full w-[40px] h-[40px]"
-                  />
-                  <div className="flex flex-col gap-1">
-                    <CardTitle>{community.name}</CardTitle>
-                    <div className="flex gap-2 flex-wrap items-center">
-                      <CardDescription>{community.type}</CardDescription>
-                      <span>-</span>
-                      <CardDescription>
-                        <span> {community.members} member</span>
-                      </CardDescription>
+                  <Link
+                    className="w-full flex gap-4 justify-start"
+                    href={`/communities/${community.communityId}`}
+                  >
+                    <Image
+                      src={
+                        community.communityImage.length > 1
+                          ? community.communityImage
+                          : "/assets/Images/cover.png"
+                      }
+                      width={100}
+                      height={100}
+                      alt="community image"
+                      className="rounded-full w-[40px] h-[40px]"
+                    />
+                    <div className="flex flex-col">
+                      <div className="flex gap-3 items-center">
+                        <CardTitle>{community.name}</CardTitle>
+
+                        {community.active && (
+                          <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
+                        )}
+
+                        {!community.active && (
+                          <DotFilledIcon className="w-8 h-8 text-gray-500" />
+                        )}
+                      </div>
+                      <div className="flex gap-2 flex-wrap items-center">
+                        <CardDescription>{community.type}</CardDescription>
+                        <span>-</span>
+                        <CardDescription>
+                          <span> {community.members} member</span>
+                        </CardDescription>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </Button>
-            ))
+                  </Link>
+                </Button>
+              ))}
+            </CardContent>
           )}
         </Card>
 

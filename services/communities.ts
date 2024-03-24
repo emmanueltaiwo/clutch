@@ -40,6 +40,7 @@ export const createNewCommunity = async (
       creator: userId,
       communityImage: "",
       members: 1,
+      active: false,
     };
 
     await setDoc(doc(db, "communities", communityId), newCommunity);
@@ -160,6 +161,35 @@ export const findCommunitiesToJoin = async (): Promise<Community[]> => {
     });
 
     return communities;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchActiveCommunities = async (): Promise<Community[]> => {
+  try {
+    const communities: Community[] = [];
+    const q = query(collection(db, "communities"), where("active", "==", true));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      communities.push(doc.data() as Community);
+    });
+
+    return communities;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const activateCommunity = async (
+  communityId: string
+): Promise<boolean> => {
+  try {
+    const communityRef = doc(db, "communities", communityId);
+    await updateDoc(communityRef, { active: true });
+
+    return true;
   } catch (error) {
     throw error;
   }
