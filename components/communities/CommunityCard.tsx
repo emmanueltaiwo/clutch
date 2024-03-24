@@ -45,25 +45,25 @@ const CommunityCard = ({
         </CardContent>
       )}
 
-      <CardFooter>
-        {hasJoined && (
+      {hasJoined && (
+        <CardFooter>
           <Button asChild className="w-full">
             <Link href={`/comunities/${community.communityId}`}>
               Enter Community
             </Link>
           </Button>
-        )}
-      </CardFooter>
+        </CardFooter>
+      )}
 
-      <CardFooter>
-        {community.visibility !== "private" && !hasJoined && (
+      {community.visibility !== "private" && !hasJoined && (
+        <CardFooter>
           <Button asChild className="w-full">
             <Link href={`/comunities/${community.communityId}`}>
               {hasJoined ? "Enter" : "Join"} Community
             </Link>
           </Button>
-        )}
-      </CardFooter>
+        </CardFooter>
+      )}
     </Card>
   );
 };

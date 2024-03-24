@@ -1,5 +1,6 @@
 "use client";
 
+import { ChangeEvent, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,6 +17,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
+  SelectLabel,
 } from "@/components/ui/select";
 import { COMMUNITY_TYPES } from "@/constants";
 import {
@@ -36,6 +39,11 @@ const CreateCommunity = () => {
     queryKey: ["created-communities"],
     queryFn: async () => await fetchUserCreatedCommunities(),
   });
+  const [filteredCommunity, setFilteredCommunity] = useState<Community[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [visibilityFilter, setVisibilityFilter] = useState<string>("");
+
   const { mutate: mutateCreateCommunity, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
       const name = formData.get("name")?.toString();
@@ -59,7 +67,7 @@ const CreateCommunity = () => {
 
       if (!response) {
         return toast({
-          title: "An Error Occured!",
+          title: "An Error Occurred!",
           description: "Refresh page and try again",
         });
       }
@@ -73,11 +81,45 @@ const CreateCommunity = () => {
     },
   });
 
-   const skeletonCards = Array.from({ length: 5 }, (_, index) => (
+  useEffect(() => {
+    if (Array.isArray(communities)) {
+      setFilteredCommunity(communities);
+    }
+  }, [communities]);
+
+  const skeletonCards = Array.from({ length: 5 }, (_, index) => (
     <div key={index} className="w-[95%] mx-auto flex flex-col gap-3">
       <CommunityLoader />
     </div>
   ));
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const search = e.target.value;
+    setSearchTerm(search);
+    filterCommunities(search, categoryFilter, visibilityFilter);
+  };
+
+  const filterCommunities = (
+    search: string,
+    category: string,
+    visibility: string
+  ) => {
+    let filtered = communities || [];
+    if (search) {
+      filtered = filtered.filter((community) =>
+        community.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    if (category && category !== "All") {
+      filtered = filtered.filter((community) => community.type === category);
+    }
+    if (visibility && visibility !== "All") {
+      filtered = filtered.filter(
+        (community) => community.visibility === visibility
+      );
+    }
+    setFilteredCommunity(filtered);
+  };
 
   return (
     <section className="w-full flex flex-col gap-10">
@@ -90,7 +132,10 @@ const CreateCommunity = () => {
         </CardHeader>
         <CardContent>
           <form
-            action={(formData: FormData) => mutateCreateCommunity(formData)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              mutateCreateCommunity(new FormData(e.target as HTMLFormElement));
+            }}
           >
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
@@ -150,31 +195,83 @@ const CreateCommunity = () => {
         </CardContent>
       </Card>
 
-      {isLoading && skeletonCards}
-
-      {communities && communities.length === 0 && (
-        <Card className="p-5">
-          <CardDescription className="text-center">
-            You have not created any community
-          </CardDescription>
-        </Card>
-      )}
-
-      {communities && communities.length >= 1 && (
+      {isLoading ? (
+        skeletonCards
+      ) : (
         <div className="flex flex-col gap-5">
           <h2 className="font-bold text-[20px] cursor-pointer">
             Communities you created
           </h2>
 
-          <div className="flex flex-col gap-5">
-            {communities?.map((community) => (
-              <CommunityCard
-                hasJoined={true}
-                key={community.communityId}
-                community={community}
-              />
-            ))}
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <Input
+              type="text"
+              placeholder="Search for community"
+              value={searchTerm}
+              onChange={(e) => handleSearch(e)}
+            />
+
+            <Select
+              onValueChange={(e) => {
+                setCategoryFilter(e);
+                filterCommunities(searchTerm, e, visibilityFilter);
+              }}
+            >
+              <SelectTrigger className="w-full md:w-[300px]">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Categories</SelectLabel>
+                  <SelectItem value="All">All</SelectItem>
+                  {COMMUNITY_TYPES.map((community) => (
+                    <SelectItem key={community.id} value={community.value}>
+                      {community.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
+            <Select
+              onValueChange={(e) => {
+                setVisibilityFilter(e);
+                filterCommunities(searchTerm, categoryFilter, e);
+              }}
+            >
+              <SelectTrigger className="w-full md:w-[300px]">
+                <SelectValue placeholder="Filter by visibility" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Visibility</SelectLabel>
+                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="public">Public</SelectItem>
+                  <SelectItem value="private">Private</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
+
+          {filteredCommunity.length === 0 && (
+            <Card className="p-5">
+              <CardDescription className="text-center">
+                No communities found.
+              </CardDescription>
+            </Card>
+          )}
+
+          {filteredCommunity.length > 0 && (
+            <div className="flex flex-col gap-5">
+              {filteredCommunity.map((community) => (
+                <CommunityCard
+                  hasJoined={true}
+                  key={community.communityId}
+                  community={community}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </section>
