@@ -13,8 +13,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 
@@ -31,7 +29,7 @@ const RightPanel = () => {
   ));
 
   return (
-    <Card className="rounded-none hidden lg:inline lg:w-[25%] xl:w-[27%] top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500">
+    <Card className="rounded-none hidden lg:inline lg:w-[30%] xl:w-[27%] top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500 border-t-0 border-r-0 border-b-0">
       <div className="mt-5 flex flex-col gap-5">
         <Card className="w-[90%] rounded-full h-[55px] mx-auto flex gap-4 items-center px-4">
           <SearchIcon />
@@ -78,7 +76,7 @@ const RightPanel = () => {
                 key={community.communityId}
                 variant="outline"
                 asChild
-                className="w-full h-fit justify-start p-3"
+                className="w-full h-fit justify-start px-3 py-2.5"
               >
                 <Link
                   className="w-full flex gap-4 justify-start"

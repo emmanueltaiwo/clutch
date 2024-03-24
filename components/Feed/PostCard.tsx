@@ -83,7 +83,7 @@ const PostCard: FC<Props> = ({
           <PostAvatar profilePic={profilePic} fullName={fullName} />
 
           <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
-            <h4 className="font-bold text-gray-800 text-[15px] dark:text-gray-400">
+            <h4 className="font-bold text-[15px]">
               {fullName}
             </h4>
             <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
@@ -92,7 +92,7 @@ const PostCard: FC<Props> = ({
           </div>
         </Link>
 
-        <div className="flex items-center gap-5">
+        <div className="flex flex-col sm:flex-row items-center gap-5">
           <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400 flex items-center gap-1">
             <ClockIcon /> {createdAtString}
           </p>
