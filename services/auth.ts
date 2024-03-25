@@ -91,7 +91,8 @@ export const handleLoginAuthentication = async (
 
     return {
       user: userData,
-      message: "You've logged in successfully. redirecting you to your feed now",
+      message:
+        "You've logged in successfully. redirecting you to your feed now",
     };
   } catch (error) {
     const firebaseError = error as FirebaseError;
@@ -144,7 +145,7 @@ export const handleSignupAuthentication = async (
 
   const newUser: Signup = {
     email,
-    fullName,
+    fullName: fullName.toLowerCase(),
     phoneNumber,
     dateOfBirth,
     gender,

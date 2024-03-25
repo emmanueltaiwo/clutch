@@ -11,7 +11,6 @@ const PostAvatar = ({
   profilePic: string;
   fullName: string;
 }) => {
-
   return (
     <Avatar>
       {profilePic.length !== 0 && (
@@ -26,6 +25,7 @@ const PostAvatar = ({
 
       <AvatarFallback delayMs={1000}>
         {fullName
+          .toUpperCase()
           .split(" ")
           .map((n) => n[0])
           .join("")}

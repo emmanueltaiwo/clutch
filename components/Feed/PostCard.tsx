@@ -15,6 +15,7 @@ import { useToast } from "../ui/use-toast";
 import { editPost } from "@/services/feed";
 import { useFormStatus } from "react-dom";
 import WrapperComponent from "./Wrapper";
+import { capitalizeWord } from "@/utils/helpers";
 
 type Props = {
   postId: string;
@@ -84,7 +85,7 @@ const PostCard: FC<Props> = ({
 
           <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
             <h4 className="font-bold text-[15px]">
-              {fullName}
+              {capitalizeWord(fullName)}
             </h4>
             <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
               @{username}

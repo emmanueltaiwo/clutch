@@ -59,8 +59,8 @@ export const createNewCommunity = async (
     );
 
     return true;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -88,8 +88,8 @@ export const fetchUserCreatedCommunities = async (): Promise<Community[]> => {
     });
 
     return communities;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -122,8 +122,8 @@ export const fetchUserCommunities = async (): Promise<Community[]> => {
     }
 
     return communities;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -161,8 +161,8 @@ export const findCommunitiesToJoin = async (): Promise<Community[]> => {
     });
 
     return communities;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -202,8 +202,8 @@ export const fetchActiveCommunities = async (): Promise<Community[]> => {
     }
 
     return activeUserCommunities;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -215,8 +215,8 @@ export const activateCommunity = async (
     await updateDoc(communityRef, { active: true });
 
     return true;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 

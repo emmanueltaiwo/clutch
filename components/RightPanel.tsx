@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Community } from "@/types";
+import { Community, SearchResult } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import SearchIcon from "@mui/icons-material/Search";
 import CommunitySkeleton from "./CommunitySkeleton";
@@ -17,18 +17,37 @@ import {
 } from "@/components/ui/card";
 import { DotFilledIcon } from "@radix-ui/react-icons";
 import { recommendCommunitiesToUser } from "@/services/recommendation";
+import { findUser } from "@/services/search";
+import { Loader2 } from "lucide-react";
+import PostAvatar from "./Feed/PostAvatar";
+import { capitalizeWord } from "@/utils/helpers";
 
 const RightPanel = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const { data: activeCommunities, isLoading: activeCommunitiesLoading } =
     useQuery<Community[]>({
       queryKey: ["active-communities"],
       queryFn: async () => await fetchActiveCommunities(),
     });
 
+  const {
+    data: searchResult,
+    refetch: searchRefetch,
+    isLoading: searchResultLoading,
+  } = useQuery<SearchResult[]>({
+    queryKey: ["search-result", searchQuery.trim()],
+    queryFn: async () => await findUser(searchQuery),
+    enabled: false,
+  });
+
   const { data, isLoading } = useQuery<Community[]>({
     queryKey: ["recommended-communities"],
     queryFn: async () => await recommendCommunitiesToUser(),
   });
+
+  useEffect(() => {
+    searchRefetch();
+  }, [searchQuery, searchRefetch]);
 
   const sortedCommunities = useMemo(() => {
     return (
@@ -38,6 +57,10 @@ const RightPanel = () => {
       })
     );
   }, [data]);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchQuery = e.target.value;
+    setSearchQuery(newSearchQuery);
+  };
 
   const skeletonCards = Array.from({ length: 2 }, (_, index) => (
     <div key={index} className="w-full flex flex-col gap-3">
@@ -48,14 +71,63 @@ const RightPanel = () => {
   return (
     <Card className="rounded-none hidden lg:inline lg:w-[30%] xl:w-[27%] top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500 border-t-0 border-r-0 border-b-0">
       <div className="mt-5 flex flex-col gap-5">
-        <Card className="w-[90%] rounded-full h-[55px] mx-auto flex gap-4 items-center px-4">
+        <Card
+          className={`w-[90%] mx-auto h-[55px] flex gap-4 items-center px-4 rounded-full ${
+            searchQuery.length !== 0 && "rounded-md"
+          }   `}
+        >
           <SearchIcon />
           <input
-            type="text"
+            value={searchQuery}
+            onChange={handleSearch}
+            type="search"
             placeholder="Search.."
-            className="h-full bg-transparent outline-none dark:placeholder:text-gray-200 placeholder:text-gray-900"
+            className="h-full w-full bg-transparent outline-none dark:placeholder:text-gray-200 placeholder:text-gray-900"
           />
         </Card>
+
+        {searchResultLoading && searchQuery.length > 0 && (
+          <Card className="w-[90%] mx-auto left-0 right-0 mt-14 rounded-md absolute flex flex-col gap-3 p-3 items-center">
+            <Loader2 className="w-5 h-5 animate-spin" />
+          </Card>
+        )}
+
+        {!searchResultLoading && searchQuery.length !== 0 && (
+          <Card className="w-[90%] mx-auto left-0 right-0 mt-14 max-h-[515px] z-50 overflow-y-auto rounded-md absolute flex flex-col gap-3 p-3">
+            {searchResult && searchResult.length === 0 && (
+              <p className="text-center">No user was found</p>
+            )}
+
+            {searchResult?.length !== 0 && (
+              <h4 className="font-bold">{searchResult?.length} user found</h4>
+            )}
+
+            {searchResult?.map((result) => (
+              <Button
+                key={result.username}
+                variant="outline"
+                asChild
+                className="w-full rounded-md h-fit justify-start px-3 py-[0.5rem]"
+              >
+                <Link
+                  className="w-full flex gap-4 justify-start items-center"
+                  href={`/profile/${result.username}`}
+                >
+                  <PostAvatar
+                    profilePic={result.profilePic}
+                    fullName={result.fullName}
+                  />
+                  <div className="flex flex-col">
+                    <h2 className="text-[14px]">
+                      {capitalizeWord(result.fullName)}
+                    </h2>
+                    <CardDescription>{result.username}</CardDescription>
+                  </div>
+                </Link>
+              </Button>
+            ))}
+          </Card>
+        )}
 
         <Card className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] max-h-[300px] overflow-y-auto p-4">
           <h1 className="text-gray-900 dark:text-gray-100 text-[18px] font-[900]">
@@ -79,7 +151,7 @@ const RightPanel = () => {
                   key={community.communityId}
                   variant="outline"
                   asChild
-                  className="w-full h-fit justify-start px-3 py-[0.5rem]"
+                  className="w-full rounded-[15px] h-fit justify-start px-3 py-[0.5rem]"
                 >
                   <Link
                     className="w-full flex gap-4 justify-start"
@@ -141,7 +213,7 @@ const RightPanel = () => {
                   key={community.communityId}
                   variant="outline"
                   asChild
-                  className="w-full h-fit justify-start px-3 py-[0.5rem]"
+                  className="w-full rounded-[15px] h-fit justify-start px-3 py-[0.5rem]"
                 >
                   <Link
                     className="w-full flex gap-4 justify-start"
