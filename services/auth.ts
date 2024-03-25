@@ -27,6 +27,8 @@ export const handleLoginAuthentication = async (
 ): Promise<AuthResponse> => {
   // This function handles the login request by verifying the data, sending the authentication to firebase auth, storing the userID in cookies and redirecting to the main app on successful login.
 
+  handleCookies("delete", "USER_ID");
+
   if (!formData) {
     const response = {
       message: "No data was received, Try resubmitting the form",
@@ -89,7 +91,7 @@ export const handleLoginAuthentication = async (
 
     return {
       user: userData,
-      message: "Yay! You've logged in successfully. redirecting you now",
+      message: "You've logged in successfully. redirecting you to your feed now",
     };
   } catch (error) {
     const firebaseError = error as FirebaseError;
@@ -103,6 +105,7 @@ export const handleSignupAuthentication = async (
   prevState: AuthResponse,
   formData: FormData
 ): Promise<AuthResponse> => {
+  handleCookies("delete", "USER_ID");
   // This function handles the signup request by verifying the data, sending the authentication to firebase auth, creating a new document containing the user data in the firebase database, storing the userID in cookies and redirecting to the main app on successful login.
 
   if (!formData) {
@@ -208,7 +211,7 @@ export const handleSignupAuthentication = async (
         bio: "",
       },
       message:
-        "Yay! You've successfully created an account on clutch. Redirecting you now",
+        "You've succesfully created an account on clutch. redirecting you to your feed now",
     };
   } catch (error) {
     const firebaseError = error as FirebaseError;
@@ -224,6 +227,7 @@ export const handleDemoAccountAuthentication = async () => {
   const password = "democlutch#01";
 
   try {
+    handleCookies("delete", "USER_ID");
     const userCredential: UserCredential = await signInWithEmailAndPassword(
       auth,
       email,

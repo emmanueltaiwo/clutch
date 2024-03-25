@@ -9,6 +9,9 @@ import { AuthResponse } from "@/types/auth-types";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks";
 import { addUser } from "@/lib/features/auth/authSlice";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 
 const initialState = {
   message: "",
@@ -17,18 +20,25 @@ const initialState = {
 export const SubmitButton = ({ children }: { children: ReactNode }) => {
   const { pending } = useFormStatus();
 
+  if (pending) {
+    return (
+      <Button
+        disabled
+        className="w-[90%] bg-[#903AFF] p-5 text-white hover:bg-[#8a4add]"
+      >
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        Please wait
+      </Button>
+    );
+  }
+
   return (
-    <button
+    <Button
       type="submit"
-      aria-disabled={pending}
-      className={`${
-        pending
-          ? "w-[90%] p-4 rounded-[10px] bg-red-900 cursor-not-allowed disabled text-white font-[400] text-[16px]"
-          : "w-[90%] p-4 rounded-[10px] bg-[#8f3aff64] hover:bg-[#8133e798] active:border-2 active:border-violet-700 text-white font-[400] text-[16px]"
-      }`}
+      className="w-[90%] bg-[#903AFF] p-5 text-white hover:bg-[#8a4add]"
     >
       {children}
-    </button>
+    </Button>
   );
 };
 
@@ -39,11 +49,11 @@ const LoginForm = () => {
   const loginUser = async (prevState: AuthResponse, formData: FormData) => {
     try {
       const login = await handleLoginAuthentication(prevState, formData);
-      if (!login?.user) return { message: "Error login attempt" };
+      if (!login?.user) return { message: "An error occurred! make sure all fields are valid and try again" };
 
       if (
         login.message !==
-        "Yay! You've logged in successfully. redirecting you now"
+        "You've logged in successfully. redirecting you to your feed now"
       ) {
         return login;
       }
@@ -52,7 +62,7 @@ const LoginForm = () => {
       router.push("/feed");
       return login;
     } catch (error) {
-      return { message: "Unknow Error, Try again" };
+      return { message: "Unknow Error, refresh the page and try again" };
     }
   };
   const [state, formAction] = useFormState(loginUser, initialState);
@@ -60,42 +70,40 @@ const LoginForm = () => {
   return (
     <form
       action={formAction}
-      className="w-full h-full py-10 flex flex-col gap-10 items-center"
+      className="w-full h-full py-10 flex flex-col gap-5 items-center"
     >
       <DemoAccount />
 
       <div className="flex w-[90%] items-center gap-2">
-        <hr className="w-full border-[0.3px] border-gray-500" />
-        <span className="text-gray-400 text-[15px] font-[300]">Or</span>
-        <hr className="w-full border-[0.3px] border-gray-500" />
+        <hr className="w-full border-[0.3px] border-gray-200" />
+        <span className="text-gray-200 text-[15px] font-[300]">Or</span>
+        <hr className="w-full border-[0.3px] border-gray-200" />
       </div>
 
-      <div className="flex flex-col gap-4 w-[90%]">
-        <label htmlFor="email" className="text-white font-[400] text-[14px]">
-          Enter E-mail Address:
-        </label>
+      <div className="flex flex-col w-[90%] space-y-1.5">
+        <Label htmlFor="email">Email</Label>
+        <AuthInput type="email" placeholder="Enter your email" name="email" />
+      </div>
+
+      <div className="flex w-[90%] flex-col space-y-1.5">
+        <Label htmlFor="name">Password</Label>
         <AuthInput
-          type="email"
-          placeholder="clutchuser@hello.com"
-          name="email"
+          type="password"
+          placeholder="Enter your password"
+          name="password"
         />
-      </div>
-
-      <div className="flex flex-col gap-4 w-[90%]">
-        <label htmlFor="password" className="text-white font-[400] text-[14px]">
-          Enter Password:
-        </label>
-        <AuthInput type="password" placeholder="*********" name="password" />
       </div>
 
       <SubmitButton>Login</SubmitButton>
 
-      <p
-        aria-live="polite"
-        className="text-gray-200 text-center text-[14px] w-[90%]"
-      >
-        {state?.message}
-      </p>
+      {state.message.length > 1 && (
+        <p
+          aria-live="polite"
+          className="text-gray-200 text-center text-[14px] w-[90%]"
+        >
+          {state?.message}
+        </p>
+      )}
     </form>
   );
 };

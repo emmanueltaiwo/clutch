@@ -4,12 +4,13 @@ import Footer from "./Footer";
 
 interface LayoutProps {
   children: ReactNode;
+  isAuthenticated: boolean;
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children, isAuthenticated }) => {
   return (
     <>
-      <Header />
+      <Header isAuthenticated={isAuthenticated} />
       {children}
       <Footer />
     </>

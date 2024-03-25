@@ -12,6 +12,14 @@ import { useRouter } from "next/navigation";
 import { COUNTRIES, GENDER, INTERESTS } from "@/constants";
 import { useAppDispatch } from "@/lib/hooks";
 import { addUser } from "@/lib/features/auth/authSlice";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const initialState = {
   message: "",
@@ -24,10 +32,10 @@ const SignupForm = () => {
   const signupUser = async (prevState: AuthResponse, formData: FormData) => {
     try {
       const login = await handleSignupAuthentication(prevState, formData);
-      if (!login || !login.user) return { message: "Error login attempt" };
+      if (!login || !login.user) return { message: "An error occurred! make sure all fields are valid and try again" };
       if (
         login.message !==
-        "Yay! You've succesfully created an account on clutch. redirecting you now"
+        "You've succesfully created an account on clutch. redirecting you to your feed now"
       ) {
         return login;
       }
@@ -36,7 +44,7 @@ const SignupForm = () => {
       router.push("/feed");
       return login;
     } catch (error) {
-      return { message: "Unknow Error, Try again" };
+      return { message: "Unknow Error, refresh the page and try again" };
     }
   };
   const [state, formAction] = useFormState(signupUser, initialState);
@@ -44,125 +52,118 @@ const SignupForm = () => {
   return (
     <form
       action={formAction}
-      className="w-full h-full py-10 flex flex-col gap-10 items-center"
+      className="w-full h-full py-10 flex flex-col gap-5 items-center"
     >
       <DemoAccount />
 
       <div className="flex w-[90%] items-center gap-2">
-        <hr className="w-full border-[0.3px] border-gray-500" />
-        <span className="text-gray-400 text-[15px] font-[300]">Or</span>
-        <hr className="w-full border-[0.3px] border-gray-500" />
-      </div>
-
-      <div className="flex flex-col gap-4 w-[90%]">
-        <label className="text-white font-[400] text-[14px]">
-          Enter E-mail Address:
-        </label>
-        <AuthInput
-          type="email"
-          name="email"
-          placeholder="clutchuser@clutch.com"
-        />
-      </div>
-
-      <div className="flex flex-col gap-4 w-[90%]">
-        <label className="text-white font-[400] text-[14px]">
-          Enter Full name:
-        </label>
-        <AuthInput type="text" name="fullName" placeholder="Clutch User" />
+        <hr className="w-full border-[0.3px] border-gray-200" />
+        <span className="text-gray-200 text-[15px] font-[300]">Or</span>
+        <hr className="w-full border-[0.3px] border-gray-200" />
       </div>
 
       <div className="w-[90%] flex flex-wrap md:flex-nowrap items-center gap-5">
-        <div className="flex flex-col gap-4 w-full">
-          <label className="text-white font-[400] text-[14px]">
-            Enter Phone number:
-          </label>
+        <div className="flex flex-col w-full md:w-[90%] space-y-1.5">
+          <Label htmlFor="email">Email</Label>
+          <AuthInput type="email" placeholder="Enter your email" name="email" />
+        </div>
+
+        <div className="flex flex-col w-full md:w-[90%] space-y-1.5">
+          <Label htmlFor="name">Full name</Label>
+          <AuthInput
+            type="text"
+            name="fullName"
+            placeholder="Enter your full name"
+          />
+        </div>
+      </div>
+
+      <div className="w-[90%] flex flex-wrap md:flex-nowrap items-center gap-5">
+        <div className="flex flex-col w-full md:w-[90%] space-y-1.5">
+          <Label htmlFor="name">Phone number</Label>
           <AuthInput
             type="text"
             name="phoneNumber"
-            placeholder="+ 123-456-789"
+            placeholder="Enter your phone number"
           />
         </div>
 
-        <div className="flex flex-col gap-4 w-full">
-          <label className="text-white font-[400] text-[14px]">
-            Enter Date of birth:
-          </label>
-          <AuthInput type="date" name="dateOfBirth" />
+        <div className="flex flex-col w-full md:w-[90%] space-y-1.5">
+          <Label htmlFor="name">Phone date of birth</Label>
+          <AuthInput
+            type="date"
+            name="dateOfBirth"
+            placeholder="Enter your date of birth"
+          />
         </div>
       </div>
 
       <div className="w-[90%] flex flex-wrap md:flex-nowrap items-center gap-5">
         <div className="flex flex-col gap-4 w-full">
-          <label className="text-white font-[400] text-[14px]">
-            Select Gender:
-          </label>
-          <select
-            className="w-full p-4 rounded-[10px] border-2 border-[rgb(43,43,125)] text-white placeholder:text-white font-[400] text-[14px] bg-transparent outline-none"
-            name="gender"
-          >
-            <option value="default" disabled selected>
-              Select your gender
-            </option>
-            {GENDER.map((item) => (
-              <option key={item.id} value={item.name}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+          <Label>Select Gender:</Label>
+          <Select name="gender">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select gender" />
+            </SelectTrigger>
+            <SelectContent>
+              {GENDER.map((item) => (
+                <SelectItem key={item.id} value={item.name}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-col gap-4 w-full">
-          <label className="text-white font-[400] text-[14px]">
-            Select Country:
-          </label>
-          <select
-            name="country"
-            className="w-full p-4 rounded-[10px] border-2 border-[rgb(43,43,125)] text-white placeholder:text-white font-[400] text-[14px] bg-transparent outline-none"
-          >
-            <option value="default" disabled selected>
-              Select your country, you can change this later
-            </option>
-            {COUNTRIES.map((item) => (
-              <option key={item.id} value={item.name}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+          <Label>Select country:</Label>
+          <Select name="country">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select country" />
+            </SelectTrigger>
+            <SelectContent>
+              {COUNTRIES.map((item) => (
+                <SelectItem key={item.id} value={item.name}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 w-[90%]">
-        <label className="text-white font-[400] text-[14px]">
-          Select Interest:
-        </label>
-        <select
-          name="interest"
-          className="w-full p-4 rounded-[10px] border-2 border-[rgb(43,43,125)] text-white placeholder:text-white font-[400] text-[14px] bg-transparent outline-none"
-        >
-          <option value="default" disabled selected>
-            Select your top interest, you can change this later
-          </option>
-          {INTERESTS.map((item) => (
-            <option key={item.id} value={item.name}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="w-[90%] flex flex-wrap md:flex-nowrap items-center gap-5">
+        <div className="flex flex-col gap-4 w-full md:w-[90%]">
+          <Label>Select interest:</Label>
+          <Select name="interest">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select interest" />
+            </SelectTrigger>
+            <SelectContent>
+              {INTERESTS.map((item) => (
+                <SelectItem key={item.id} value={item.name}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div className="flex flex-col gap-4 w-[90%]">
-        <label className="text-white font-[400] text-[14px]">
-          Enter Password:
-        </label>
-        <AuthInput type="password" placeholder="*********" name="password" />
+        <div className="flex flex-col gap-4 w-full md:w-[90%]">
+          <Label htmlFor="password">Password</Label>
+          <AuthInput
+            type="password"
+            placeholder="Enter your password"
+            name="password"
+          />
+        </div>
       </div>
 
       <div className="w-[90%] flex gap-3 items-center">
         <input type="checkbox" name="termsAndConditions" />
         <span className="text-white font-[400] text-[14px]">
           Do you agree to our{" "}
-          <Link className="text-gray-400 underline italic" href="/">
+          <Link className="text-gray-200 underline" href="/">
             Terms & conditions
           </Link>
         </span>
@@ -170,12 +171,14 @@ const SignupForm = () => {
 
       <SubmitButton>Sign Up</SubmitButton>
 
-      <p
-        aria-live="polite"
-        className="text-gray-200 text-center text-[14px] w-[90%]"
-      >
-        {state?.message}
-      </p>
+      {state.message.length > 1 && (
+        <p
+          aria-live="polite"
+          className="text-gray-200 text-center text-[14px] w-[90%]"
+        >
+          {state?.message}
+        </p>
+      )}
     </form>
   );
 };

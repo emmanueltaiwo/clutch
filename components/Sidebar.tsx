@@ -25,8 +25,10 @@ import { fetchUserCommunities } from "@/services/communities";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "react-responsive";
+import { useToast } from "./ui/use-toast";
 
 const Sidebar = ({ username }: { username: string }) => {
+  const { toast } = useToast();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.sidebar.isOpen);
@@ -54,6 +56,7 @@ const Sidebar = ({ username }: { username: string }) => {
 
   const handleLogout = async () => {
     try {
+      toast({ description: "Logging you out" });
       const signout = await handleUserSignout();
 
       if (!signout) router.push("/feed");

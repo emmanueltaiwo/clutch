@@ -149,26 +149,7 @@ const DesktopHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   );
 };
 
-const Header = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkUserAuthenticationState = async () => {
-      try {
-        const userHasToken = (await handleCookies("get", "USER_ID")) as string;
-
-        if (!userHasToken) {
-          setIsAuthenticated(false);
-        } else {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        return false;
-      }
-    };
-    checkUserAuthenticationState();
-  }, []);
-
+const Header = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   return (
     <header className="w-full z-50 sticky top-0 h-24 bg-[rgb(2,2,26)] flex justify-between items-center text-white">
       <div className="ml-5 md:ml-10 lg:ml-20">
