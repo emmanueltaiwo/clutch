@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, ReactNode } from "react";
 import Link from "next/link";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion, AnimatePresence } from "framer-motion";
-import { handleCookies } from "@/services/auth";
 import Logo from "../../Logo";
 
 const MenuItem = ({
