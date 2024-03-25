@@ -16,7 +16,8 @@ export const findUser = async (
 
     const q = query(
       collection(db, "users"),
-      where("fullName", "==", searchQuery.toLowerCase())
+      where("fullName", ">=", searchQuery.toLowerCase()),
+      where("fullName", "<=", searchQuery.toLowerCase() + "\uf8ff")
     );
     const querySnapshot = await getDocs(q);
 
