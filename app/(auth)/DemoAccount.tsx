@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { handleDemoAccountAuthentication } from "@/services/auth";
 import { useAppDispatch } from "@/lib/hooks";
 import { addUser } from "@/lib/features/auth/authSlice";
+import { Button } from "@/components/ui/button";
 
 const DemoAccount = () => {
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -24,20 +25,27 @@ const DemoAccount = () => {
       throw new Error("Error while login to demo account, try again");
     }
   };
+
+  if (isPending) {
+    return (
+      <Button
+        disabled
+        className="w-[90%] bg-[#903AFF] p-5 text-white hover:bg-[#8a4add] rounded-md"
+      >
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        Please wait
+      </Button>
+    );
+  }
+
   return (
-    <button
+    <Button
       onClick={loginToDemoAccount}
-      aria-disabled={isPending}
       type="button"
-      className={`${
-        isPending
-          ? "w-[90%] p-4 rounded-[10px] bg-red-900 cursor-not-allowed disabled text-white font-[400] text-[16px]"
-          : "w-[90%] p-4 rounded-[10px] bg-[#903AFF] text-white font-[400] text-[16px] flex gap-3 items-center justify-center"
-      }`}
+      className="w-[90%] bg-[#903AFF] p-5 text-white hover:bg-[#8a4add] rounded-md"
     >
-      Try a Demo Account
-      <AutoAwesomeIcon />
-    </button>
+      Demo Account
+    </Button>
   );
 };
 

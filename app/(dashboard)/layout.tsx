@@ -11,14 +11,14 @@ export default async function AppLayout({
 }: Readonly<{ children: ReactNode }>) {
   let isAuthenticated = false;
   const userId = await handleCookies("get", "USER_ID");
-  if (typeof userId === "boolean") return;
+  if (typeof userId === "boolean") redirect("/login");
 
   const user = await getUserDocFromFirestore(userId);
-  if (typeof user === "boolean") return;
+  if (typeof user === "boolean") redirect("/login");
   const sessionStatus = await getSessionStatus();
 
   if (!sessionStatus) {
-    redirect("/");
+    redirect("/login");
   } else {
     isAuthenticated = sessionStatus;
   }
