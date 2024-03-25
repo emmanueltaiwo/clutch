@@ -88,7 +88,7 @@ const MobileHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
                   href="/feed"
                   onClick={() => setMenuIsOpen(false)}
                 >
-                  Go To App
+                  Go To Feed
                 </Link>
               ) : (
                 <Link
@@ -134,7 +134,7 @@ const DesktopHeader = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
             className="text-white font-medium text-[15px] w-fit h-fit px-5 py-2 rounded-[10px] border-2 border-[#7119e6] hover:bg-[#8f3aff64]"
             href="/feed"
           >
-            Go To App
+            Go To Feed
           </Link>
         ) : (
           <Link

@@ -43,7 +43,7 @@ const LikePost: FC<Props> = ({
     e.preventDefault();
     e.stopPropagation();
     try {
-      setFavouritedPost(hasLikePost ? false : true);
+      setFavouritedPost(!hasLikePost);
       const response = await handleLikePost(postId, postUserId);
 
       if (response !== "Post Favourited Successfully") {

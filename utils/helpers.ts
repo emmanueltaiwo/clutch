@@ -26,6 +26,10 @@ export const capitalizeEachWord = (string: string) => {
     .join(" ");
 };
 
+export const capitalizeWord = (str: string) => {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
 export const trimWord = (word: string) => {
   const words = word.split(" ");
   if (words.length > 40) {

@@ -85,3 +85,9 @@ export type Community = {
   communityImage: string;
   active: boolean;
 };
+
+export type SearchResult = {
+  username: string;
+  profilePic: string;
+  fullName: string;
+};
