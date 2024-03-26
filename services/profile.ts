@@ -37,7 +37,7 @@ export const verifyUserProfileExists = async (
       return { exists: false, userId: "" };
     }
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -91,7 +91,7 @@ export const fetchUserProfilePosts = async (userId: string, type: string) => {
 
     return allPosts;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -164,7 +164,7 @@ export const fetchSpecificPost = async (userId: string, type: string) => {
 
     return uniquePosts;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -204,7 +204,7 @@ export const editProfile = async (
 
     return true;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -258,7 +258,7 @@ export const handleFollowUser = async (
         `You unfollowed ${followingUserData.fullName}`,
         userId
       );
-  
+
       await createNewNotification(
         `${followerUserData.fullName} unfollowed You`,
         followingUserId
@@ -287,7 +287,7 @@ export const handleFollowUser = async (
 
     return "You just followed this user";
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -310,7 +310,7 @@ export const hasUserAlreadyFollowed = async (
     }
     return false;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -324,7 +324,7 @@ export const fetchUserFollowers = async (userId: string): Promise<number> => {
 
     return querySnapshot.size;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -338,6 +338,6 @@ export const fetchUserFollowing = async (userId: string): Promise<number> => {
 
     return querySnapshot.size;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };

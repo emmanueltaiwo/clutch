@@ -31,8 +31,8 @@ export const createNewNotification = async (
     await setDoc(doc(db, "notifications", notificationId), newNotification);
 
     return true;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -60,8 +60,8 @@ export const fetchNotifications = async (): Promise<Notification[]> => {
     });
 
     return notifications;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -76,8 +76,8 @@ export const markNotificationAsRead = async (
     });
 
     return true;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 

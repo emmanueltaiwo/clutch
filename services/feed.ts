@@ -56,7 +56,6 @@ export const fetchFeedPosts = async (mode: string | null): Promise<Post[]> => {
     let q: any;
 
     if (mode === "for-you" || mode === null) {
-      const userCategory = await getUserCategory();
       q = query(collection(db, "posts"));
     } else if (mode === "following") {
       const followingIds = await getUserFollowingIds();
@@ -119,8 +118,8 @@ export const fetchFeedPosts = async (mode: string | null): Promise<Post[]> => {
 
     const allPosts = (await Promise.all(promises)) as Post[];
     return allPosts;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -177,8 +176,8 @@ export const fetchPostById = async (postId: string): Promise<Post> => {
     };
 
     return post;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -453,8 +452,8 @@ export const fetchPostComments = async (postId: string): Promise<Comment[]> => {
     const allComments = (await Promise.all(promises)) as Comment[];
 
     return allComments;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -492,7 +491,7 @@ export const getUserCategory = async (): Promise<string> => {
 
     return userCategory;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -522,6 +521,6 @@ export const getUserFollowingIds = async (): Promise<string[]> => {
 
     return followingIds;
   } catch (error: any) {
-    throw error;
+    throw new Error(error);
   }
 };
