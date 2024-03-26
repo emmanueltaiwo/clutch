@@ -18,7 +18,7 @@ const ProfileAvatar = (user: { user: User }) => {
         />
       )}
 
-      <AvatarFallback delayMs={1000}>
+      <AvatarFallback>
         {user.user.fullName
           .split(" ")
           .map((n) => n[0])
