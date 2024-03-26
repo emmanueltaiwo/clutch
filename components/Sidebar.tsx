@@ -216,9 +216,10 @@ const Sidebar = ({ username }: { username: string }) => {
             <button
               className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] bg-[rgb(222,222,222)] dark:bg-gray-900 mt-auto"
               onClick={() => {
-                isSmallDevice
-                  ? (dispatch(closeSidebar()), handleLogout())
-                  : handleLogout();
+                if (isSmallDevice) {
+                  dispatch(closeSidebar());
+                }
+                handleLogout();
               }}
             >
               <LogoutIcon />

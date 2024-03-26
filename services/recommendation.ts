@@ -64,7 +64,7 @@ export const recommendCommunitiesToUser = async (): Promise<Community[]> => {
     }
 
     return recommendedCommunities;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
