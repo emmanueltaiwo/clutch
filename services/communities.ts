@@ -284,6 +284,7 @@ export const fetchAllCommunityMembers = async (
       }
 
       const member: SearchResult = {
+        userId: userDoc.id,
         username: user.username,
         profilePic: user.profilePic,
         fullName: user.fullName,
@@ -295,6 +296,23 @@ export const fetchAllCommunityMembers = async (
     return users;
   } catch (error: any) {
     throw new Error(`Error fetching community members: ${error.message}`);
+  }
+};
+
+export const fetchCommunityById = async (
+  communityId: string
+): Promise<Community> => {
+  try {
+    const communityRef = doc(db, "communities", communityId);
+    const communityDoc = await getDoc(communityRef);
+
+    if (!communityDoc.exists()) {
+      throw new Error("Couldn't find community");
+    }
+
+    return communityDoc.data() as Community;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 

@@ -87,6 +87,7 @@ export type Community = {
 };
 
 export type SearchResult = {
+  userId?: string;
   username: string;
   profilePic: string;
   fullName: string;
