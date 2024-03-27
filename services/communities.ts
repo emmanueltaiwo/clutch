@@ -1,6 +1,6 @@
 "use server";
 
-import { handleCookies } from "./auth";
+import { getUserDocFromFirestore, handleCookies } from "./auth";
 import { db } from "../firebase";
 import {
   doc,
@@ -13,6 +13,7 @@ import {
   getDoc,
   DocumentData,
   Query,
+  deleteField,
 } from "firebase/firestore";
 import { Community, SearchResult } from "@/types";
 import { createNewNotification } from "./notifications";
@@ -313,6 +314,73 @@ export const fetchCommunityById = async (
     return communityDoc.data() as Community;
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const leaveCommunity = async (
+  communityId: string,
+  communityName: string,
+  creatorId: string
+): Promise<boolean> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") return false;
+    const user = await getUserDocFromFirestore(userId);
+
+    if (typeof user === "boolean") return false;
+
+    await updateDoc(doc(db, "communityMembers", communityId), {
+      [userId]: deleteField(),
+    });
+
+    await createNewNotification(`You left ${communityName} community`, userId);
+
+    await createNewNotification(
+      `${user.fullName} left your community (${communityName})`,
+      creatorId
+    );
+
+    return true;
+  } catch (error: any) {
+    return false;
+  }
+};
+
+export const joinPublicCommunity = async (
+  communityId: string,
+  communityName: string,
+  creatorId: string
+): Promise<boolean> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") return false;
+    const user = await getUserDocFromFirestore(userId);
+
+    if (typeof user === "boolean") return false;
+
+    await setDoc(
+      doc(db, "communityMembers", communityId),
+      {
+        [userId]: true,
+      },
+      { merge: true }
+    );
+
+    await createNewNotification(
+      `You joined ${communityName} community`,
+      userId
+    );
+
+    await createNewNotification(
+      `${user.fullName} joined your community (${communityName})`,
+      userId
+    );
+
+    await activateCommunity(communityId);
+
+    return true;
+  } catch (error: any) {
+    return false;
   }
 };
 

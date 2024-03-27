@@ -1,6 +1,6 @@
 import Container from "@/components/Container";
 import {
-    fetchAllCommunityMembers,
+  fetchAllCommunityMembers,
   fetchCommunityById,
   verifyCommunityExists,
 } from "@/services/communities";
@@ -24,18 +24,21 @@ const CommunityPage = async ({ params }: { params: { slug: string } }) => {
 
   const community = await fetchCommunityById(communityId);
 
-    const communityMembers = await fetchAllCommunityMembers(communityId)
+  const communityMembers = await fetchAllCommunityMembers(communityId);
 
   return (
     <main>
       <div className="flex justify-between">
         <Container>
-          <CommunityHeader communityMembers={communityMembers} community={community} />
+          <CommunityHeader
+            userId={userId}
+            communityMembers={communityMembers}
+            community={community}
+          />
         </Container>
         <CommunityMembers
           communityCreator={communityExists.creatorId}
-                  communityId={communityId}
-                  initialMembers={communityMembers}
+          communityId={communityId}
         />
       </div>
     </main>

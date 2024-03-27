@@ -16,23 +16,33 @@ import { Badge } from "@/components/ui/badge";
 const CommunityMembers = ({
   communityId,
   communityCreator,
-  initialMembers,
 }: {
   communityId: string;
   communityCreator: string;
-  initialMembers: SearchResult[];
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { data: communityMembers, isLoading: communityMembersLoading } =
     useQuery<SearchResult[]>({
       queryKey: ["community-members", communityId],
       queryFn: async () => await fetchAllCommunityMembers(communityId),
-      initialData: initialMembers,
     });
 
   const filteredMembers = communityMembers?.filter((member) =>
     member.username.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const matchingCreatorMembers: SearchResult[] = [];
+  const otherMembers: SearchResult[] = [];
+
+  filteredMembers?.forEach((member) => {
+    if (member.userId === communityCreator) {
+      matchingCreatorMembers.push(member);
+    } else {
+      otherMembers.push(member);
+    }
+  });
+
+  const sortedMembers = matchingCreatorMembers.concat(otherMembers);
 
   return (
     <Card className="rounded-none hidden lg:inline lg:w-[30%] xl:w-[27%] top-0 bottom-0 fixed right-0 overflow-y-auto transition-all duration-500 border-t-0 border-r-0 border-b-0">
@@ -48,24 +58,24 @@ const CommunityMembers = ({
           />
         </Card>
 
-        {communityMembersLoading && (
+        {communityMembersLoading && searchQuery.length === 0 && (
           <Card className="w-[90%] flex justify-center items-center gap-5 mx-auto rounded-[15px] h-fit overflow-y-auto p-4">
             <Loader2 className="w-5 h-5 animate-spin" />
           </Card>
         )}
 
-        {filteredMembers && (
+        {sortedMembers && !communityMembersLoading && (
           <Card className="w-[90%] flex flex-col gap-5 mx-auto rounded-[15px] max-h-full overflow-y-auto p-4">
             <h1 className="text-gray-900 dark:text-gray-100 text-[18px] font-[900]">
               Community Members
             </h1>
 
-            {filteredMembers?.length === 0 && (
+            {sortedMembers.length === 0 && searchQuery.length > 0 && (
               <CardTitle>No member matched &quot;{searchQuery}&quot;</CardTitle>
             )}
 
             <div className="flex flex-col gap-3">
-              {filteredMembers.map((member) => (
+              {sortedMembers.map((member) => (
                 <Button
                   variant="outline"
                   className="w-full rounded-[15px] h-fit justify-start px-3 py-[0.5rem]"
