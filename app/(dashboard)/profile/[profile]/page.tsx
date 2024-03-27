@@ -10,19 +10,22 @@ import {
   hasUserAlreadyFollowed,
   verifyUserProfileExists,
 } from "@/services/profile";
+import { redirect } from "next/navigation";
 
 const ProfilePage = async ({ params }: { params: { profile: string } }) => {
   const profileExist = await verifyUserProfileExists(params.profile);
 
   const defaultUserId = await handleCookies("get", "USER_ID");
-  if (typeof defaultUserId === "boolean") return null;
+  if (typeof defaultUserId === "boolean") {
+    redirect("/login");
+  }
 
   if (!profileExist.exists) {
     return <Container>User does not exist</Container>;
   }
 
   const user = await getUserDocFromFirestore(profileExist.userId);
-  if (typeof user === "boolean") return;
+  if (typeof user === "boolean") redirect("/login");
 
   const { country, email, fullName, gender, profilePic, username, bio } = user;
   const isUserAlreadyFollowing = await hasUserAlreadyFollowed(

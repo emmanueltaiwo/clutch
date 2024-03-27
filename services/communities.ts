@@ -14,7 +14,7 @@ import {
   DocumentData,
   Query,
 } from "firebase/firestore";
-import { Community } from "@/types";
+import { Community, SearchResult } from "@/types";
 import { createNewNotification } from "./notifications";
 
 export const createNewCommunity = async (
@@ -217,6 +217,84 @@ export const activateCommunity = async (
     return true;
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const deactivateCommunity = async (
+  communityId: string
+): Promise<boolean> => {
+  try {
+    const communityRef = doc(db, "communities", communityId);
+    await updateDoc(communityRef, { active: false });
+
+    return true;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const verifyCommunityExists = async (
+  communityId: string
+): Promise<{ exists: boolean; creatorId: string }> => {
+  try {
+    const communityRef = doc(db, "communities", communityId);
+    const communityDoc = await getDoc(communityRef);
+
+    if (!communityDoc.exists()) {
+      return { exists: false, creatorId: "" };
+    }
+
+    return { exists: true, creatorId: communityDoc.data().creator };
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const fetchAllCommunityMembers = async (
+  communityId: string
+): Promise<SearchResult[]> => {
+  try {
+    const communityRef = doc(db, "communityMembers", communityId);
+    const communityDoc = await getDoc(communityRef);
+
+    if (!communityDoc.exists()) {
+      return [];
+    }
+
+    const community = communityDoc.data();
+    if (!community) {
+      return [];
+    }
+
+    const userIds = Object.keys(community);
+
+    const users: SearchResult[] = [];
+
+    for (const userId of userIds) {
+      const userRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userRef);
+
+      if (!userDoc.exists()) {
+        return [];
+      }
+
+      const user = userDoc.data();
+      if (!user) {
+        return [];
+      }
+
+      const member: SearchResult = {
+        username: user.username,
+        profilePic: user.profilePic,
+        fullName: user.fullName,
+      };
+
+      users.push(member);
+    }
+
+    return users;
+  } catch (error: any) {
+    throw new Error(`Error fetching community members: ${error.message}`);
   }
 };
 

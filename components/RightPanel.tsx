@@ -95,7 +95,9 @@ const RightPanel = () => {
         {!searchResultLoading && searchQuery.length !== 0 && (
           <Card className="w-[90%] mx-auto left-0 right-0 mt-14 max-h-[515px] z-50 overflow-y-auto rounded-md absolute flex flex-col gap-3 p-3">
             {searchResult && searchResult.length === 0 && (
-              <p className="text-center">No user was found</p>
+              <p className="text-center">
+                No user matched &quot;{searchQuery}&quot;
+              </p>
             )}
 
             {searchResult?.length !== 0 && (

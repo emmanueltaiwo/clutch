@@ -60,7 +60,7 @@ const CommunityCard = ({
       {hasJoined && (
         <CardFooter>
           <Button asChild className="w-full">
-            <Link href={`/comunities/${community.communityId}`}>
+            <Link href={`/communities/${community.communityId}`}>
               Enter Community
             </Link>
           </Button>
@@ -70,7 +70,7 @@ const CommunityCard = ({
       {community.visibility !== "private" && !hasJoined && (
         <CardFooter>
           <Button asChild className="w-full">
-            <Link href={`/comunities/${community.communityId}`}>
+            <Link href={`/communities/${community.communityId}`}>
               {hasJoined ? "Enter" : "Join"} Community
             </Link>
           </Button>
