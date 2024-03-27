@@ -169,8 +169,7 @@ const ProfileHeader: FC<Props> = ({
                       bio: newBio,
                     });
                     return toast({
-                      description:
-                        "Profile updated successfully!",
+                      description: "Profile updated successfully!",
                     });
                   }}
                 >
@@ -218,7 +217,9 @@ const ProfileHeader: FC<Props> = ({
         <div
           className={`flex flex-col gap-1 items-center justify-center mt-3 relative`}
         >
-          <h4 className="text-gray-200 font-[600] text-[24px]">{capitalizeWord(user.fullName)}</h4>
+          <h4 className="text-gray-200 font-[600] text-[24px]">
+            {capitalizeWord(user.fullName)}
+          </h4>
           <p className="font-[100] text-gray-800 text-[12px] dark:text-gray-400 flex items-center gap-2">
             @{user.username.toLowerCase()} <span>||</span>{" "}
             <span className="flex items-center gap-1">

@@ -11,13 +11,23 @@ import { Button } from "@/components/ui/button";
 import { capitalizeWord } from "@/utils/helpers";
 import Link from "next/link";
 import { fetchAllCommunityMembers } from "@/services/communities";
+import { Badge } from "@/components/ui/badge";
 
-const CommunityMembers = ({ communityId }: { communityId: string }) => {
+const CommunityMembers = ({
+  communityId,
+  communityCreator,
+  initialMembers,
+}: {
+  communityId: string;
+  communityCreator: string;
+  initialMembers: SearchResult[];
+}) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { data: communityMembers, isLoading: communityMembersLoading } =
     useQuery<SearchResult[]>({
       queryKey: ["community-members", communityId],
       queryFn: async () => await fetchAllCommunityMembers(communityId),
+      initialData: initialMembers,
     });
 
   const filteredMembers = communityMembers?.filter((member) =>
@@ -76,6 +86,10 @@ const CommunityMembers = ({ communityId }: { communityId: string }) => {
                       </h2>
                       <CardDescription>{member.username}</CardDescription>
                     </div>
+
+                    {communityCreator === member.userId && (
+                      <Badge className="px-1 ml-auto">admin</Badge>
+                    )}
                   </Link>
                 </Button>
               ))}
