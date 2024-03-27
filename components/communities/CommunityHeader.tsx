@@ -1,19 +1,76 @@
 "use client";
 
 import { Community, SearchResult } from "@/types";
-import { FC } from "react";
+import { FC, useState } from "react";
 import BackButton from "../post-details/BackButton";
 import { capitalizeWord } from "@/utils/helpers";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Button } from "@/components/ui/button";
+import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
+import { joinPublicCommunity, leaveCommunity } from "@/services/communities";
 
 type Props = {
   communityMembers: SearchResult[];
   community: Community;
+  userId: string;
 };
 
-const CommunityHeader: FC<Props> = ({ community, communityMembers }) => {
+const CommunityHeader: FC<Props> = ({
+  community,
+  communityMembers,
+  userId,
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const isMember = communityMembers.some((member) => member.userId === userId);
+
+  const handleLeaveCommunity = async () => {
+    setIsLoading(true);
+    const response = await leaveCommunity(
+      community.communityId,
+      community.name,
+      community.creator
+    );
+
+    if (!response) {
+      return toast({
+        description: "An error occurred! Refresh the page",
+      });
+    }
+    setIsLoading(false);
+    toast({
+      description: `You just left ${community.name} community`,
+    });
+
+    router.push(`/communities`);
+  };
+
+  const handleJoinCommunity = async () => {
+    setIsLoading(true);
+    const response = await joinPublicCommunity(
+      community.communityId,
+      community.name,
+      community.creator
+    );
+
+    if (!response) {
+      return toast({
+        description: "An error occurred! Refresh the page",
+      });
+    }
+    setIsLoading(false);
+    toast({
+      title: `You just joined ${community.name} community`,
+      description: "Redirecting you to the community",
+    });
+
+    router.push(`/communities/${community.communityId}`);
+  };
+
   return (
     <section className="w-full flex flex-col">
       <div className="flex items-center gap-5 h-[11vh] px-5">
@@ -47,9 +104,25 @@ const CommunityHeader: FC<Props> = ({ community, communityMembers }) => {
             {communityMembers.length} member
           </Button>
         </div>
-        <Button variant="outline" className="w-fit">
-          Leave
-        </Button>
+
+        {isMember ? (
+          <Button
+            disabled={isLoading}
+            variant="outline"
+            className="w-fit"
+            onClick={handleLeaveCommunity}
+          >
+            Leave
+          </Button>
+        ) : (
+          <Button
+            disabled={isLoading}
+            className="w-fit"
+            onClick={handleJoinCommunity}
+          >
+            Join
+          </Button>
+        )}
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trimWord } from "@/utils/helpers";
 import { DotFilledIcon } from "@radix-ui/react-icons";
+import { useToast } from "../ui/use-toast";
+import { joinPublicCommunity } from "@/services/communities";
+import { useRouter } from "next/navigation";
 
 const CommunityCard = ({
   community,
@@ -23,6 +27,11 @@ const CommunityCard = ({
   community: Community;
   hasJoined?: boolean;
 }) => {
+  const [publicButtonIsLoading, setPublicButtonIsLoading] =
+    useState<boolean>(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
   return (
     <Card className="hover:bg-[rgba(48,48,48,0.15)] transition-all duration-300 cursor-pointer">
       <CardHeader>
@@ -69,10 +78,33 @@ const CommunityCard = ({
 
       {community.visibility !== "private" && !hasJoined && (
         <CardFooter>
-          <Button asChild className="w-full">
-            <Link href={`/communities/${community.communityId}`}>
-              {hasJoined ? "Enter" : "Join"} Community
-            </Link>
+          <Button
+            disabled={publicButtonIsLoading}
+            onClick={async () => {
+              setPublicButtonIsLoading(true);
+              const response = await joinPublicCommunity(
+                community.communityId,
+                community.name,
+                community.creator
+              );
+
+              if (!response) {
+                return toast({
+                  description: "An error occurred! Refresh the page",
+                });
+              }
+
+              setPublicButtonIsLoading(false);
+              toast({
+                title: `You just joined ${community.name} community`,
+                description: "Redirecting you to the community",
+              });
+
+              router.push(`/communities/${community.communityId}`);
+            }}
+            className="w-full"
+          >
+            Join Community
           </Button>
         </CardFooter>
       )}
