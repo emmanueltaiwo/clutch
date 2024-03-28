@@ -296,7 +296,6 @@ const RightPanel = () => {
                             </CardDescription>
                           </div>
                         </div>
-
                         <Badge className="ml-auto">Public</Badge>
                       </Link>
                     </Button>
