@@ -9,24 +9,31 @@ import { Badge } from "../ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { joinPublicCommunity, leaveCommunity } from "@/services/communities";
+import {
+  joinPublicCommunity,
+  leaveCommunity,
+  fetchAllCommunityMembers,
+} from "@/services/communities";
+import { useQuery } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 
 type Props = {
-  communityMembers: SearchResult[];
   community: Community;
   userId: string;
 };
 
-const CommunityHeader: FC<Props> = ({
-  community,
-  communityMembers,
-  userId,
-}) => {
+const CommunityHeader: FC<Props> = ({ community, userId }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const router = useRouter();
+  const { data: communityMembers, isLoading: communityMembersLoading } =
+    useQuery<SearchResult[]>({
+      queryKey: ["community-members", community.communityId],
+      queryFn: async () =>
+        await fetchAllCommunityMembers(community.communityId),
+    });
 
-  const isMember = communityMembers.some((member) => member.userId === userId);
+  const isMember = communityMembers?.some((member) => member.userId === userId);
 
   const handleLeaveCommunity = async () => {
     setIsLoading(true);
@@ -92,7 +99,7 @@ const CommunityHeader: FC<Props> = ({
         <div className="w-full h-[200px] bg-gradient-to-r from-blue-700/50 to-blue-800/50 flex items-center justify-center" />
       )}
 
-      <div className="w-full h-fit p-5 bg-[#2d2d2d37] flex justify-between gap-3">
+      <div className="w-full h-fit p-5 bg-[#2d2d2d37] flex flex-col md:flex-row justify-between gap-3">
         <div className="flex flex-col gap-3">
           <h3 className="text-[35px] font-bold">
             {capitalizeWord(community.name)}
@@ -100,27 +107,49 @@ const CommunityHeader: FC<Props> = ({
           <Badge variant="outline" className="px-1 w-fit cursor-pointer">
             {community.type}
           </Badge>
-          <Button variant="link" className="w-fit p-0">
-            {communityMembers.length} member
-          </Button>
+          {communityMembersLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Button variant="link" className="w-fit p-0">
+              {communityMembers?.length}{" "}
+              {communityMembers && communityMembers.length > 1
+                ? "members"
+                : "member"}
+            </Button>
+          )}
         </div>
 
-        {isMember ? (
-          <Button
-            disabled={isLoading}
-            variant="outline"
-            className="w-fit"
-            onClick={handleLeaveCommunity}
-          >
-            Leave
-          </Button>
-        ) : (
+        {isMember &&
+          community.creator !== userId &&
+          !communityMembersLoading && (
+            <Button
+              disabled={isLoading}
+              variant="outline"
+              className="w-fit"
+              onClick={handleLeaveCommunity}
+            >
+              Leave
+            </Button>
+          )}
+
+        {!isMember && !communityMembersLoading && (
           <Button
             disabled={isLoading}
             className="w-fit"
             onClick={handleJoinCommunity}
           >
             Join
+          </Button>
+        )}
+
+        {community.creator == userId && (
+          <Button
+            variant="destructive"
+            disabled={isLoading}
+            className="w-fit"
+            onClick={() => alert("Feature is not available yet")}
+          >
+            Delete Community
           </Button>
         )}
       </div>
