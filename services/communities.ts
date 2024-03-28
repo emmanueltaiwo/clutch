@@ -373,7 +373,7 @@ export const joinPublicCommunity = async (
 
     await createNewNotification(
       `${user.fullName} joined your community (${communityName})`,
-      userId
+      creatorId
     );
 
     await activateCommunity(communityId);
