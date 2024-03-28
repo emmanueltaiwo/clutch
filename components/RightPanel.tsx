@@ -21,6 +21,7 @@ import { findUser } from "@/services/search";
 import { Loader2 } from "lucide-react";
 import PostAvatar from "./Feed/PostAvatar";
 import { capitalizeWord } from "@/utils/helpers";
+import { Badge } from "@/components/ui/badge";
 
 const RightPanel = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -211,49 +212,96 @@ const RightPanel = () => {
           ) : (
             <CardContent className="w-full flex flex-col items-center gap-4 mx-auto rounded-[15px] h-fit bg-gray-100 dark:bg-gray-900/50 overflow-y-auto py-3 px-2">
               {sortedCommunities?.slice(0, 10).map((community) => (
-                <Button
-                  key={community.communityId}
-                  variant="outline"
-                  asChild
-                  className="w-full rounded-[15px] h-fit justify-start px-3 py-[0.5rem]"
-                >
-                  <Link
-                    className="w-full flex gap-4 justify-start"
-                    href={`/communities/${community.communityId}`}
-                  >
-                    <Image
-                      src={
-                        community.communityImage.length > 1
-                          ? community.communityImage
-                          : "/assets/Images/cover.png"
-                      }
-                      width={100}
-                      height={100}
-                      alt="community image"
-                      className="rounded-full w-[40px] h-[40px]"
-                    />
-                    <div className="flex flex-col">
-                      <div className="flex gap-3 items-center">
-                        <CardTitle>{community.name}</CardTitle>
+                <div key={community.communityId} className="w-full h-fit">
+                  {community.visibility === "private" ? (
+                    <Button
+                      disabled
+                      variant="outline"
+                      className="w-full rounded-[15px] disabled:cursor-not-allowed h-fit justify-start px-3 py-[0.5rem]"
+                    >
+                      <Image
+                        src={
+                          community.communityImage.length > 1
+                            ? community.communityImage
+                            : "/assets/Images/cover.png"
+                        }
+                        width={100}
+                        height={100}
+                        alt="community image"
+                        className="rounded-full w-[40px] h-[40px]"
+                      />
+                      <div className="flex flex-col">
+                        <div className="flex gap-3 items-center">
+                          <CardTitle>{community.name}</CardTitle>
 
-                        {community.active && (
-                          <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
-                        )}
+                          {community.active && (
+                            <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
+                          )}
 
-                        {!community.active && (
-                          <DotFilledIcon className="w-8 h-8 text-gray-500" />
-                        )}
+                          {!community.active && (
+                            <DotFilledIcon className="w-8 h-8 text-gray-500" />
+                          )}
+                        </div>
+                        <div className="flex gap-2 flex-wrap items-center">
+                          <CardDescription>{community.type}</CardDescription>
+                          <span>-</span>
+                          <CardDescription>
+                            <span> {community.members} member</span>
+                          </CardDescription>
+                        </div>
                       </div>
-                      <div className="flex gap-2 flex-wrap items-center">
-                        <CardDescription>{community.type}</CardDescription>
-                        <span>-</span>
-                        <CardDescription>
-                          <span> {community.members} member</span>
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </Link>
-                </Button>
+
+                      <Badge className="ml-auto">Private</Badge>
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled={community.visibility === "private"}
+                      key={community.communityId}
+                      variant="outline"
+                      asChild
+                      className="w-full rounded-[15px] disabled:cursor-not-allowed h-fit justify-start px-3 py-[0.5rem]"
+                    >
+                      <Link
+                        href={`/communities/${community.communityId}`}
+                        className="w-full flex gap-4 justify-start"
+                      >
+                        <Image
+                          src={
+                            community.communityImage.length > 1
+                              ? community.communityImage
+                              : "/assets/Images/cover.png"
+                          }
+                          width={100}
+                          height={100}
+                          alt="community image"
+                          className="rounded-full w-[40px] h-[40px]"
+                        />
+                        <div className="flex flex-col">
+                          <div className="flex gap-3 items-center">
+                            <CardTitle>{community.name}</CardTitle>
+
+                            {community.active && (
+                              <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
+                            )}
+
+                            {!community.active && (
+                              <DotFilledIcon className="w-8 h-8 text-gray-500" />
+                            )}
+                          </div>
+                          <div className="flex gap-2 flex-wrap items-center">
+                            <CardDescription>{community.type}</CardDescription>
+                            <span>-</span>
+                            <CardDescription>
+                              <span> {community.members} member</span>
+                            </CardDescription>
+                          </div>
+                        </div>
+
+                        <Badge className="ml-auto">Public</Badge>
+                      </Link>
+                    </Button>
+                  )}
+                </div>
               ))}
             </CardContent>
           )}
