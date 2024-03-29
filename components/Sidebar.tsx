@@ -172,14 +172,7 @@ const Sidebar = ({ username }: { username: string }) => {
                       alt="community image"
                       className="rounded-full w-[30px] h-[30px]"
                     />
-                    <p className="font-bold">
-                      {community.name}{" "}
-                      <span className="font-[300]">
-                        {" "}
-                        - {community.members || "0"}{" "}
-                        {community.members > 1 ? "members" : "member"}
-                      </span>{" "}
-                    </p>
+                    <p className="font-bold">{community.name}</p>
                   </Link>
                 ))
               )}
