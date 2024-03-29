@@ -13,9 +13,21 @@ import {
   joinPublicCommunity,
   leaveCommunity,
   fetchAllCommunityMembers,
+  deleteCommunity,
 } from "@/services/communities";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Props = {
   community: Community;
@@ -143,14 +155,50 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
         )}
 
         {community.creator == userId && (
-          <Button
-            variant="destructive"
-            disabled={isLoading}
-            className="w-fit"
-            onClick={() => alert("Feature is not available yet")}
-          >
-            Delete Community
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button variant="destructive" className="w-fit">
+                Delete Community
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setIsLoading(true);
+                    const response = await deleteCommunity(
+                      community.communityId
+                    );
+
+                    if (!response) {
+                      setIsLoading(false);
+                      return toast({
+                        description: "An error occurred! Refresh the page",
+                      });
+                    }
+
+                    setIsLoading(false);
+                    toast({
+                      description: `You just deleted ${community.name} community`,
+                    });
+
+                    router.push(`/communities`);
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
     </section>
