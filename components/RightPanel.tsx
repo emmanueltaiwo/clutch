@@ -403,14 +403,11 @@ const RightPanel = () => {
             href="https://github.com/realemmanuel/clutch"
             className="font-bold text-[12px] text-gray-900 dark:text-gray-400"
           >
-            Contribute
-          </a>
-          <a
-            href="https://github.com/realemmanuel/clutch"
-            className="font-bold text-[12px] text-gray-900 dark:text-gray-400"
-          >
             Privacy Policy
           </a>
+          <p className="font-bold text-[12px] text-gray-900 dark:text-gray-400">
+            &copy; {new Date().getFullYear()} Emmanuel Taiwo
+          </p>
         </div>
       </div>
     </Card>

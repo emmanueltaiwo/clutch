@@ -134,8 +134,8 @@ const Sidebar = ({ username }: { username: string }) => {
 
             <hr className="w-full border-[0.4px] border-gray-600" />
 
-            <ul className="flex flex-col gap-3">
-              <CardTitle className="text-[14px] font-[500]">
+            <ul className="flex flex-col">
+              <CardTitle className="text-[14px] font-[500] pb-2">
                 My Communities
               </CardTitle>
 
@@ -172,8 +172,14 @@ const Sidebar = ({ username }: { username: string }) => {
                       alt="community image"
                       className="rounded-full w-[30px] h-[30px]"
                     />
-                    {community.name} ({community.members || "0"}{" "}
-                    {community.members > 1 ? "members" : "member"})
+                    <p className="font-bold">
+                      {community.name}{" "}
+                      <span className="font-[300]">
+                        {" "}
+                        - {community.members || "0"}{" "}
+                        {community.members > 1 ? "members" : "member"}
+                      </span>{" "}
+                    </p>
                   </Link>
                 ))
               )}
