@@ -24,7 +24,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useFormStatus } from "react-dom";
 
-const JoinPrivateCommunityButton = () => {
+export const JoinPrivateCommunityButton = () => {
   const { pending } = useFormStatus();
 
   return (
