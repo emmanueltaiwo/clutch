@@ -14,6 +14,7 @@ import {
   DocumentData,
   Query,
   deleteField,
+  deleteDoc,
 } from "firebase/firestore";
 import { Community, SearchResult } from "@/types";
 import { createNewNotification } from "./notifications";
@@ -447,6 +448,19 @@ export const joinPrivateCommunity = async (
     return `You've sucessfully joined ${communityName} community`;
   } catch (error) {
     throw new Error();
+  }
+};
+
+export const deleteCommunity = async (
+  communityId: string
+): Promise<boolean> => {
+  try {
+    await deleteDoc(doc(db, "communities", communityId));
+    await deleteDoc(doc(db, "communityMembers", communityId));
+
+    return true;
+  } catch (error) {
+    return false;
   }
 };
 
