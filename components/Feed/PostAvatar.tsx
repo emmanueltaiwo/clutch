@@ -23,7 +23,7 @@ const PostAvatar = ({
         />
       )}
 
-      <AvatarFallback delayMs={1000}>
+      <AvatarFallback>
         {fullName
           .toUpperCase()
           .split(" ")
