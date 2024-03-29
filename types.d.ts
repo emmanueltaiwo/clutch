@@ -84,6 +84,7 @@ export type Community = {
   members: number;
   communityImage: string;
   active: boolean;
+  inviteCode?: string;
 };
 
 export type SearchResult = {

@@ -22,7 +22,8 @@ export const createNewCommunity = async (
   communityName: string,
   communityDescription: string,
   communityType: string,
-  communityVisibility: string
+  communityVisibility: string,
+  inviteCode?: string
 ): Promise<boolean> => {
   try {
     const userId = await handleCookies("get", "USER_ID");
@@ -31,18 +32,36 @@ export const createNewCommunity = async (
 
     const communityId = generateCommunityId(communityName);
 
-    const newCommunity = {
-      name: communityName,
-      description: communityDescription,
-      type: communityType,
-      visibility: communityVisibility,
-      communityId: communityId,
-      createdAt: new Date().getTime(),
-      creator: userId,
-      communityImage: "",
-      members: 1,
-      active: false,
-    };
+    let newCommunity: Community;
+
+    if (inviteCode) {
+      newCommunity = {
+        name: communityName,
+        description: communityDescription,
+        type: communityType,
+        visibility: communityVisibility,
+        communityId: communityId,
+        createdAt: new Date().getTime(),
+        creator: userId,
+        communityImage: "",
+        members: 1,
+        active: false,
+      };
+    } else {
+      newCommunity = {
+        name: communityName,
+        description: communityDescription,
+        type: communityType,
+        visibility: communityVisibility,
+        communityId: communityId,
+        createdAt: new Date().getTime(),
+        creator: userId,
+        communityImage: "",
+        members: 1,
+        active: false,
+        inviteCode: inviteCode,
+      };
+    }
 
     await setDoc(doc(db, "communities", communityId), newCommunity);
 
@@ -381,6 +400,53 @@ export const joinPublicCommunity = async (
     return true;
   } catch (error: any) {
     return false;
+  }
+};
+
+export const joinPrivateCommunity = async (
+  communityId: string,
+  communityName: string,
+  creatorId: string,
+  enteredInviteCode: string
+): Promise<string> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") throw new Error();
+    const user = await getUserDocFromFirestore(userId);
+
+    if (typeof user === "boolean") throw new Error();
+
+    const docRef = doc(db, "communities", communityId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) throw new Error();
+
+    const inviteCode = docSnap.data().inviteCode;
+    if (inviteCode !== enteredInviteCode) return "Invite code is not correct.";
+
+    await setDoc(
+      doc(db, "communityMembers", communityId),
+      {
+        [userId]: true,
+      },
+      { merge: true }
+    );
+
+    await createNewNotification(
+      `You joined ${communityName} community`,
+      userId
+    );
+
+    await createNewNotification(
+      `${user.fullName} joined your community (${communityName})`,
+      creatorId
+    );
+
+    await activateCommunity(communityId);
+
+    return `You've sucessfully joined ${communityName} community`;
+  } catch (error) {
+    throw new Error();
   }
 };
 

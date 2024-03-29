@@ -17,8 +17,22 @@ import { Label } from "@/components/ui/label";
 import { trimWord } from "@/utils/helpers";
 import { DotFilledIcon } from "@radix-ui/react-icons";
 import { useToast } from "../ui/use-toast";
-import { joinPublicCommunity } from "@/services/communities";
+import {
+  joinPrivateCommunity,
+  joinPublicCommunity,
+} from "@/services/communities";
 import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
+
+const JoinPrivateCommunityButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button disabled={pending} type="submit" className="w-[150px]">
+      Join Community
+    </Button>
+  );
+};
 
 const CommunityCard = ({
   community,
@@ -56,14 +70,54 @@ const CommunityCard = ({
       </CardHeader>
 
       {community.visibility === "private" && !hasJoined && (
-        <CardContent className="w-full flex items-end gap-3">
-          <div className="w-full flex flex-col space-y-1.5">
-            <Label htmlFor="communityName">Enter your invite code</Label>
-            <Input name="name" id="code" placeholder="Invite code" />
-          </div>
+        <form
+          action={async (formData) => {
+            const inviteCode = formData.get("inviteCode")?.toString();
 
-          <Button className="w-[150px]">Join Community</Button>
-        </CardContent>
+            if (!inviteCode) {
+              return toast({
+                description: "Invite code cannot be empty",
+              });
+            }
+
+            const response = await joinPrivateCommunity(
+              community.communityId,
+              community.name,
+              community.creator,
+              inviteCode
+            );
+
+            if (
+              response !==
+              `You've sucessfully joined ${community.name} community`
+            ) {
+              return toast({
+                title: "An Error Occurred!",
+                description: response,
+              });
+            }
+
+            toast({
+              title: `You just joined ${community.name} community`,
+              description: "Redirecting you to the community",
+            });
+
+            router.push(`/communities/${community.communityId}`);
+          }}
+        >
+          <CardContent className="w-full flex items-end gap-3">
+            <div className="w-full flex flex-col space-y-1.5">
+              <Label htmlFor="inviteCode">Enter your invite code</Label>
+              <Input
+                name="inviteCode"
+                id="inviteCode"
+                placeholder="Invite code"
+              />
+            </div>
+
+            <JoinPrivateCommunityButton />
+          </CardContent>
+        </form>
       )}
 
       {hasJoined && (

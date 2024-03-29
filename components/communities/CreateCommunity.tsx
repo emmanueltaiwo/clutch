@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState, useEffect,useMemo } from "react";
+import { ChangeEvent, useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,6 +43,7 @@ const CreateCommunity = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [visibilityFilter, setVisibilityFilter] = useState<string>("");
+  const [isPrivateCommunity, setIsPrivateCommunity] = useState<boolean>(false);
 
   const { mutate: mutateCreateCommunity, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -50,6 +51,7 @@ const CreateCommunity = () => {
       const description = formData.get("description")?.toString();
       const visibility = formData.get("visibility")?.toString();
       const type = formData.get("type")?.toString();
+      const inviteCode = formData.get("inviteCode")?.toString();
 
       if (!name || !description || !visibility || !type) {
         return toast({
@@ -58,12 +60,31 @@ const CreateCommunity = () => {
         });
       }
 
-      const response = await createNewCommunity(
-        name,
-        description,
-        type,
-        visibility
-      );
+      if (isPrivateCommunity && !inviteCode) {
+        return toast({
+          title: "Community Creation Failed",
+          description: "Please enter invite code for private community",
+        });
+      }
+
+      let response: boolean;
+
+      if (isPrivateCommunity) {
+        response = await createNewCommunity(
+          name,
+          description,
+          type,
+          visibility,
+          inviteCode
+        );
+      } else {
+        response = await createNewCommunity(
+          name,
+          description,
+          type,
+          visibility
+        );
+      }
 
       if (!response) {
         return toast({
@@ -180,9 +201,19 @@ const CreateCommunity = () => {
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="visibility">Visibility</Label>
-                <Select name="visibility">
+                <Select
+                  onValueChange={(e) => {
+                    if (e === "private") {
+                      setIsPrivateCommunity(true);
+                    } else {
+                      setIsPrivateCommunity(false);
+                    }
+                  }}
+                  name="visibility"
+                >
                   <SelectTrigger id="visibility">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
@@ -192,6 +223,17 @@ const CreateCommunity = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              {isPrivateCommunity && (
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="inviteCode">Enter Invite Code</Label>
+                  <Input
+                    name="inviteCode"
+                    id="inviteCode"
+                    placeholder="Invite code of your community"
+                  />
+                </div>
+              )}
             </div>
 
             <Button className="mt-5" type="submit" disabled={isPending}>
