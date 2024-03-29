@@ -47,6 +47,7 @@ export const createNewCommunity = async (
         communityImage: "",
         members: 1,
         active: false,
+        inviteCode: inviteCode,
       };
     } else {
       newCommunity = {
@@ -60,7 +61,6 @@ export const createNewCommunity = async (
         communityImage: "",
         members: 1,
         active: false,
-        inviteCode: inviteCode,
       };
     }
 

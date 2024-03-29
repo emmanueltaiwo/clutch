@@ -8,7 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import SearchIcon from "@mui/icons-material/Search";
 import CommunitySkeleton from "./CommunitySkeleton";
 import { Button } from "@/components/ui/button";
-import { fetchActiveCommunities } from "@/services/communities";
+import {
+  fetchActiveCommunities,
+  joinPrivateCommunity,
+} from "@/services/communities";
 import {
   Card,
   CardContent,
@@ -22,8 +25,22 @@ import { Loader2 } from "lucide-react";
 import PostAvatar from "./Feed/PostAvatar";
 import { capitalizeWord } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
+import { JoinPrivateCommunityButton } from "./communities/CommunityCard";
 
 const RightPanel = () => {
+  const { toast } = useToast();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { data: activeCommunities, isLoading: activeCommunitiesLoading } =
     useQuery<Community[]>({
@@ -214,45 +231,114 @@ const RightPanel = () => {
               {sortedCommunities?.slice(0, 10).map((community) => (
                 <div key={community.communityId} className="w-full h-fit">
                   {community.visibility === "private" ? (
-                    <Button
-                      disabled
-                      variant="outline"
-                      className="w-full rounded-[15px] disabled:cursor-not-allowed h-fit justify-start px-3 py-[0.5rem]"
-                    >
-                      <Image
-                        src={
-                          community.communityImage.length > 1
-                            ? community.communityImage
-                            : "/assets/Images/cover.png"
-                        }
-                        width={100}
-                        height={100}
-                        alt="community image"
-                        className="rounded-full w-[40px] h-[40px]"
-                      />
-                      <div className="flex flex-col">
-                        <div className="flex gap-3 items-center">
-                          <CardTitle>{community.name}</CardTitle>
+                    <div className="w-full">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full rounded-[15px] disabled:cursor-not-allowed h-fit justify-start px-3 py-[0.5rem]"
+                          >
+                            <Image
+                              src={
+                                community.communityImage.length > 1
+                                  ? community.communityImage
+                                  : "/assets/Images/cover.png"
+                              }
+                              width={100}
+                              height={100}
+                              alt="community image"
+                              className="rounded-full w-[40px] h-[40px]"
+                            />
+                            <div className="flex flex-col">
+                              <div className="flex gap-3 items-center">
+                                <CardTitle>{community.name}</CardTitle>
 
-                          {community.active && (
-                            <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
-                          )}
+                                {community.active && (
+                                  <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
+                                )}
 
-                          {!community.active && (
-                            <DotFilledIcon className="w-8 h-8 text-gray-500" />
-                          )}
-                        </div>
-                        <div className="flex gap-2 flex-wrap items-center">
-                          <CardDescription>{community.type}</CardDescription>
-                          <span>-</span>
-                          <CardDescription>
-                            <span> {community.members} member</span>
-                          </CardDescription>
-                        </div>
-                      </div>
+                                {!community.active && (
+                                  <DotFilledIcon className="w-8 h-8 text-gray-500" />
+                                )}
+                              </div>
+                              <div className="flex gap-2 flex-wrap items-center">
+                                <CardDescription>
+                                  {community.type}
+                                </CardDescription>
+                                <span>-</span>
+                                <CardDescription>
+                                  <span> {community.members} member</span>
+                                </CardDescription>
+                              </div>
+                            </div>
 
-                      <Badge className="ml-auto">Private</Badge>
-                    </Button>
+                            <Badge className="ml-auto">Private</Badge>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Join Private Community</DialogTitle>
+                          </DialogHeader>
+                          <form
+                            action={async (formData) => {
+                              const inviteCode = formData
+                                .get("inviteCode")
+                                ?.toString();
+
+                              if (!inviteCode) {
+                                return toast({
+                                  description: "Invite code cannot be empty",
+                                });
+                              }
+
+                              const response = await joinPrivateCommunity(
+                                community.communityId,
+                                community.name,
+                                community.creator,
+                                inviteCode
+                              );
+
+                              if (
+                                response !==
+                                `You've sucessfully joined ${community.name} community`
+                              ) {
+                                return toast({
+                                  title: "An Error Occurred!",
+                                  description: response,
+                                });
+                              }
+
+                              toast({
+                                title: `You just joined ${community.name} community`,
+                                description: "Redirecting you to the community",
+                              });
+
+                              router.push(
+                                `/communities/${community.communityId}`
+                              );
+                            }}
+                            className="grid gap-4 py-4"
+                          >
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="inviteCode"
+                                className="text-right"
+                              >
+                                Invite Code
+                              </Label>
+                              <Input
+                                name="inviteCode"
+                                id="inviteCode"
+                                placeholder="Enter invite code"
+                                className="col-span-3"
+                              />
+                            </div>
+
+                            <JoinPrivateCommunityButton />
+                          </form>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   ) : (
                     <Button
                       disabled={community.visibility === "private"}
