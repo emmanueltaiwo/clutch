@@ -16,8 +16,17 @@ import {
   deleteField,
   deleteDoc,
 } from "firebase/firestore";
-import { Community, SearchResult } from "@/types";
+import {
+  Comment,
+  Community,
+  CommunityPost,
+  LikedPost,
+  SearchResult,
+  User,
+} from "@/types";
 import { createNewNotification } from "./notifications";
+import { generateLikeId, generatePostId } from "./feed";
+import { formatDate } from "@/utils/helpers";
 
 export const createNewCommunity = async (
   communityName: string,
@@ -461,6 +470,338 @@ export const deleteCommunity = async (
     return true;
   } catch (error) {
     return false;
+  }
+};
+
+export const createCommunityPost = async (
+  post: string,
+  communityId: string
+): Promise<string> => {
+  try {
+    if (post.length < 1) {
+      return "Input cannot be empty";
+    }
+
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") return "UserId Not Found";
+
+    const userDoc = await getUserDocFromFirestore(userId);
+    if (userDoc === false) return "User Not Found";
+
+    const user = userDoc as User;
+    const userInterest = user.interests[0];
+    const postId = generatePostId(post);
+
+    const newPost = {
+      userId: userId,
+      postId: postId,
+      category: userInterest.toLowerCase(),
+      post: post,
+      postImage: "",
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
+      communityId: communityId,
+    };
+
+    await setDoc(doc(db, "communityPosts", postId), newPost);
+
+    return "Post Created Successfully";
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const fetchAllLikesForCommunityPost = async (
+  postId: string
+): Promise<LikedPost[]> => {
+  try {
+    if (!postId) throw new Error("Post ID is required");
+    const totalLikes: LikedPost[] = [];
+
+    const q = query(
+      collection(db, "communityLikes"),
+      where("postId", "==", postId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return totalLikes;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const likesCount = doc.data() as LikedPost;
+      totalLikes.push(likesCount);
+    });
+
+    return totalLikes;
+  } catch (error) {
+    throw new Error("Failed to fetch liked posts.");
+  }
+};
+
+export const fetchNumberOfCommunityComment = async (
+  postId: string
+): Promise<number> => {
+  try {
+    const q = query(
+      collection(db, "communityComments"),
+      where("postId", "==", postId)
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.size;
+  } catch (error) {
+    throw new Error("Failed to fetch number of community comments.");
+  }
+};
+
+export const findAllLikedCommunityPost = async (): Promise<LikedPost[]> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") {
+      throw new Error("User id not found or invalid.");
+    }
+
+    const allLikedPost: LikedPost[] = [];
+
+    const q = query(
+      collection(db, "communityLikes"),
+      where("userId", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return allLikedPost;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const likedPost = doc.data() as LikedPost;
+      allLikedPost.push(likedPost);
+    });
+
+    return allLikedPost;
+  } catch (error) {
+    throw new Error("Failed to fetch liked posts.");
+  }
+};
+
+export const fetchAllCommunityPost = async (
+  communityId: string
+): Promise<CommunityPost[]> => {
+  try {
+    const posts: CommunityPost[] = [];
+
+    const q = query(
+      collection(db, "communityPosts"),
+      where("communityId", "==", communityId)
+    );
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const post = doc.data() as CommunityPost;
+      posts.push(post);
+    });
+
+    const promises = posts.map(async (post) => {
+      const user = (await getUserDocFromFirestore(post.userId)) as User;
+      const likeCount = await fetchAllLikesForCommunityPost(post.postId);
+      const totalLikes = likeCount.length;
+      const totalComment = await fetchNumberOfCommunityComment(post.postId);
+      const likedPosts = await findAllLikedCommunityPost();
+      let hasLikePost: boolean = false;
+      likedPosts.forEach((favPost) => {
+        if (favPost.postId === post.postId) {
+          hasLikePost = true;
+        }
+      });
+
+      return {
+        postId: post.postId,
+        userId: post.userId,
+        post: post.post,
+        postImage: post.postImage,
+        category: post.category,
+        createdAt: post.createdAt,
+        createdAtString: formatDate(post.createdAt),
+        updatedAtString: formatDate(post.updatedAt),
+        updatedAt: post.updatedAt,
+        hasLikePost: hasLikePost,
+        totalLikes: totalLikes,
+        totalComment: totalComment,
+        communityId: post.communityId,
+        user: {
+          username: user.username,
+          fullName: user.fullName,
+          profilePic: user.profilePic,
+          country: user.country,
+        },
+      };
+    });
+
+    const allPosts = (await Promise.all(promises)) as CommunityPost[];
+    return allPosts;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const handleLikeCommunityPost = async (
+  postId: string,
+  postUserId: string
+): Promise<string> => {
+  try {
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") return "User Id Not Found";
+    const likeId = generateLikeId(userId);
+
+    const userData = (await getUserDocFromFirestore(userId)) as DocumentData;
+
+    const documentId = `${userId}${postId}`;
+    const q = query(
+      collection(db, "communityLikes"),
+      where("postId", "==", postId),
+      where("userId", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      await deleteDoc(doc(db, "communityLikes", documentId));
+
+      await createNewNotification(
+        `${userData.fullName} removed your post on a community from favourite`,
+        postUserId
+      );
+      return "You've Removed This Post From Your Favorites";
+    }
+
+    const newLikeDocument = {
+      likeId: likeId,
+      userId: userId,
+      postId: postId,
+      likeCreatedAt: new Date().getTime(),
+    };
+
+    await setDoc(doc(db, "communityLikes", documentId), newLikeDocument);
+
+    await createNewNotification(
+      `${userData.fullName} added your post on a community to favourite`,
+      postUserId
+    );
+
+    return "Post Favourited Successfully";
+  } catch (error) {
+    throw new Error();
+  }
+};
+
+export const editCommunityPost = async (
+  postId: string,
+  post: string
+): Promise<boolean> => {
+  try {
+    const postRef = doc(db, "communityPosts", postId);
+
+    await updateDoc(postRef, {
+      post: post,
+      updatedAt: new Date().getTime(),
+    });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const deleteCommunityPost = async (
+  postId: string,
+  type: string
+): Promise<boolean> => {
+  try {
+    let collection: string;
+    if (type === "post") {
+      collection = "communityPosts";
+    } else {
+      collection = "communityComments";
+    }
+    await deleteDoc(doc(db, collection, postId));
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const createNewCommunityComment = async (
+  postId: string,
+  commentText: string,
+  postUserId: string
+) => {
+  try {
+    if (!postId || !commentText) return false;
+
+    const userId = await handleCookies("get", "USER_ID");
+    if (!userId || typeof userId !== "string") return false;
+
+    const userData = (await getUserDocFromFirestore(userId)) as DocumentData;
+
+    const commentId = generatePostId(commentText);
+
+    const newComment = {
+      commentId: commentId,
+      userId: userId,
+      postId: postId,
+      commentText: commentText,
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
+    };
+
+    await setDoc(doc(db, "communityComments", commentId), newComment);
+
+    await createNewNotification(
+      `${userData.fullName} added a comment to your post on a community`,
+      postUserId
+    );
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const fetchCommunityPostComments = async (
+  postId: string
+): Promise<Comment[]> => {
+  try {
+    const q = query(collection(db, "communityComments"));
+
+    const querySnapshot = await getDocs(q);
+
+    const promises = querySnapshot.docs
+      .filter((doc) => doc.data().postId === postId)
+      .map(async (doc) => {
+        const comment = doc.data() as Comment;
+        const user = (await getUserDocFromFirestore(comment.userId)) as User;
+
+        return {
+          commentId: comment.commentId,
+          userId: comment.userId,
+          postId: comment.postId,
+          commentText: comment.commentText,
+          createdAt: comment.createdAt,
+          updatedAt: comment.updatedAt,
+          createdAtString: formatDate(comment.createdAt),
+          updatedAtString: formatDate(comment.updatedAt),
+          user: {
+            fullName: user.fullName,
+            profilePic: user.profilePic,
+            country: user.country,
+          },
+        };
+      });
+
+    const allComments = (await Promise.all(promises)) as Comment[];
+
+    return allComments;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 

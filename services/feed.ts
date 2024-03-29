@@ -228,10 +228,6 @@ export const handleLikePost = async (
 
     const userData = (await getUserDocFromFirestore(userId)) as DocumentData;
 
-    const postUserData = (await getUserDocFromFirestore(
-      postUserId
-    )) as DocumentData;
-
     const documentId = `${userId}${postId}`;
     const q = query(
       collection(db, "likes"),
@@ -242,10 +238,7 @@ export const handleLikePost = async (
 
     if (!querySnapshot.empty) {
       await deleteDoc(doc(db, "likes", documentId));
-      await createNewNotification(
-        `You removed ${postUserData.fullName} post from your favourite`,
-        userId
-      );
+
       await createNewNotification(
         `${userData.fullName} removed your post from favourite`,
         postUserId
@@ -262,10 +255,6 @@ export const handleLikePost = async (
 
     await setDoc(doc(db, "likes", documentId), newLikeDocument);
 
-    await createNewNotification(
-      `You added ${postUserData.fullName} post to your favourite`,
-      userId
-    );
     await createNewNotification(
       `${userData.fullName} added your post to favourite`,
       postUserId
@@ -388,10 +377,6 @@ export const createNewComment = async (
 
     const userData = (await getUserDocFromFirestore(userId)) as DocumentData;
 
-    const postUserData = (await getUserDocFromFirestore(
-      postUserId
-    )) as DocumentData;
-
     const commentId = generatePostId(commentText);
 
     const newComment = {
@@ -405,10 +390,6 @@ export const createNewComment = async (
 
     await setDoc(doc(db, "comments", commentId), newComment);
 
-    await createNewNotification(
-      `You added a comment on ${postUserData.fullName} post`,
-      userId
-    );
     await createNewNotification(
       `${userData.fullName} added a comment to your post`,
       postUserId

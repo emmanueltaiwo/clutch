@@ -93,3 +93,7 @@ export type SearchResult = {
   profilePic: string;
   fullName: string;
 };
+
+export type CommunityPost = Post & {
+  communityId: string;
+};
