@@ -30,6 +30,7 @@ const CommunityPage = async ({ params }: { params: { slug: string } }) => {
           <CommunityHeader userId={userId} community={community} />
         </Container>
         <CommunityMembers
+          userId={userId}
           communityCreator={communityExists.creatorId}
           communityId={communityId}
         />
