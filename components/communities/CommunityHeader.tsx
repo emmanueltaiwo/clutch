@@ -122,7 +122,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
           <h3 className="text-[35px] font-bold">
             {capitalizeWord(community.name)}
           </h3>
-          <p className="text-[13px] w-full md:w-[80%] font-[300]">
+          <p className="text-[13px] w-full font-[300]">
             {community.description}
           </p>
           <Badge variant="outline" className="px-1 w-fit cursor-pointer">

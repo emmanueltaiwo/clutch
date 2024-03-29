@@ -7,6 +7,7 @@ import { handleCookies } from "@/services/auth";
 import { redirect } from "next/navigation";
 import CommunityMembers from "@/components/communities/CommunityMembers";
 import CommunityHeader from "@/components/communities/CommunityHeader";
+import CommunityFeed from "@/components/communities/CommunityFeed";
 
 const CommunityPage = async ({ params }: { params: { slug: string } }) => {
   const communityId = params.slug;
@@ -28,6 +29,7 @@ const CommunityPage = async ({ params }: { params: { slug: string } }) => {
       <div className="flex justify-between">
         <Container>
           <CommunityHeader userId={userId} community={community} />
+          <CommunityFeed />
         </Container>
         <CommunityMembers
           userId={userId}

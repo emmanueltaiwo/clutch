@@ -57,16 +57,18 @@ const CommunityMembers = ({
           </Badge>
         ) : (
           <>
-            <Card className="w-[90%] mx-auto h-[55px] flex gap-4 items-center px-4 rounded-full">
-              <SearchIcon />
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for members..."
-                className="h-full w-full bg-transparent outline-none dark:placeholder:text-gray-200 placeholder:text-gray-900"
-              />
-            </Card>
+            {isMember && (
+              <Card className="w-[90%] mx-auto h-[55px] flex gap-4 items-center px-4 rounded-full">
+                <SearchIcon />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for members..."
+                  className="h-full w-full bg-transparent outline-none dark:placeholder:text-gray-200 placeholder:text-gray-900"
+                />
+              </Card>
+            )}
 
             {communityMembersLoading && searchQuery.length === 0 && (
               <Card className="w-[90%] flex justify-center items-center gap-5 mx-auto rounded-[15px] h-fit overflow-y-auto p-4">
