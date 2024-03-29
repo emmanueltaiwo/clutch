@@ -4,6 +4,7 @@ import React from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
 import { User } from "@/types";
+import { capitalizeWord } from "@/utils/helpers";
 
 const ProfileAvatar = (user: { user: User }) => {
   return (
@@ -19,7 +20,7 @@ const ProfileAvatar = (user: { user: User }) => {
       )}
 
       <AvatarFallback>
-        {user.user.fullName
+        {capitalizeWord(user.user.fullName)
           .split(" ")
           .map((n) => n[0])
           .join("")}
