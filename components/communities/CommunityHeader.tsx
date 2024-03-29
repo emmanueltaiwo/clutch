@@ -108,7 +108,13 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
           className="w-full h-[200px]"
         />
       ) : (
-        <div className="w-full h-[200px] bg-gradient-to-r from-blue-700/50 to-blue-800/50 flex items-center justify-center" />
+        <Image
+          src="/assets/Images/community.png"
+          width={500}
+          height={200}
+          alt="Banner"
+          className="w-full h-[150px]"
+        />
       )}
 
       <div className="w-full h-fit p-5 bg-[#2d2d2d37] flex flex-col md:flex-row justify-between gap-3">
@@ -116,6 +122,9 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
           <h3 className="text-[35px] font-bold">
             {capitalizeWord(community.name)}
           </h3>
+          <p className="text-[13px] w-full md:w-[500px] font-[300]">
+            {community.description}
+          </p>
           <Badge variant="outline" className="px-1 w-fit cursor-pointer">
             {community.type}
           </Badge>
