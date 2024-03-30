@@ -18,6 +18,11 @@ import WrapperComponent from "./Wrapper";
 import { capitalizeWord } from "@/utils/helpers";
 import { editCommunityPost } from "../../services/communities";
 import { useParams } from "next/navigation";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 type Props = {
   postId: string;
@@ -91,14 +96,32 @@ const PostCard: FC<Props> = ({
         <Link href={`/profile/${username}`} className="flex items-center gap-3">
           <PostAvatar profilePic={profilePic} fullName={fullName} />
 
-          <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
-            <h4 className="font-bold text-[15px]">
-              {capitalizeWord(fullName)}
-            </h4>
-            <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
-              @{username}
-            </span>
-          </div>
+          <HoverCard>
+            <HoverCardTrigger>
+              <div className="flex flex-col hover:underline underline-offset-4 decoration-[0.5px]">
+                <h4 className="font-bold text-[15px]">
+                  {capitalizeWord(fullName)}
+                </h4>
+                <span className="font-[100] text-gray-800 text-[12px] dark:text-gray-400">
+                  @{username}
+                </span>
+              </div>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="w-full flex flex-col gap-4 items-center justify-center py-1">
+                <PostAvatar
+                  profilePic={profilePic}
+                  fullName={fullName}
+                  width={200}
+                  height={200}
+                />
+
+                <h4 className="font-bold text-[25px]">
+                  {capitalizeWord(fullName)}
+                </h4>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
         </Link>
 
         <div className="flex flex-col sm:flex-row items-center gap-5">
