@@ -7,17 +7,21 @@ import Image from "next/image";
 const PostAvatar = ({
   profilePic,
   fullName,
+  width,
+  height,
 }: {
   profilePic: string;
   fullName: string;
+  width?: number;
+  height?: number;
 }) => {
   return (
     <Avatar>
       {profilePic.length !== 0 && (
         <Image
           src={profilePic}
-          width={50}
-          height={50}
+          width={width ?? 50}
+          height={height ?? 50}
           className="rounded-full invert-0"
           alt="Profile Pic"
         />
