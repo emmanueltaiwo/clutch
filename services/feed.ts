@@ -174,7 +174,6 @@ export const fetchPostById = async (postId: string): Promise<Post> => {
         country: user.country,
       },
     };
-
     return post;
   } catch (error: any) {
     throw new Error(error);

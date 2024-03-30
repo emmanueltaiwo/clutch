@@ -14,25 +14,16 @@ const landingPage = (isAuthenticated: boolean, children: ReactNode) => {
 export default async function AuthLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  let isAuthenticated = false;
   const userId = await handleCookies("get", "USER_ID");
   if (typeof userId === "boolean") {
-    isAuthenticated = false;
-    return landingPage(isAuthenticated, children);
+    return landingPage(false, children);
   }
 
   const user = await getUserDocFromFirestore(userId!);
   if (typeof user === "boolean") {
-    isAuthenticated = false;
-    return landingPage(isAuthenticated, children);
+    return landingPage(false, children);
   }
-  const sessionStatus = await getSessionStatus();
 
-  if (!sessionStatus) {
-    isAuthenticated = false;
-    return landingPage(isAuthenticated, children);
-  } else {
-    isAuthenticated = sessionStatus;
-    return landingPage(isAuthenticated, children);
-  }
+  const isAuthenticated = await getSessionStatus();
+  return landingPage(isAuthenticated, children);
 }

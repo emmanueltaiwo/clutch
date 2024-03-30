@@ -21,6 +21,7 @@ import {
   Community,
   CommunityPost,
   LikedPost,
+  Post,
   SearchResult,
   User,
 } from "@/types";
@@ -711,6 +712,24 @@ export const editCommunityPost = async (
   }
 };
 
+export const editCommunityComment = async (
+  commentId: string,
+  comment: string
+): Promise<boolean> => {
+  try {
+    const commentRef = doc(db, "communityComments", commentId);
+
+    await updateDoc(commentRef, {
+      commentText: comment,
+      updatedAt: new Date().getTime(),
+    });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export const deleteCommunityPost = async (
   postId: string,
   type: string
@@ -800,6 +819,66 @@ export const fetchCommunityPostComments = async (
     const allComments = (await Promise.all(promises)) as Comment[];
 
     return allComments;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const verifyCommunityPostExists = async (
+  postId: string
+): Promise<boolean> => {
+  try {
+    const docRef = doc(db, "communityPosts", postId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return false;
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const fetchCommunityPostById = async (postId: string): Promise<Post> => {
+  try {
+    const docRef = doc(db, "communityPosts", postId);
+    const docSnap = await getDoc(docRef);
+
+    const postDetail = docSnap.data() as Post;
+
+    const user = (await getUserDocFromFirestore(postDetail.userId)) as User;
+    const likeCount = await fetchAllLikesForCommunityPost(postId);
+    const totalLikes = likeCount.length;
+    const totalComment = await fetchNumberOfCommunityComment(postId);
+    const likedPosts = await findAllLikedCommunityPost();
+    let hasLikePost: boolean = false;
+    likedPosts.forEach((favPost) => {
+      if (favPost.postId === postId) {
+        hasLikePost = true;
+      }
+    });
+
+    const post: Post = {
+      postId: postId,
+      userId: postDetail.userId,
+      post: postDetail.post,
+      postImage: postDetail.postImage,
+      category: postDetail.category,
+      createdAt: postDetail.createdAt,
+      updatedAt: postDetail.updatedAt,
+      createdAtString: formatDate(postDetail.createdAt),
+      updatedAtString: formatDate(postDetail.updatedAt),
+      totalLikes: totalLikes,
+      hasLikePost: hasLikePost,
+      totalComment: totalComment,
+      user: {
+        username: user.username,
+        fullName: user.fullName,
+        profilePic: user.profilePic,
+        country: user.country,
+      },
+    };
+
+    return post;
   } catch (error: any) {
     throw new Error(error);
   }

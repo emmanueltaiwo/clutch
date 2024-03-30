@@ -4,21 +4,29 @@ import CommentCard from "./CommentCard";
 import CommentSkeleton from "./CommentSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPostComments } from "@/services/feed";
+import { fetchCommunityPostComments } from "@/services/communities";
 
 const CommentContainer = ({
   defaultUserId,
   postId,
+  communityPage,
 }: {
   defaultUserId: string;
   postId: string;
+  communityPage?: boolean;
 }) => {
   const {
     data: comments,
     isLoading,
     isError,
   } = useQuery<Comment[]>({
-    queryKey: ["post-comment", postId],
-    queryFn: async () => await fetchPostComments(postId),
+    queryKey: communityPage
+      ? ["community-post-comment", postId]
+      : ["post-comment", postId],
+    queryFn: async () =>
+      communityPage
+        ? await fetchCommunityPostComments(postId)
+        : await fetchPostComments(postId),
     staleTime: 0,
   });
   const [showNoCommentsMessage, setShowNoCommentsMessage] = useState(false);
@@ -72,6 +80,7 @@ const CommentContainer = ({
             defaultUserId={defaultUserId}
             key={comment.commentId}
             comment={comment}
+            communityPage={communityPage}
           />
         ))}
       </section>

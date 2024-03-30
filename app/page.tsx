@@ -18,25 +18,16 @@ const landingPage = (isAuthenticated: boolean) => {
 };
 
 export default async function Home() {
-  let isAuthenticated = false;
   const userId = await handleCookies("get", "USER_ID");
   if (typeof userId === "boolean") {
-    isAuthenticated = false;
-    return landingPage(isAuthenticated);
+    return landingPage(false);
   }
 
-  const user = await getUserDocFromFirestore(userId!);
+  const user = await getUserDocFromFirestore(userId);
   if (typeof user === "boolean") {
-    isAuthenticated = false;
-    return landingPage(isAuthenticated);
+    return landingPage(false);
   }
-  const sessionStatus = await getSessionStatus();
 
-  if (!sessionStatus) {
-    isAuthenticated = false;
-    return landingPage(isAuthenticated);
-  } else {
-    isAuthenticated = sessionStatus;
-    return landingPage(isAuthenticated);
-  }
+  const isAuthenticated = await getSessionStatus();
+  return landingPage(isAuthenticated);
 }

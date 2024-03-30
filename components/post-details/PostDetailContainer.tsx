@@ -10,22 +10,33 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPostById } from "@/services/feed";
 import Container from "../Container";
 import SkeletonCard from "../Feed/SkeletonCard";
+import { fetchCommunityPostById } from "@/services/communities";
 
 type Props = {
   postId: string;
-  username: string;
   userId: string;
   user: User;
+  communityPage?: boolean;
 };
 
-const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
+const PostDetailContainer: FC<Props> = ({
+  postId,
+  userId,
+  user,
+  communityPage,
+}) => {
   const {
     data: post,
     isLoading,
     isError,
   } = useQuery<Post>({
-    queryKey: ["feed-posts", postId],
-    queryFn: async () => await fetchPostById(postId),
+    queryKey: communityPage
+      ? ["community-post", postId]
+      : ["feed-posts", postId],
+    queryFn: async () =>
+      communityPage
+        ? await fetchCommunityPostById(postId)
+        : await fetchPostById(postId),
     staleTime: 0,
   });
 
@@ -74,13 +85,14 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
         postId={postId}
         postUserId={post.userId}
         userId={userId}
+        communityPage={communityPage}
       />
 
       <section className="border-b-[0.5px] flex flex-col gap-3 pb-5">
         <PostCard
           postId={postId}
           userId={post.userId}
-          username={username}
+          username={post.user.username}
           profilePic={post.user.profilePic}
           fullName={post.user.fullName}
           createdAtString={post.createdAtString}
@@ -93,16 +105,26 @@ const PostDetailContainer: FC<Props> = ({ postId, username, userId, user }) => {
           hasLikePost={post.hasLikePost}
           totalComment={post.totalComment}
           defaultUserId={userId}
+          communityPage={communityPage}
         />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
 
-        <CreateComment postUserId={post.userId} user={user} postId={postId} />
+        <CreateComment
+          communityPage={communityPage}
+          postUserId={post.userId}
+          user={user}
+          postId={postId}
+        />
 
         <hr className="w-[95%] border-[0.2px] mx-auto" />
       </section>
 
-      <CommentContainer postId={postId} defaultUserId={userId} />
+      <CommentContainer
+        communityPage={communityPage}
+        postId={postId}
+        defaultUserId={userId}
+      />
     </>
   );
 };

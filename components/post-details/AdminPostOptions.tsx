@@ -24,33 +24,47 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { editComment } from "@/lib/features/editComment/editCommentSlice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCommunityPost } from "@/services/communities";
 
 const AdminPostOptions = ({
   postId,
   userId,
   type,
+  communityPage,
 }: {
   postId: string;
   userId: string;
   type: string;
+  communityPage?: boolean;
 }) => {
+  const params = useParams<{ slug: string; postId: string }>();
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { toast } = useToast();
-
-  const { mutate: mutateDelete, isPending } = useMutation({
+  const { mutate: mutateDelete } = useMutation({
     mutationFn: () => handleDelete(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["post-comment", postId] });
+      queryClient.invalidateQueries({
+        queryKey: communityPage
+          ? ["community-post-comment", params.postId]
+          : ["feed-posts", postId],
+      });
     },
   });
 
   const handleDelete = async () => {
-    const response = await deletePost(postId, type);
+    let response: boolean;
+
+    if (communityPage) {
+      response = await deleteCommunityPost(postId, type);
+    } else {
+      response = await deletePost(postId, type);
+    }
+
     if (!response) {
       return toast({
         title: "An Error Occured!",
