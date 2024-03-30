@@ -13,13 +13,15 @@ import { EditPostButton } from "@/components/Feed/PostCard";
 import { closeEditComment } from "@/lib/features/editComment/editCommentSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { editComment } from "@/services/feed";
+import { editCommunityComment } from "@/services/communities";
 
 type Props = {
   comment: Comment;
   defaultUserId: string;
+  communityPage?: boolean;
 };
 
-const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
+const CommentCard: FC<Props> = ({ comment, defaultUserId, communityPage }) => {
   const {
     commentId,
     userId,
@@ -85,6 +87,7 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
               userId={userId}
               type="comment"
               postId={commentId}
+              communityPage={communityPage}
             />
           )}
         </div>
@@ -103,7 +106,14 @@ const CommentCard: FC<Props> = ({ comment, defaultUserId }) => {
                   description: "New Post Entry Is Invalid",
                 });
               }
-              const response = await editComment(commentId, newComment);
+              let response: boolean;
+
+              if (communityPage) {
+                response = await editCommunityComment(commentId, newComment);
+              } else {
+                response = await editComment(commentId, newComment);
+              }
+
               if (!response) {
                 return toast({
                   title: "An Error Occurred!",

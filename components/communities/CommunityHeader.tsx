@@ -14,6 +14,7 @@ import {
   leaveCommunity,
   fetchAllCommunityMembers,
   deleteCommunity,
+  fetchCommunityById,
 } from "@/services/communities";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -30,29 +31,33 @@ import {
 } from "@/components/ui/alert-dialog";
 
 type Props = {
-  community: Community;
+  communityId: string;
   userId: string;
 };
 
-const CommunityHeader: FC<Props> = ({ community, userId }) => {
+const CommunityHeader: FC<Props> = ({ communityId, userId }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const router = useRouter();
   const { data: communityMembers, isLoading: communityMembersLoading } =
     useQuery<SearchResult[]>({
-      queryKey: ["community-members", community.communityId],
-      queryFn: async () =>
-        await fetchAllCommunityMembers(community.communityId),
+      queryKey: ["community-members", communityId],
+      queryFn: async () => await fetchAllCommunityMembers(communityId),
     });
+
+  const { data: community, isLoading: communityLoading } = useQuery<Community>({
+    queryKey: ["community", communityId],
+    queryFn: async () => await fetchCommunityById(communityId),
+  });
 
   const isMember = communityMembers?.some((member) => member.userId === userId);
 
   const handleLeaveCommunity = async () => {
     setIsLoading(true);
     const response = await leaveCommunity(
-      community.communityId,
-      community.name,
-      community.creator
+      community?.communityId ?? "",
+      community?.name ?? "",
+      community?.creator ?? ""
     );
 
     if (!response) {
@@ -62,7 +67,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
     }
     setIsLoading(false);
     toast({
-      description: `You just left ${community.name} community`,
+      description: `You just left ${community?.name} community`,
     });
 
     window.location.reload();
@@ -71,9 +76,9 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
   const handleJoinCommunity = async () => {
     setIsLoading(true);
     const response = await joinPublicCommunity(
-      community.communityId,
-      community.name,
-      community.creator
+      community?.communityId ?? "",
+      community?.name ?? "",
+      community?.creator ?? ""
     );
 
     if (!response) {
@@ -83,25 +88,29 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
     }
     setIsLoading(false);
     toast({
-      title: `You just joined ${community.name} community`,
+      title: `You just joined ${community?.name} community`,
       description: "Redirecting you to the community",
     });
 
     window.location.reload();
   };
 
+  if (communityLoading) {
+    return;
+  }
+
   return (
     <section className="w-full flex flex-col">
       <div className="flex items-center gap-5 h-[11vh] px-5">
         <BackButton />
         <h3 className="text-[24px] font-bold cursor-pointer">
-          {capitalizeWord(community.name)}
+          {community && capitalizeWord(community.name)}
         </h3>
       </div>
 
-      {community.communityImage.length > 1 ? (
+      {community && community.communityImage.length > 1 ? (
         <Image
-          src={community.communityImage}
+          src={community?.communityImage}
           width={500}
           height={200}
           alt="Banner"
@@ -120,13 +129,13 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
       <div className="w-full h-fit p-5 bg-[#2d2d2d37] flex flex-col md:flex-row justify-between gap-3">
         <div className="flex flex-col gap-3">
           <h3 className="text-[35px] font-bold">
-            {capitalizeWord(community.name)}
+            {community && capitalizeWord(community.name)}
           </h3>
           <p className="text-[13px] w-full font-[300]">
-            {community.description}
+            {community?.description}
           </p>
           <Badge variant="outline" className="px-1 w-fit cursor-pointer">
-            {community.type}
+            {community?.type}
           </Badge>
           {communityMembersLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -141,7 +150,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
         </div>
 
         {isMember &&
-          community.creator !== userId &&
+          community?.creator !== userId &&
           !communityMembersLoading && (
             <Button
               disabled={isLoading}
@@ -163,7 +172,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
           </Button>
         )}
 
-        {community.creator == userId && (
+        {community?.creator == userId && (
           <AlertDialog>
             <AlertDialogTrigger>
               <Button variant="destructive" className="w-fit">
@@ -197,7 +206,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
 
                     setIsLoading(false);
                     toast({
-                      description: `You just deleted ${community.name} community`,
+                      description: `You just deleted ${community?.name} community`,
                     });
 
                     router.push(`/communities`);

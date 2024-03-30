@@ -1,6 +1,5 @@
 import Container from "@/components/Container";
 import {
-  fetchCommunityById,
   verifyCommunityExists,
   fetchAllCommunityMembers,
 } from "@/services/communities";
@@ -25,8 +24,6 @@ const CommunityPage = async ({ params }: { params: { slug: string } }) => {
     return <Container>Community does not exist</Container>;
   }
 
-  const community = await fetchCommunityById(communityId);
-
   const communityMembers = await fetchAllCommunityMembers(communityId);
   const isMember = communityMembers.some((member) => member.userId === userId);
 
@@ -34,7 +31,7 @@ const CommunityPage = async ({ params }: { params: { slug: string } }) => {
     <main>
       <div className="flex justify-between">
         <Container>
-          <CommunityHeader userId={userId} community={community} />
+          <CommunityHeader userId={userId} communityId={communityId} />
           {isMember ? (
             <>
               <CreateCommunityPost communityId={communityId} userId={userId} />
@@ -46,11 +43,7 @@ const CommunityPage = async ({ params }: { params: { slug: string } }) => {
             </Card>
           )}
         </Container>
-        <CommunityMembers
-          userId={userId}
-          communityCreator={communityExists.creatorId}
-          communityId={communityId}
-        />
+        <CommunityMembers userId={userId} />
       </div>
     </main>
   );

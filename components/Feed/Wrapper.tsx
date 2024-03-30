@@ -26,7 +26,6 @@ const LinkWrapper: FC<{
 const CardWrapper: FC<{
   children: ReactNode;
   postId: string;
-  communityId?: string;
 }> = ({ children, postId }) => {
   return (
     <div

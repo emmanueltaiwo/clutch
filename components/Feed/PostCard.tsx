@@ -16,7 +16,8 @@ import { editPost } from "@/services/feed";
 import { useFormStatus } from "react-dom";
 import WrapperComponent from "./Wrapper";
 import { capitalizeWord } from "@/utils/helpers";
-import { editCommunityPost } from '../../services/communities';
+import { editCommunityPost } from "../../services/communities";
+import { useParams } from "next/navigation";
 
 type Props = {
   postId: string;
@@ -35,7 +36,6 @@ type Props = {
   hasLikePost: boolean;
   defaultUserId: string;
   communityPage?: boolean;
-  communityId?: string;
 };
 
 export const EditPostButton: FC = () => {
@@ -70,13 +70,14 @@ const PostCard: FC<Props> = ({
   defaultUserId,
   totalComment,
   communityPage,
-  communityId,
 }) => {
+  const params = useParams<{ slug: string; postId?: string }>();
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [displayedPost, setDisplayedPost] = useState<string>(post);
   const edit = useAppSelector((state) => state.editPost);
   const { editUserId, editPostId, isEditPost } = edit;
+  const communityId = params.slug;
 
   return (
     <WrapperComponent

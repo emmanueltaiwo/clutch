@@ -64,7 +64,6 @@ const CommunityFeed: FC<Props> = ({ communityId }) => {
             hasLikePost={post.hasLikePost}
             defaultUserId=""
             communityPage={true}
-            communityId={communityId}
           />
         );
       });

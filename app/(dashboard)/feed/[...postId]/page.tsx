@@ -5,7 +5,7 @@ import PostDetailContainer from "@/components/post-details/PostDetailContainer";
 import { verifyPostExists } from "@/services/feed";
 
 const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
-  const [username, postId] = params.postId;
+  const postId = params.postId[1];
 
   const postExists = await verifyPostExists(postId);
 
@@ -19,12 +19,7 @@ const PostDetails = async ({ params }: { params: { postId: string[] } }) => {
 
   return (
     <Container>
-      <PostDetailContainer
-        user={user}
-        postId={postId}
-        username={username}
-        userId={userId}
-      />
+      <PostDetailContainer user={user} postId={postId} userId={userId} />
     </Container>
   );
 };

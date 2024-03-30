@@ -9,20 +9,31 @@ import { createNewComment } from "@/services/feed";
 import { User } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { createNewCommunityComment } from "@/services/communities";
 
 type Props = {
   postId: string;
   user: User;
   postUserId: string;
+  communityPage?: boolean;
 };
 
-const CreateComment: FC<Props> = ({ postId, user, postUserId }) => {
+const CreateComment: FC<Props> = ({
+  postId,
+  user,
+  postUserId,
+  communityPage,
+}) => {
   const queryClient = useQueryClient();
 
   const { mutate: mutateCreateComment, isPending } = useMutation({
     mutationFn: (formData: FormData) => createComment(formData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["post-comment", postId] });
+      queryClient.invalidateQueries({
+        queryKey: communityPage
+          ? ["community-post-comment", postId]
+          : ["post-comment", postId],
+      });
     },
   });
   const { toast } = useToast();
@@ -38,7 +49,14 @@ const CreateComment: FC<Props> = ({ postId, user, postUserId }) => {
       });
     }
 
-    const response = await createNewComment(postId, comment, postUserId);
+    let response: boolean;
+
+    if (communityPage) {
+      response = await createNewCommunityComment(postId, comment, postUserId);
+    } else {
+      response = await createNewComment(postId, comment, postUserId);
+    }
+
     if (!response) {
       return toast({
         title: "An error occurred",

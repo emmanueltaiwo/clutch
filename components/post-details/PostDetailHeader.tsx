@@ -8,10 +8,12 @@ const PostDetailHeader = ({
   postUserId,
   userId,
   postId,
+  communityPage,
 }: {
   postUserId: string;
   userId: string;
   postId: string;
+  communityPage?: boolean;
 }) => {
   const [postCreatedByUser, setPostCreatedByUser] = useState<boolean>(false);
 
@@ -40,7 +42,12 @@ const PostDetailHeader = ({
 
       {postCreatedByUser && (
         <div className="mr-5 ml-auto">
-          <AdminPostOptions userId={userId} type="post" postId={postId} />
+          <AdminPostOptions
+            communityPage={communityPage}
+            userId={userId}
+            type="post"
+            postId={postId}
+          />
         </div>
       )}
     </div>
