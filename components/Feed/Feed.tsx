@@ -10,8 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "../ui/card";
 
 const Feed = () => {
-  const [showNoPostsMessage, setShowNoPostsMessage] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode");
   const { data: posts, refetch } = useQuery<Post[]>({
@@ -56,13 +55,7 @@ const Feed = () => {
   }
 
   function renderContent() {
-    if (showNoPostsMessage) {
-      return (
-        <div className="text-center py-5 text-[14px] text-gray-800 dark:text-gray-600">
-          Ooops! No post was found
-        </div>
-      );
-    } else if (isLoading || !posts) {
+    if (isLoading || !posts) {
       return skeletonCards;
     } else {
       return sortedPosts?.map((post) => {
