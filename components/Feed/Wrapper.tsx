@@ -5,11 +5,16 @@ const LinkWrapper: FC<{
   children: ReactNode;
   username: string;
   postId: string;
-  postDetailPage?: boolean;
-}> = ({ children, username, postId, postDetailPage }) => {
+  communityPage?: boolean;
+  communityId?: string;
+}> = ({ children, username, postId, communityPage, communityId }) => {
   return (
     <Link
-      href={`/feed/${username}/${postId}`}
+      href={
+        communityPage
+          ? `/communities/${communityId}/${postId}`
+          : `/feed/${username}/${postId}`
+      }
       key={postId}
       className="w-full border-t-[1px] border-gray-800 dark:border-gray-700 px-5 pt-5 pb-1 flex flex-col gap-5 hover:bg-[rgba(48,48,48,0.24)] transition-all duration-300 border-b-[0.5px]"
     >
@@ -21,8 +26,8 @@ const LinkWrapper: FC<{
 const CardWrapper: FC<{
   children: ReactNode;
   postId: string;
-  postDetailPage?: boolean;
-}> = ({ children, postId, postDetailPage }) => {
+  communityId?: string;
+}> = ({ children, postId }) => {
   return (
     <div
       key={postId}
@@ -38,6 +43,8 @@ type WrapperComponentProps = {
   username: string;
   postId: string;
   postDetailPage?: boolean;
+  communityPage?: boolean;
+  communityId?: string;
 };
 
 const WrapperComponent: FC<WrapperComponentProps> = ({
@@ -45,13 +52,16 @@ const WrapperComponent: FC<WrapperComponentProps> = ({
   postId,
   username,
   postDetailPage,
+  communityPage,
+  communityId,
 }) => {
   const Wrapper = postDetailPage ? CardWrapper : LinkWrapper;
   return (
     <Wrapper
+      communityPage={communityPage}
       username={username}
       postId={postId}
-      postDetailPage={postDetailPage}
+      communityId={communityId}
     >
       {children}
     </Wrapper>

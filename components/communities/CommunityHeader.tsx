@@ -65,7 +65,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
       description: `You just left ${community.name} community`,
     });
 
-    router.push(`/communities`);
+    window.location.reload();
   };
 
   const handleJoinCommunity = async () => {
@@ -87,7 +87,7 @@ const CommunityHeader: FC<Props> = ({ community, userId }) => {
       description: "Redirecting you to the community",
     });
 
-    router.push(`/communities/${community.communityId}`);
+    window.location.reload();
   };
 
   return (

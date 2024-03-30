@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { CopyIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
   Dialog,
@@ -22,11 +22,26 @@ import { DOMAIN_NAME } from "@/constants";
 type Props = {
   username: string;
   postId: string;
+  communityPage?: boolean;
+  communityId?: string;
 };
 
-const SharePost: FC<Props> = ({ username, postId }) => {
+const SharePost: FC<Props> = ({
+  username,
+  postId,
+  communityPage,
+  communityId,
+}) => {
   const [copied, setCopied] = useState<boolean>(false);
-  const postUrl = `${DOMAIN_NAME}/feed/${username}/${postId}`;
+  const [postUrl, setPostUrl] = useState<string>("");
+
+  useEffect(() => {
+    if (communityPage) {
+      setPostUrl(`${DOMAIN_NAME}/communities/${communityId}/${postId}`);
+    } else {
+      setPostUrl(`${DOMAIN_NAME}/feed/${username}/${postId}`);
+    }
+  }, [communityPage, communityId, postId, username]);
 
   const copyToClipboard = async () => {
     try {

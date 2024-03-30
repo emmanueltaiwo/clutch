@@ -4,12 +4,15 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { handleLikePost } from "@/services/feed";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { handleLikeCommunityPost } from "@/services/communities";
 
 type Props = {
   postId: string;
   totalLikes: number;
   hasLikePost: boolean;
   postUserId: string;
+  communityPage?: boolean;
+  communityId?: string;
 };
 
 const LikePost: FC<Props> = ({
@@ -17,6 +20,8 @@ const LikePost: FC<Props> = ({
   totalLikes,
   hasLikePost,
   postUserId,
+  communityPage,
+  communityId,
 }) => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -32,7 +37,11 @@ const LikePost: FC<Props> = ({
       return favouritePost(e);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["feed-posts"] });
+      queryClient.invalidateQueries({
+        queryKey: communityPage
+          ? ["community-posts", communityId]
+          : ["feed-posts"],
+      });
     },
   });
 
@@ -44,7 +53,12 @@ const LikePost: FC<Props> = ({
     e.stopPropagation();
     try {
       setFavouritedPost(!hasLikePost);
-      const response = await handleLikePost(postId, postUserId);
+      let response: string;
+      if (communityPage) {
+        response = await handleLikeCommunityPost(postId, postUserId);
+      } else {
+        response = await handleLikePost(postId, postUserId);
+      }
 
       if (response !== "Post Favourited Successfully") {
         return toast({

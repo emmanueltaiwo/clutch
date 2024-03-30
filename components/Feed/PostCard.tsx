@@ -16,6 +16,7 @@ import { editPost } from "@/services/feed";
 import { useFormStatus } from "react-dom";
 import WrapperComponent from "./Wrapper";
 import { capitalizeWord } from "@/utils/helpers";
+import { editCommunityPost } from '../../services/communities';
 
 type Props = {
   postId: string;
@@ -33,6 +34,8 @@ type Props = {
   totalComment: number;
   hasLikePost: boolean;
   defaultUserId: string;
+  communityPage?: boolean;
+  communityId?: string;
 };
 
 export const EditPostButton: FC = () => {
@@ -66,6 +69,8 @@ const PostCard: FC<Props> = ({
   hasLikePost,
   defaultUserId,
   totalComment,
+  communityPage,
+  communityId,
 }) => {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
@@ -75,6 +80,8 @@ const PostCard: FC<Props> = ({
 
   return (
     <WrapperComponent
+      communityPage={communityPage}
+      communityId={communityId}
       username={username}
       postId={postId}
       postDetailPage={postDetailPage}
@@ -117,7 +124,14 @@ const PostCard: FC<Props> = ({
                   description: "New Post Entry Is Invalid",
                 });
               }
-              const response = await editPost(postId, newPost);
+              let response: boolean;
+
+              if (communityPage) {
+                response = await editCommunityPost(postId, newPost);
+              } else {
+                response = await editPost(postId, newPost);
+              }
+
               if (!response) {
                 return toast({
                   title: "An Error Occurred!",
@@ -161,13 +175,20 @@ const PostCard: FC<Props> = ({
         </button>
 
         <LikePost
+          communityPage={communityPage}
+          communityId={communityId}
           postId={postId}
           postUserId={userId}
           totalLikes={totalLikes}
           hasLikePost={hasLikePost}
         />
 
-        <SharePost username={username} postId={postId} />
+        <SharePost
+          communityPage={communityPage}
+          communityId={communityId}
+          username={username}
+          postId={postId}
+        />
       </div>
     </WrapperComponent>
   );
