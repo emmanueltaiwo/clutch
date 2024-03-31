@@ -108,7 +108,7 @@ const PostCard: FC<Props> = ({
               </div>
             </HoverCardTrigger>
             <HoverCardContent>
-              <div className="w-full flex flex-col gap-4 items-center justify-center py-1">
+              <div className="w-full flex flex-col gap-4 items-center justify-center">
                 <PostAvatar
                   profilePic={profilePic}
                   fullName={fullName}
