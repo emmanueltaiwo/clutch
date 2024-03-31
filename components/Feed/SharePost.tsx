@@ -56,7 +56,7 @@ const SharePost: FC<Props> = ({
   };
 
   return (
-    <Link href="">
+    <Link href="#">
       <Dialog>
         <DialogTrigger asChild>
           <button className="text-gray-600 hover:bg-[rgba(74,252,98,0.11)] hover:text-green-500 transition-all duration-300 px-[8px] pt-[3px] pb-[9px] rounded-full">
