@@ -196,13 +196,8 @@ const RightPanel = () => {
                           <DotFilledIcon className="w-8 h-8 text-green-500 animate-pulse" />
                         )}
                       </div>
-                      <div className="flex gap-2 flex-wrap items-center">
-                        <CardDescription>{community.type}</CardDescription>
-                        <span>-</span>
-                        <CardDescription>
-                          <span> {community.members} member</span>
-                        </CardDescription>
-                      </div>
+
+                      <CardDescription>{community.type}</CardDescription>
                     </div>
                   </Link>
                 </Button>
@@ -374,13 +369,7 @@ const RightPanel = () => {
                               <DotFilledIcon className="w-8 h-8 text-gray-500" />
                             )}
                           </div>
-                          <div className="flex gap-2 flex-wrap items-center">
-                            <CardDescription>{community.type}</CardDescription>
-                            <span>-</span>
-                            <CardDescription>
-                              <span> {community.members} member</span>
-                            </CardDescription>
-                          </div>
+                          <CardDescription>{community.type}</CardDescription>
                         </div>
                         <Badge className="ml-auto">Public</Badge>
                       </Link>
