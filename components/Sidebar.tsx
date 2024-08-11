@@ -87,7 +87,7 @@ const Sidebar = ({ username }: { username: string }) => {
         } h-full overflow-y-auto fixed rounded-none border-t-0 border-l-0 border-b-0`}
       >
         {isOpen && (
-          <nav className="flex flex-col gap-5 p-5 pb-10">
+          <nav className="flex flex-col gap-5 p-5 h-full pb-5">
             <div className="flex justify-between items-center">
               <Logo />
 
@@ -121,8 +121,8 @@ const Sidebar = ({ username }: { username: string }) => {
                     href={item.route}
                     className={`${
                       isActiveLink
-                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[10px] bg-[rgb(222,222,222)] dark:bg-gray-900"
-                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[10px] hover:bg-[rgb(222,222,222)] dark:hover:bg-gray-900"
+                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[5px] bg-[rgb(222,222,222)] dark:bg-gray-900"
+                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[5px] hover:bg-[rgb(222,222,222)] dark:hover:bg-gray-900"
                     }`}
                   >
                     <IconComponent />
@@ -147,7 +147,7 @@ const Sidebar = ({ username }: { username: string }) => {
                     isSmallDevice ? () => dispatch(closeSidebar()) : undefined
                   }
                   href="/communities"
-                  className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-full px-4 py-3 rounded-[10px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
+                  className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w-full px-4 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
                 >
                   Find Communities
                 </Link>
@@ -159,7 +159,7 @@ const Sidebar = ({ username }: { username: string }) => {
                     }
                     key={community.communityId}
                     href={`/communities/${community.communityId}`}
-                    className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[10px] hover:bg-[rgb(222,222,222)] dark:hover:bg-gray-900"
+                    className="text-[13px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[5px] hover:bg-[rgb(222,222,222)] dark:hover:bg-gray-900"
                   >
                     <Image
                       src={
@@ -201,8 +201,8 @@ const Sidebar = ({ username }: { username: string }) => {
                     }
                     className={`${
                       isActiveLink
-                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] bg-[rgb(222,222,222)] dark:bg-gray-900"
-                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] hover:bg-[rgb(222,222,222)] dark:hover:bg-gray-900"
+                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] bg-[rgb(222,222,222)] dark:bg-gray-900"
+                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[5px] hover:bg-[rgb(222,222,222)] dark:hover:bg-gray-900"
                     }`}
                   >
                     <IconComponent />
@@ -213,7 +213,7 @@ const Sidebar = ({ username }: { username: string }) => {
             </ul>
 
             <button
-              className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 w[90%] px-2 py-3 rounded-[10px] bg-[rgb(222,222,222)] dark:bg-gray-900 mt-auto"
+              className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex items-center gap-5 px-2 py-3 rounded-[5px] bg-[rgb(222,222,222)] dark:bg-gray-900 mt-auto"
               onClick={() => {
                 if (isSmallDevice) {
                   dispatch(closeSidebar());
@@ -228,7 +228,7 @@ const Sidebar = ({ username }: { username: string }) => {
         )}
 
         {!isOpen && (
-          <nav className="flex flex-col items-center gap-5 p-5 pb-10">
+          <nav className="flex flex-col items-center gap-5 p-5 h-full pb-5">
             <div className="flex flex-col gap-5 justify-between">
               <Link href="/feed">
                 <Image
@@ -277,8 +277,8 @@ const Sidebar = ({ username }: { username: string }) => {
                     href={item.route}
                     className={`${
                       isActiveLink
-                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[10px] transition-all duration-100 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
-                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[10px] transition-all duration-100 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-gray-900"
+                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[5px] transition-all duration-100 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
+                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[5px] transition-all duration-100 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-gray-900"
                     }`}
                   >
                     <IconComponent />
@@ -333,8 +333,8 @@ const Sidebar = ({ username }: { username: string }) => {
                     }
                     className={`${
                       isActiveLink
-                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[10px] transition-all duration-100 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
-                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[10px] transition-all duration-100 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-gray-900"
+                        ? "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[5px] transition-all duration-100 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
+                        : "text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 px-2 py-3 rounded-[5px] transition-all duration-100 hover:bg-[rgba(125,133,150,0.86)] dark:hover:bg-gray-900"
                     }`}
                   >
                     <IconComponent />
@@ -344,7 +344,7 @@ const Sidebar = ({ username }: { username: string }) => {
             </ul>
 
             <button
-              className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 w[90%] px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900 mt-auto"
+              className="text-[14px] font-[400] text-gray-900 dark:text-gray-200 flex w-fit h-fit items-center gap-5 mt-auto px-2 py-3 rounded-[5px] transition-all duration-200 bg-[rgba(125,133,150,0.86)] dark:bg-gray-900"
               onClick={handleLogout}
             >
               <LogoutIcon />

@@ -383,13 +383,13 @@ const RightPanel = () => {
 
         <div className="absolute bottom-0 left-0 right-0 w-[90%] flex flex-wrap gap-3 mx-auto py-5">
           <a
-            href="https://github.com/realemmanuel/clutch"
+            href="https://github.com/emmanueltaiwo/clutch"
             className="font-bold text-[12px] text-gray-900 dark:text-gray-400"
           >
             Report a Problem
           </a>
           <a
-            href="https://github.com/realemmanuel/clutch"
+            href="https://github.com/emmanueltaiwo/clutch"
             className="font-bold text-[12px] text-gray-900 dark:text-gray-400"
           >
             Privacy Policy
