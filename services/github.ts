@@ -4,7 +4,7 @@ import axios from "axios";
 import { GitHubUser } from "../types/homepage-types";
 
 const apiUrl = `https://api.github.com/`;
-const owner = "realemmanuel";
+const owner = "emmanueltaiwo";
 const repo = "clutch";
 const token = process.env.GITHUB_TOKEN_KEY;
 

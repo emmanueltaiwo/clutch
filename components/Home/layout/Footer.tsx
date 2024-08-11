@@ -16,7 +16,7 @@ const Footer = () => {
       </div>
 
       <ul className="mx-5 md:mx-10 lg:mx-20 flex items-center gap-5 text-gray-300">
-        <a href="https://github.com/realemmanuel/clutch">
+        <a href="https://github.com/emmanueltaiwo/clutch">
           <GitHubIcon fontSize="large" />
         </a>
         <a href="https://twitter.com/thedevemmanuel">

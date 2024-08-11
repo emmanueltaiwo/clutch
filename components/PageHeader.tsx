@@ -16,7 +16,7 @@ const PageHeader = ({
   const dispatch = useAppDispatch();
 
   return (
-    <div className="w-full sticky top-0 flex items-center gap-2 bg-background z-50 h-[14vh] border-b-[1px] p-5">
+    <div className="w-full sticky top-0 flex items-center gap-2 bg-background z-50 lg:h-[10vh] border-b-[1px] p-5">
       <button
         onClick={() => {
           dispatch(openSidebar());
